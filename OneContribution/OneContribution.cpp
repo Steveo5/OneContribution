@@ -2,11 +2,14 @@
 //
 
 #include "stdafx.h"
+#include <iostream>
 
 
 int main()
 {
 	printf("hello world");
     return 0;
+
+	std::cout << "oh jesus what is this" << std::endl;
 }
 
