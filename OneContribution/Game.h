@@ -15,5 +15,7 @@ private:
 	void endDraw();
 	void tick();
 	void update();
+
+	void toggleFullscreen();
 };
 

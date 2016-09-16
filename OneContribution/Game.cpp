@@ -39,18 +39,24 @@ void Game::handleEvents()
 			case sf::Event::Closed:
 				m_window.close();
 				break;
+			case sf::Keyboard::LAlt:
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Return))
+				{
+					toggleFullscreen();
+				}
+				break;
 		}
 	}
 }
 
 void Game::beginDraw()
 {
-
+	m_window.clear(sf::Color::Black);
 }
 
 void Game::endDraw()
 {
-
+	m_window.display();
 }
 
 void Game::tick()
@@ -61,4 +67,12 @@ void Game::tick()
 void Game::update()
 {
 
+}
+
+
+void Game::toggleFullscreen()
+{
+	m_window.close();
+	m_window.create(sf::VideoMode(640, 480), "OneContribution", sf::Style::Fullscreen);
+	m_window.display();
 }
