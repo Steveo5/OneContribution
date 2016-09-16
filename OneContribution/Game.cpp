@@ -4,7 +4,9 @@
 
 Game::Game()
 	: m_window(sf::VideoMode(640, 480), "OneContribution")
+	, m_view(sf::FloatRect(200, 200, 300, 200))
 {
+	m_window.setView(m_view);
 }
 
 
@@ -56,6 +58,7 @@ void Game::beginDraw()
 
 void Game::endDraw()
 {
+	m_window.draw(m_world);
 	m_window.display();
 }
 

@@ -1,6 +1,5 @@
 #include "World.h"
 
-
 World::World()
 {
 	if (!m_texture.loadFromFile("Resources/background.png"))
@@ -8,7 +7,7 @@ World::World()
 
 	}
 
-	
+	m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 208.f);
 }
 
 
@@ -16,7 +15,7 @@ World::~World()
 {
 }
 
-void World::Draw(sf::RenderTarget& target, sf::RenderStates states) const
+void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	
+	m_tileMap->draw(target, states);
 }

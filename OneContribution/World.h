@@ -1,15 +1,17 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include "TileMap.h"
 
-class World : sf::Drawable
+class World : public sf::Drawable
 {
 public:
 	World();
 	~World();
 
 private:
-	void Draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	TileMap* m_tileMap;
 	sf::Texture m_texture;
 };
 
