@@ -7,7 +7,7 @@ World::World()
 
 	}
 
-	m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 208.f);
+	m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
 }
 
 

@@ -5,8 +5,10 @@
 Game::Game()
 	: m_window(sf::VideoMode(640, 480), "OneContribution")
 	, m_view(sf::FloatRect(200, 200, 300, 200))
+	, m_miniMap(sf::FloatRect(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)))
 {
-	m_window.setView(m_view);
+	m_view.rotate(315.f);
+	m_view.zoom(7);
 }
 
 
@@ -33,6 +35,23 @@ void Game::run()
 
 void Game::handleEvents()
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		m_view.setCenter(m_view.getCenter().x - 0.5, m_view.getCenter().y);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		m_view.setCenter(m_view.getCenter().x + 0.5, m_view.getCenter().y);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y - 0.5);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y + 0.5);
+	}
+
 	sf::Event event;
 	while (m_window.pollEvent(event))
 	{
@@ -69,7 +88,7 @@ void Game::tick()
 
 void Game::update()
 {
-
+	m_window.setView(m_view);
 }
 
 
