@@ -1,15 +1,13 @@
-// OneContribution.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <iostream>
+#include <SFML\Graphics.hpp>
+#include "Game.h"
 
 
 int main()
 {
-	printf("hello world");
-    return 0;
+	Game game;
+	game.run();
 
-	std::cout << "oh jesus what is this" << std::endl;
 }
 
