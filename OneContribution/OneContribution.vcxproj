@@ -154,9 +154,11 @@
     <ClInclude Include="AnimatedSprite.hpp" />
     <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="pugiconfig.hpp" />
+    <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="TmxLoader.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
@@ -165,8 +167,9 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="OneContribution.cpp" />
+    <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TmxLoader.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

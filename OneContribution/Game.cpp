@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "TmxLoader.h"
+#include "TileMap.h"
 
 
 Game::Game()
@@ -18,6 +20,7 @@ Game::~Game()
 
 void Game::run()
 {
+	TileMap map = TmxLoader::load("Resources/Map.tmx");
 	while (m_window.isOpen())
 	{
 		//Clear the screen with black
@@ -35,22 +38,6 @@ void Game::run()
 
 void Game::handleEvents()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		m_view.setCenter(m_view.getCenter().x - 0.2, m_view.getCenter().y + 0.2);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		m_view.setCenter(m_view.getCenter().x + 0.2, m_view.getCenter().y - 0.2);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		m_view.setCenter(m_view.getCenter().x - 0.2, m_view.getCenter().y - 0.2);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		m_view.setCenter(m_view.getCenter().x + 0.2, m_view.getCenter().y + 0.2);
-	}
 
 	sf::Event event;
 	while (m_window.pollEvent(event))
@@ -83,7 +70,22 @@ void Game::endDraw()
 
 void Game::tick()
 {
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		m_view.move(-0.2, 0.2);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		m_view.move(0.2, -0.2);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		m_view.move(-0.2, -0.2);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		m_view.move(0.2, 0.2);
+	}
 }
 
 void Game::update()
