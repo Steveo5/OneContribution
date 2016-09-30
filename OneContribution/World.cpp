@@ -2,10 +2,6 @@
 
 World::World()
 {
-	if (!m_texture.loadFromFile("Resources/background.png"))
-	{
-
-	}
 
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
 }

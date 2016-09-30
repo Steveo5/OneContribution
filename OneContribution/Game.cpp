@@ -1,15 +1,12 @@
 #include "Game.h"
 
-#include "TmxLoader.h"
-#include "TileMap.h"
-
+#include "tmx\MapLoader.h"
 
 Game::Game()
 	: m_window(sf::VideoMode(640, 480), "OneContribution")
-	, m_view(sf::FloatRect(200, 200, 180, 200))
+	, m_view(sf::FloatRect(200, 200, 200, 200))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)))
 {
-	m_view.rotate(315.f);
 	m_view.zoom(7);
 }
 
@@ -20,7 +17,11 @@ Game::~Game()
 
 void Game::run()
 {
-	TileMap map = TmxLoader::load("Resources/Map.tmx");
+	tmx::MapLoader ml("Resources");
+	if (!ml.Load("Map.tmx"))
+	{
+		std::cout << "failed to load map" << std::endl;
+	}
 	while (m_window.isOpen())
 	{
 		//Clear the screen with black
@@ -31,6 +32,7 @@ void Game::run()
 		update();
 		//Do a game tick
 		tick();
+		m_window.draw(ml);
 		//Display everything to the screen
 		endDraw();
 	}
