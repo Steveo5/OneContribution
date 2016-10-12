@@ -7,6 +7,9 @@ public:
 	World();
 	~World();
 
+	void tick();
+	void update();
+
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
