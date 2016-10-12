@@ -15,3 +15,13 @@ void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	//sm_tileMap->draw(target, states);
 }
+
+void World::tick()
+{
+
+}
+
+void World::update()
+{
+
+}
