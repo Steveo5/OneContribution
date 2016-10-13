@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include "World.h"
 #include "tmx\MapLoader.h"
 #include "UI.h"
+#include "World.h"
 
 class Game
 {
@@ -10,6 +10,8 @@ public:
 	Game();
 	~Game();
 	void run();
+
+	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
 	World m_world;
@@ -18,7 +20,9 @@ private:
 	sf::RectangleShape m_miniMapSprite;
 	bool m_fullscreen = true;
 
-	UI m_ui;
+	tmx::MapLoader m_ml;
+
+	UI* m_ui;
 
 	sf::Clock m_tickTimer;
 	//tickTimer interval in milliseconds

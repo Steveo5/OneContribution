@@ -14,14 +14,18 @@ public:
 
 	void toggleDebugMenu();
 
+	void update(sf::RenderWindow &window);
 	void updateDrawTime();
 private:
 	int m_drawTime = 0;
+	int m_fps = 0;
 	sf::Clock m_drawTimer;
 
-	sf::Text m_txtFps;
+	sf::Text m_txtDebug;
 	sf::Font m_fontArial;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+
 };
 

@@ -9,9 +9,22 @@ UI::UI()
 	m_debugOverlay.setPosition(0, 0);
 
 	m_fontArial.loadFromFile("Resources/arial.ttf");
-	m_txtFps.setFont(m_fontArial);
-	m_txtFps.setCharacterSize(10);
-	m_txtFps.setColor(sf::Color::White);
+	m_txtDebug.setFont(m_fontArial);
+	m_txtDebug.setCharacterSize(10);
+	m_txtDebug.setColor(sf::Color::White);
+	m_txtDebug.setPosition(0, 0);
+	/*
+	std::vector<Entity*> entities = Game::getWorld().getEntities();
+	for (int i = 0; i < entities.size(); i++)
+	{
+		entities[i]->m_healthRed.setFillColor(sf::Color::Red);
+		entities[i]->m_healthRed.setPosition(entities[i]->m_rectangle.getPosition().x - 50, entities[i]->m_rectangle.getPosition().y - 80);
+
+		entities[i]->m_healthGreen.setFillColor(sf::Color::Green);
+		entities[i]->m_healthGreen.setPosition(entities[i]->m_healthRed.getPosition().x + entities[i]->m_healthRed.getSize().x, entities[i]->m_healthRed.getPosition().y);
+		
+	}
+	*/
 }
 
 
@@ -39,7 +52,7 @@ void UI::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	if (m_debugOverlayEnabled)
 	{
 		target.draw(m_debugOverlay);
-		target.draw(m_txtFps);
+		target.draw(m_txtDebug);
 	}
 }
 
@@ -60,8 +73,19 @@ void UI::updateDrawTime()
 	if (m_drawTimer.getElapsedTime().asSeconds() >= 1)
 	{
 		m_drawTimer.restart();
-		m_txtFps.setString(std::to_string(m_drawTime));
+		m_fps = m_drawTime;
 		m_drawTime = 0;
 	}
 	m_drawTime++;
+}
+
+void UI::update(sf::RenderWindow &window)
+{
+	sf::Vector2f newDebugPos = window.mapPixelToCoords(sf::Vector2i(0, 0));
+	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition());
+	m_debugOverlay.setPosition(newDebugPos);
+	m_txtDebug.setPosition(newDebugPos);
+	std::string fps = "Fps: " + std::to_string(m_fps);
+	std::string mousePosStr = "Mouse Position: x " + std::to_string(mousePos.x) + " y " + std::to_string(mousePos.y);
+	m_txtDebug.setString(fps + "\n" + mousePosStr);
 }
