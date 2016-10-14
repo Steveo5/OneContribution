@@ -10,14 +10,17 @@ public:
 
 	int getWidth();
 	void setWidth(int width);
-
 	void setHealth(int health);
+	void setPosition(sf::Vector2f position);
+	bool isVisible();
+	void setVisible(bool visible);
 
 private:
 	int m_width;
 	int m_health;
 	sf::RectangleShape m_healthGreen;
 	sf::RectangleShape m_healthRed;
+	bool m_visible;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

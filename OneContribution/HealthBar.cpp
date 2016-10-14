@@ -23,17 +23,35 @@ void HealthBar::setWidth(int width)
 
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	std::cout << "Drawing ui component " << std::endl;
-	target.draw(m_healthGreen);
+	if (!m_visible) return;
 	target.draw(m_healthRed);
+	target.draw(m_healthGreen);
 }
 
 void HealthBar::update(sf::RenderWindow& window)
 {
-	m_healthRed.setSize(sf::Vector2f(m_health, 20));
+	double healthGreen = m_health * m_width / 100;
+	m_healthGreen.setSize(sf::Vector2f(healthGreen, 20));
+	m_healthRed.setSize(sf::Vector2f(m_width, 20));
 }
 
 void HealthBar::setHealth(int health)
 {
 	m_health = health;
+}
+
+void HealthBar::setPosition(sf::Vector2f position)
+{
+	m_healthGreen.setPosition(position);
+	m_healthRed.setPosition(position);
+}
+
+bool HealthBar::isVisible()
+{
+	return m_visible;
+}
+
+void HealthBar::setVisible(bool visible)
+{
+	m_visible = visible;
 }

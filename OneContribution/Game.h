@@ -3,7 +3,6 @@
 #include "tmx\MapLoader.h"
 #include "UI.h"
 #include "World.h"
-#include "HealthBar.h"
 
 class Game
 {
@@ -11,6 +10,9 @@ public:
 	Game();
 	~Game();
 	void run();
+
+	static UI* getUi();
+	static tmx::MapLoader* getMapLoader();
 
 	//static World& getWorld();
 private:
@@ -21,9 +23,9 @@ private:
 	sf::RectangleShape m_miniMapSprite;
 	bool m_fullscreen = true;
 
-	tmx::MapLoader m_ml;
+	static tmx::MapLoader* m_ml;
 
-	UI* m_ui;
+	static UI m_ui;
 
 	sf::Clock m_tickTimer;
 	//tickTimer interval in milliseconds

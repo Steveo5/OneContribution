@@ -1,11 +1,11 @@
 #include "SFML\Graphics.hpp"
+//#include "Game.h"
 #include "HealthBar.h"
 #pragma once
 enum EntityType
 {
-	NPC,
-	MONSTER,
-	PLAYER
+	ARROW,
+	KNIGHT
 };
 
 class Entity : public sf::Drawable
@@ -17,16 +17,27 @@ public:
 	void tick();
 	void update();
 
+	void setHealth(int health);
+	int getHealth();
+	bool isColliding(sf::Vector2f position);
+	//Move an entity to a position in target seconds
+	void moveTo(sf::Vector2f position, int seconds);
+	bool isDead();
+	bool isControllable();
+	void setControllable(bool control);
+	bool isVisible();
+	void setVisible(bool visible);
+
 	sf::RectangleShape m_rectangle;
 
 private:
 
+	bool m_controllable;
 	EntityType m_entityType;
 	int m_health;
-	bool m_invisible;
+	bool m_visible;
 	int m_maxHealth;
-	HealthBar* m_hpBar;
-
+	static HealthBar* m_hpBar;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
