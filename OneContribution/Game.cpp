@@ -25,9 +25,9 @@ Game::Game()
 	m_window.setView(m_view);
 	//m_window.setVerticalSyncEnabled(true);
 
-	m_world.spawnEntity(EntityType::MONSTER, sf::Vector2f(-200, 400));
-
 	m_ui = new UI();
+
+	m_world.spawnEntity(EntityType::MONSTER, sf::Vector2f(100.f, 100.f));
 }
 
 

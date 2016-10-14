@@ -1,6 +1,25 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 
+class UIComponent : public sf::Drawable
+{
+public:
+	UIComponent(std::string name);
+	~UIComponent();
+
+	virtual void update(sf::RenderWindow& window);
+
+	std::string getName();
+
+	void setPosition(sf::Vector2f location);
+	sf::Vector2f getPosition();
+private:
+	std::string m_name;
+	sf::Vector2f m_position;
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+};
+
 class UI : public sf::Drawable
 {
 public:
@@ -16,6 +35,8 @@ public:
 
 	void update(sf::RenderWindow &window);
 	void updateDrawTime();
+
+	void addComponent(UIComponent* component);
 private:
 	int m_drawTime = 0;
 	int m_fps = 0;
@@ -24,8 +45,8 @@ private:
 	sf::Text m_txtDebug;
 	sf::Font m_fontArial;
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	std::vector<UIComponent*> m_components;
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 };
-

@@ -3,6 +3,7 @@
 #include "tmx\MapLoader.h"
 #include "UI.h"
 #include "World.h"
+#include "HealthBar.h"
 
 class Game
 {

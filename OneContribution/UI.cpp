@@ -3,8 +3,8 @@
 #include <iostream>
 
 UI::UI()
-	: m_debugOverlay(sf::RectangleShape(sf::Vector2f(600, 400)))
 {
+	m_debugOverlay.setSize(sf::Vector2f(600, 400));
 	m_debugOverlay.setFillColor(sf::Color::Black);
 	m_debugOverlay.setPosition(0, 0);
 
@@ -54,6 +54,11 @@ void UI::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(m_debugOverlay);
 		target.draw(m_txtDebug);
 	}
+
+	for (int i = 0; i < m_components.size(); i++)
+	{
+		target.draw(*m_components[i]);
+	}
 }
 
 void UI::toggleDebugMenu()
@@ -88,4 +93,47 @@ void UI::update(sf::RenderWindow &window)
 	std::string fps = "Fps: " + std::to_string(m_fps);
 	std::string mousePosStr = "Mouse Position: x " + std::to_string(mousePos.x) + " y " + std::to_string(mousePos.y);
 	m_txtDebug.setString(fps + "\n" + mousePosStr);
+
+	for (int i = 0; i < m_components.size(); i++)
+	{
+		m_components[i]->update(window);
+	}
+}
+
+void UI::addComponent(UIComponent* component)
+{
+	m_components.push_back(component);
+}
+
+UIComponent::UIComponent(std::string name)
+{
+	m_name = name;
+}
+UIComponent::~UIComponent()
+{
+
+}
+
+std::string UIComponent::getName()
+{
+	return m_name;
+}
+
+void UIComponent::update(sf::RenderWindow& window)
+{
+
+}
+
+void UIComponent::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+
+}
+
+void UIComponent::setPosition(sf::Vector2f location)
+{
+	m_position = location;
+}
+sf::Vector2f UIComponent::getPosition()
+{
+	return m_position;
 }

@@ -1,5 +1,6 @@
 #include "SFML\Graphics.hpp"
-
+#include "HealthBar.h"
+#pragma once
 enum EntityType
 {
 	NPC,
@@ -16,8 +17,6 @@ public:
 	void tick();
 	void update();
 
-	sf::RectangleShape m_healthRed;
-	sf::RectangleShape m_healthGreen;
 	sf::RectangleShape m_rectangle;
 
 private:
@@ -26,7 +25,7 @@ private:
 	int m_health;
 	bool m_invisible;
 	int m_maxHealth;
-
+	HealthBar* m_hpBar;
 
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

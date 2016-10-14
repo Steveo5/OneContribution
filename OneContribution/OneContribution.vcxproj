@@ -161,6 +161,7 @@
     <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="OneContribution.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="UI.cpp" />
