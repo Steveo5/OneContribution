@@ -28,7 +28,13 @@ public:
 	bool isVisible();
 	void setVisible(bool visible);
 
-	sf::RectangleShape m_rectangle;
+	//sf::RectangleShape m_rectangle;
+
+	//m_sprite stuff here
+	sf::Sprite m_sprite;
+	sf::Texture m_characterSprite;
+	//m_sprite stuff ends
+
 
 private:
 
