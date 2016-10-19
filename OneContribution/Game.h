@@ -13,11 +13,12 @@ public:
 
 	static UI* getUi();
 	static tmx::MapLoader* getMapLoader();
+	static World* getWorld();
 
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
-	World m_world;
+	static World* m_world;
 	sf::View m_view;
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;

@@ -1,6 +1,8 @@
 #pragma once
 #include "SFML\Graphics.hpp"
 
+class Game;
+
 class UIComponent : public sf::Drawable
 {
 public:
