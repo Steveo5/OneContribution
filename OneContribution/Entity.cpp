@@ -7,21 +7,33 @@ HealthBar* Entity::m_hpBar;
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 {
 	m_maxHealth = 100;
-	m_sprite.setPosition(location);
-	
-
-
 	//m_rectangle.setOrigin(m_rectangle.getSize().x / 2, m_rectangle.getSize().y / 2);
 	m_entityType = entityType;
 	m_health = 70;
 	m_visible = true;
+
+	//m_rectangle.setPosition(location);
+	//m_rectangle.setFillColor(sf::Color::Red);
+	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
+
+
+	//m_sprite stuff here
+	m_sprite.setPosition(location);
+	if (!m_characterSprite.loadFromFile("sprite.png"))
+	{
+		std::cout << "Error loading resource sprite.png"
+			<< std::endl;
+	}
+	m_sprite.setTextureRect(sf::IntRect(30, 50, 65, 95));
+	m_sprite.setTexture(m_characterSprite);
+	//m_sprite stuff ends
+
 
 	m_hpBar = new HealthBar();
 	m_hpBar->setWidth(100);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::getUi()->addComponent(m_hpBar);
-	
 }
 
 void Entity::tick()
