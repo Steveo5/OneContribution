@@ -21,6 +21,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::getUi()->addComponent(m_hpBar);
+	
 }
 
 void Entity::tick()

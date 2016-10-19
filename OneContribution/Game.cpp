@@ -3,13 +3,14 @@
 #include "tmx\MapLoader.h"
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
-World Game::m_world;
+World* Game::m_world;
 
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
+	m_world = new World();
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -30,7 +31,7 @@ Game::Game()
 	//m_ui = new UI();
 
 	//m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(100.f, 100.f));
-	m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	m_world->spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
 }
 
 
@@ -60,12 +61,12 @@ void Game::run()
 		}
 
 		m_window.draw(*m_ml);
-		m_window.draw(m_world);
+		m_window.draw(*m_world);
 		m_window.draw(m_miniMapSprite);
 
 		//Objects to draw to minimap
 		m_window.setView(m_miniMap);
-		m_window.draw(m_world);
+		m_window.draw(*m_world);
 		m_window.draw(*m_ml);
 
 		//Objects to draw to main window view
@@ -138,11 +139,11 @@ void Game::handleEvents()
 				//Entity test
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					for (int i = 0; i < m_world.getEntities().size(); i++)
+					for (int i = 0; i < m_world->getEntities().size(); i++)
 					{
-						if (!m_world.getEntities()[i]->isColliding(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
-						m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
-						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
+						if (!m_world->getEntities()[i]->isColliding(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
+						m_world->getEntities()[i]->setHealth(m_world->getEntities()[i]->getHealth() - 10);
+						if (m_world->getEntities()[i]->getHealth() < 0) m_world->getEntities()[i]->setHealth(0);
 					}
 				}
 				break;
@@ -174,12 +175,12 @@ void Game::endDraw()
 
 void Game::tick()
 {
-	m_world.tick();
+	m_world->tick();
 }
 
 void Game::update()
 {
-	m_world.update();
+	m_world->update();
 	m_ui.update(m_window);
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	//m_window.setView(m_view);
@@ -210,6 +211,11 @@ tmx::MapLoader* Game::getMapLoader()
 UI *Game::getUi()
 {
 	return &m_ui;
+}
+
+World* Game::getWorld()
+{
+	return m_world;
 }
 
 //World& Game::getWorld()
