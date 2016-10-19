@@ -1,6 +1,7 @@
 #include "SFML\Graphics.hpp"
 //#include "Game.h"
 #include "HealthBar.h"
+#include "AnimatedSprite.hpp"
 #pragma once
 enum EntityType
 {
@@ -28,7 +29,9 @@ public:
 	bool isVisible();
 	void setVisible(bool visible);
 
-	sf::RectangleShape m_rectangle;
+	AnimatedSprite m_sprite;
+	std::map <std::string, Animation> m_animation;
+	//sf::RectangleShape m_rectangle;
 
 private:
 

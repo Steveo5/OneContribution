@@ -93,6 +93,7 @@ void UI::update(sf::RenderWindow &window)
 	std::string fps = "Fps: " + std::to_string(m_fps);
 	std::string mousePosStr = "Mouse Position: x " + std::to_string(mousePos.x) + " y " + std::to_string(mousePos.y);
 	m_txtDebug.setString(fps + "\n" + mousePosStr);
+	
 
 	for (int i = 0; i < m_components.size(); i++)
 	{

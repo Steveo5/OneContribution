@@ -8,7 +8,7 @@ class World : public sf::Drawable
 public:
 	World();
 	~World();
-
+	
 	Entity* spawnEntity(EntityType type, sf::Vector2f location);
 	std::vector<Entity*> getEntities();
 

@@ -3,6 +3,7 @@
 #include "tmx\MapLoader.h"
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
+World Game::m_world;
 
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
@@ -28,8 +29,8 @@ Game::Game()
 
 	//m_ui = new UI();
 
-	m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(100.f, 100.f));
-	m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(0.f, 0.f));
+	//m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(100.f, 100.f));
+	m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
 }
 
 
@@ -135,10 +136,14 @@ void Game::handleEvents()
 				break;
 			case::sf::Event::MouseButtonPressed:
 				//Entity test
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) &&  m_world.getEntities()[0]->isColliding(m_window.mapPixelToCoords(sf::Mouse::getPosition())))
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					m_world.getEntities()[0]->setHealth(m_world.getEntities()[0]->getHealth() - 10);
-					if (m_world.getEntities()[0]->getHealth() < 0) m_world.getEntities()[0]->setHealth(0);
+					for (int i = 0; i < m_world.getEntities().size(); i++)
+					{
+						if (!m_world.getEntities()[i]->isColliding(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
+						m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
+						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
+					}
 				}
 				break;
 			case sf::Event::KeyPressed:
