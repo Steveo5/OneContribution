@@ -6,17 +6,17 @@ class Game;
 class UIComponent : public sf::Drawable
 {
 public:
-	UIComponent(std::string name);
+	UIComponent(std::string* name);
 	~UIComponent();
 
 	virtual void update(sf::RenderWindow& window);
 
-	std::string getName();
+	std::string* getName();
 
 	void setPosition(sf::Vector2f location);
 	sf::Vector2f getPosition();
 private:
-	std::string m_name;
+	std::string* m_name;
 	sf::Vector2f m_position;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

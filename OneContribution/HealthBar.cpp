@@ -2,7 +2,7 @@
 
 
 HealthBar::HealthBar()
-	: UIComponent("HealthBar")
+	: UIComponent(new std::string("HealthBar"))
 {
 	m_healthRed.setFillColor(sf::Color::Red);
 	m_healthGreen.setFillColor(sf::Color::Green);

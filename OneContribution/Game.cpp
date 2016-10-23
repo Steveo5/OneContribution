@@ -1,16 +1,16 @@
 #include "Game.h"
 
 #include "tmx\MapLoader.h"
+
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
-World* Game::m_world;
-
+World Game::m_world;
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
-	m_world = new World();
+	//m_world = new World();
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -30,8 +30,8 @@ Game::Game()
 
 	//m_ui = new UI();
 
-	//m_world.spawnEntity(EntityType::KNIGHT, sf::Vector2f(100.f, 100.f));
-	m_world->spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	
 }
 
 
@@ -45,28 +45,37 @@ void Game::run()
 	{
 		std::cout << "failed to load map" << std::endl;
 	}
+	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
 		//Clear the screen with black
 		beginDraw();
-		//Handle all events
-		handleEvents();
-		//Update the game
-		update();
-		//Do a game tick
-		if (m_tickTimer.getElapsedTime().asMilliseconds() > m_tickRate)
+		while (timeSinceLastUpdate > m_timePerFrame)
 		{
-			tick();
-			m_tickTimer.restart();
+			timeSinceLastUpdate -= m_timePerFrame;
+			//Handle all events
+			handleEvents();
+			//Update the game
+			update();
+			//Do a game tick
+			if (m_tickTimer.getElapsedTime().asMilliseconds() > m_tickRate)
+			{
+				tick();
+				m_tickTimer.restart();
+			}
+
 		}
 
 		m_window.draw(*m_ml);
-		m_window.draw(*m_world);
+		m_window.draw(getWorld());
 		m_window.draw(m_miniMapSprite);
 
 		//Objects to draw to minimap
 		m_window.setView(m_miniMap);
-		m_window.draw(*m_world);
+		m_window.draw(getWorld());
 		m_window.draw(*m_ml);
 
 		//Objects to draw to main window view
@@ -82,22 +91,22 @@ void Game::handleEvents()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		//m_view.move(-2.0, 0.0);
-		m_view.setCenter(m_view.getCenter().x - 2.0, m_view.getCenter().y);
+		m_view.setCenter(m_view.getCenter().x - 5.0, m_view.getCenter().y);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		//m_view.move(2.0, 0.0);
-		m_view.setCenter(m_view.getCenter().x + 2.0, m_view.getCenter().y);
+		m_view.setCenter(m_view.getCenter().x + 5.0, m_view.getCenter().y);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y - 1.5);
+		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y - 5);
 		//m_view.move(-0.0, -1.5);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		//m_view.move(0.0, 1.5);
-		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y + 1.5);
+		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y + 5);
 	}
 	sf::Vector2i mousePos = sf::Mouse::getPosition();
 	if (mousePos.x > m_window.getSize().x - 5)
@@ -119,7 +128,6 @@ void Game::handleEvents()
 	sf::Event event;
 	while (m_window.pollEvent(event))
 	{
-
 		switch (event.type)
 		{
 			case sf::Event::Closed:
@@ -139,11 +147,11 @@ void Game::handleEvents()
 				//Entity test
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					for (int i = 0; i < m_world->getEntities().size(); i++)
+					for (int i = 0; i < m_world.getEntities().size(); i++)
 					{
-						if (!m_world->getEntities()[i]->isColliding(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
-						m_world->getEntities()[i]->setHealth(m_world->getEntities()[i]->getHealth() - 10);
-						if (m_world->getEntities()[i]->getHealth() < 0) m_world->getEntities()[i]->setHealth(0);
+						if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
+						m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
+						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
 					}
 				}
 				break;
@@ -151,6 +159,7 @@ void Game::handleEvents()
 				m_ui.handleInput(event.key.code);
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 					toggleFullscreen();
+				break;
 			case sf::Event::Resized:
 				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 				m_window.setView(sf::View(visibleArea));
@@ -175,12 +184,12 @@ void Game::endDraw()
 
 void Game::tick()
 {
-	m_world->tick();
+	m_world.tick();
 }
 
 void Game::update()
 {
-	m_world->update();
+	m_world.update();
 	m_ui.update(m_window);
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	//m_window.setView(m_view);
@@ -213,7 +222,7 @@ UI *Game::getUi()
 	return &m_ui;
 }
 
-World* Game::getWorld()
+World& Game::getWorld()
 {
 	return m_world;
 }

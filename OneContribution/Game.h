@@ -13,12 +13,12 @@ public:
 
 	static UI* getUi();
 	static tmx::MapLoader* getMapLoader();
-	static World* getWorld();
+	static World& getWorld();
 
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
-	static World* m_world;
+	static World m_world;
 	sf::View m_view;
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;
@@ -31,6 +31,8 @@ private:
 	sf::Clock m_tickTimer;
 	//tickTimer interval in milliseconds
 	const int m_tickRate = 20;
+	//Game speed multiplier
+	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 
 	void handleEvents();
 	void beginDraw();

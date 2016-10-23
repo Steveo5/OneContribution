@@ -106,7 +106,7 @@ void UI::addComponent(UIComponent* component)
 	m_components.push_back(component);
 }
 
-UIComponent::UIComponent(std::string name)
+UIComponent::UIComponent(std::string* name)
 {
 	m_name = name;
 }
@@ -115,7 +115,7 @@ UIComponent::~UIComponent()
 
 }
 
-std::string UIComponent::getName()
+std::string* UIComponent::getName()
 {
 	return m_name;
 }

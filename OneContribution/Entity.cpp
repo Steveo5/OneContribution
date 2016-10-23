@@ -34,6 +34,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::getUi()->addComponent(m_hpBar);
+	m_lastPos = m_sprite.getPosition();
 }
 
 void Entity::tick()
@@ -53,7 +54,6 @@ void Entity::tick()
 	{
 		if (layer->name == "Collision")
 		{
-			std::cout << "test" << std::endl;
 			for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
 			{
 				collision = object->Contains(m_sprite.getPosition());
@@ -66,6 +66,32 @@ void Entity::tick()
 	m_sprite.move(sf::Vector2f(0.0, 0.8));
 
 	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y - 30));
+	
+	//Update the entities m_facing property
+	if (m_lastPos != m_sprite.getPosition())
+	{
+		if (m_lastPos.x > m_sprite.getPosition().x)
+		{
+			m_facing = Direction::RIGHT;
+		}
+		else if (m_lastPos.x < m_sprite.getPosition().x)
+		{
+			m_facing = Direction::LEFT;
+		}
+		else if (m_lastPos.y > m_sprite.getPosition().y)
+		{
+			m_facing = Direction::UP;
+		}
+		else if (m_lastPos.y < m_sprite.getPosition().y)
+		{
+			m_facing = Direction::DOWN;
+		}
+	}
+}
+
+bool Entity::isHitting(sf::Vector2f position)
+{
+	return m_sprite.getGlobalBounds().contains(position);
 }
 
 void Entity::update()
@@ -83,9 +109,22 @@ int Entity::getHealth()
 	return m_health;
 }
 
-bool Entity::isColliding(sf::Vector2f position)
+bool Entity::willCollide(sf::Vector2f position)
 {
-	return m_sprite.getGlobalBounds().contains(position);
+	bool collision;
+	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
+	{
+		if (layer->name == "Collision")
+		{
+			for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
+			{
+				collision = object->Contains(position);
+
+				if (collision) return true;
+			}
+		}
+	}
+	return collision;
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -120,6 +159,12 @@ bool Entity::isVisible()
 void Entity::setVisible(bool visible)
 {
 	m_visible = visible;
+}
+
+/* Get the entities current direction (UP, LEFT, DOWN, RIGHT) */
+Direction Entity::getFacing()
+{
+	return m_facing;
 }
 
 Entity::~Entity()

@@ -8,6 +8,14 @@ enum EntityType
 	KNIGHT
 };
 
+enum Direction
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+};
+
 class Entity : public sf::Drawable
 {
 public:
@@ -19,7 +27,8 @@ public:
 
 	void setHealth(int health);
 	int getHealth();
-	bool isColliding(sf::Vector2f position);
+	bool willCollide(sf::Vector2f position);
+	bool isHitting(sf::Vector2f position);
 	//Move an entity to a position in target seconds
 	void moveTo(sf::Vector2f position, int seconds);
 	bool isDead();
@@ -27,6 +36,7 @@ public:
 	void setControllable(bool control);
 	bool isVisible();
 	void setVisible(bool visible);
+	Direction getFacing();
 
 	//sf::RectangleShape m_rectangle;
 
@@ -34,7 +44,6 @@ public:
 	sf::Sprite m_sprite;
 	sf::Texture m_characterSprite;
 	//m_sprite stuff ends
-
 
 private:
 
@@ -44,6 +53,9 @@ private:
 	bool m_visible;
 	int m_maxHealth;
 	static HealthBar* m_hpBar;
+	Direction m_facing;
+	//Used for getting the entities direction
+	sf::Vector2f m_lastPos;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
