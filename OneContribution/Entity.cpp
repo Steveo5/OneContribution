@@ -2,6 +2,9 @@
 
 #include "Game.h"
 
+#include <unordered_set>
+#include <queue>
+
 HealthBar* Entity::m_hpBar;
 
 Entity::Entity(EntityType entityType, sf::Vector2f location)
@@ -35,6 +38,22 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::getUi()->addComponent(m_hpBar);
 	m_lastPos = m_sprite.getPosition();
+}
+
+void Entity::BFS(sf::Vector2f destination)
+{
+	sf::Vector2f startingPos = m_sprite.getPosition();//starting point
+	sf::Vector2f targetPos = destination;//ending point
+	std::unordered_set<sf::Vector2f> visited;//set of visited tiles
+	std::queue<sf::Vector2f> queue;//queue of child tiles
+
+	queue.push(startingPos);//push starting tile
+	visited.insert(startingPos);//add to visited set
+
+	std::list<sf::Vector2f> path;//list of path tiles
+	//const int parentSize = map.length * map.width//array size (all tiles of map)
+	//sf::Vector2f parents[parentSize];
+
 }
 
 void Entity::tick()

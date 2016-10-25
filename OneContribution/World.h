@@ -11,7 +11,6 @@ public:
 	
 	Entity* spawnEntity(EntityType type, sf::Vector2f location);
 	std::vector<Entity*> getEntities();
-
 	void tick();
 	void update();
 

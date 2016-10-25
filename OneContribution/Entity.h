@@ -22,6 +22,8 @@ public:
 	Entity(EntityType entityType, sf::Vector2f location);
 	~Entity();
 
+	void BFS(sf::Vector2f);
+
 	void tick();
 	void update();
 
@@ -54,6 +56,7 @@ private:
 	int m_maxHealth;
 	static HealthBar* m_hpBar;
 	Direction m_facing;
+
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;
 

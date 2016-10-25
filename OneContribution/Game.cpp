@@ -5,6 +5,7 @@
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
 World Game::m_world;
+Entity m_entity;
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
@@ -154,7 +155,13 @@ void Game::handleEvents()
 						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
 					}
 				}
-				break;
+				//provide target location to BFS
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				{
+					
+					m_entity.BFS(static_cast<sf::Vector2f>(m_window.mapPixelToCoords(sf::Mouse::getPosition())));
+				}
+				break;		
 			case sf::Event::KeyPressed:
 				m_ui.handleInput(event.key.code);
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
