@@ -1,9 +1,11 @@
 #include "World.h"
 
-World::World()
+World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds)
 {
 
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
+	m_tileSize = tileSize;
+	m_worldBounds = worldBounds;
 }
 
 
@@ -49,4 +51,9 @@ Entity* World::spawnEntity(EntityType type, sf::Vector2f location)
 std::vector<Entity*> World::getEntities()
 {
 	return m_entities;
+}
+
+sf::Vector2i World::getTile(sf::Vector2i location)
+{
+	return sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
 }
