@@ -7,6 +7,10 @@
 
 HealthBar* Entity::m_hpBar;
 
+Entity::Entity()
+{
+
+}
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 {
 	m_maxHealth = 100;
@@ -44,7 +48,9 @@ void Entity::BFS(sf::Vector2i destination)
 {
 	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
-	const int tileCount = Game::getWorld().getTileCount();/*
+	const int tileCount = Game::getWorld().getTileCount();
+	
+	/*
 	std::unordered_set<int> visited;
 
 	std::queue<int> queue;

@@ -19,6 +19,7 @@ enum Direction
 class Entity : public sf::Drawable
 {
 public:
+	Entity();
 	Entity(EntityType entityType, sf::Vector2f location);
 	~Entity();
 

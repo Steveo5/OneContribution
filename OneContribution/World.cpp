@@ -1,5 +1,9 @@
 #include "World.h"
 
+World::World()
+{
+
+}
 World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds)
 {
 

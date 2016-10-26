@@ -6,6 +6,7 @@
 class World : public sf::Drawable
 {
 public:
+	World();
 	World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds);
 	~World();
 	
