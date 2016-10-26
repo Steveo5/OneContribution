@@ -22,7 +22,7 @@ public:
 	Entity(EntityType entityType, sf::Vector2f location);
 	~Entity();
 
-	void BFS(sf::Vector2f);
+	void BFS(sf::Vector2i);
 
 	void tick();
 	void update();

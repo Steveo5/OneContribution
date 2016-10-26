@@ -40,20 +40,101 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_lastPos = m_sprite.getPosition();
 }
 
-void Entity::BFS(sf::Vector2f destination)
+void Entity::BFS(sf::Vector2i destination)
 {
-	sf::Vector2f startingPos = m_sprite.getPosition();//starting point
-	sf::Vector2f targetPos = destination;//ending point
-	std::unordered_set<sf::Vector2f> visited;//set of visited tiles
-	std::queue<sf::Vector2f> queue;//queue of child tiles
+	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
+	sf::Vector2i targetPos = destination;//ending point
+	const int tileCount = Game::getWorld().getTileCount();/*
+	std::unordered_set<int> visited;
 
-	queue.push(startingPos);//push starting tile
-	visited.insert(startingPos);//add to visited set
+	std::queue<int> queue;
 
-	std::list<sf::Vector2f> path;//list of path tiles
-	//const int parentSize = map.length * map.width//array size (all tiles of map)
-	//sf::Vector2f parents[parentSize];
+	int root = source;
 
+	queue.push(root); // enqueue the root node
+	visited.insert(root);
+
+	std::list<int> path;
+
+	const int parentSz = Map::COLUMN_COUNT * Map::ROW_COUNT;
+
+	int parents[parentSz];
+
+	parents[root] = -1;
+
+	while (!queue.empty())
+	{
+		int node = queue.front();
+		queue.pop();
+
+		path.push_back(node);
+
+		if (debug)
+		{
+			std::pair<int, int> pair = map.convert1Dto2D(node);
+			sf::RectangleShape rectangle;
+			rectangle.setPosition(pair.second * BLOCK_SZ, pair.first * BLOCK_SZ);
+			rectangle.setSize(sf::Vector2f(BLOCK_SZ, BLOCK_SZ));
+
+			sf::Color color = sf::Color::Green;
+
+			rectangle.setFillColor(color);
+
+			window.draw(rectangle);
+		}
+
+		if (node == target)
+		{
+			int path = 0;
+
+			int parent = node;
+
+			while (parent != -1)
+			{
+				parent = parents[parent];
+				path++;
+			}
+			parent = node;
+
+			float progress = (float)path;
+			int prev = -1;
+			while (parent != root)
+			{
+				prev = parent;
+				parent = parents[parent];
+
+				progress = progress - 1.0f;
+			}
+
+			if (prev == -1)
+			{
+				return root;
+			}
+			else
+			{
+				return prev;
+			}
+		}
+
+		std::list <int> edges = graph[node];
+
+		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
+		{
+			int nde = *it;
+
+			if (visited.count(nde) == 0)
+			{
+				visited.insert(nde);
+				queue.push(nde);
+
+				parents[nde] = node;
+			}
+		}
+	}
+	
+
+
+*/
 }
 
 void Entity::tick()

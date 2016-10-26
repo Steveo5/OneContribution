@@ -57,3 +57,12 @@ sf::Vector2i World::getTile(sf::Vector2i location)
 {
 	return sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
 }
+
+const int World::getTileCount()
+{
+	return ((m_worldBounds.x / m_tileSize.x) * (m_worldBounds.y / m_tileSize.y));
+}
+sf::Vector2f World::getBounds()
+{
+	return m_worldBounds;
+}
