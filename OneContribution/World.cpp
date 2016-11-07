@@ -60,7 +60,9 @@ std::vector<Entity*> World::getEntities()
 
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
-	return sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
+	//return sf::Vector2i(150, 150);
+	std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
+	return sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));//tileSize is 0
 }
 
 const int World::getTileCount()
@@ -77,9 +79,19 @@ int World::getWidth()
 	return m_worldBounds.x;
 }
 
+int World::getRows()
+{
+	return m_worldBounds.x / m_tileSize.x;
+}
+
 int World::getHeight()
 {
 	return m_worldBounds.y;
+}
+
+int World::getColumns()
+{
+	return m_worldBounds.y / m_tileSize.y;
 }
 
 std::list<sf::Vector2i> World::getNeighbours(sf::Vector2i i)

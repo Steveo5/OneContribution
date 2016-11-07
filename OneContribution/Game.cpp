@@ -25,7 +25,8 @@ Game::Game()
 	//m_view.setSize(1280 * 4, 720 * 4);
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
+	m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
+	//m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
 	m_window.setView(m_view);
 	//m_window.setVerticalSyncEnabled(true);
 
@@ -158,10 +159,10 @@ void Game::handleEvents()
 				//provide target location to BFS
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 				{
-					/*sf::Vector2i temp;
+					sf::Vector2i temp;
 					temp.x = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).x);
 					temp.y = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).y);
-					m_entity.BFS(temp);*/
+					m_entity.BFS(temp);
 
 				}
 				break;		

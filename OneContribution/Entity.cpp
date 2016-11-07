@@ -44,12 +44,15 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_lastPos = m_sprite.getPosition();
 }
 
+
+
 int Entity::VecToInt(sf::Vector2i v)
 {
-	return 1;//placeholder
+	return (v.x * Game::getWorld().getColumns()) + v.y;
 }
 sf::Vector2i Entity::IntToVec(int i)
 {
+	std::cout << "World: " << Game::getWorld().getHeight() << ", " << Game::getWorld().getHeight() << std::endl;
 	int row = i / Game::getWorld().getWidth();
 	int col = i % Game::getWorld().getHeight();
 
@@ -59,10 +62,13 @@ sf::Vector2i Entity::IntToVec(int i)
 
 void Entity::BFS(sf::Vector2i destination)
 {
+	std::cout << "BFS" << std::endl;
 	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
 	const int tileCount = Game::getWorld().getTileCount();
-	
+	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
+		" target:" << targetPos.x << ", " << targetPos.y <<
+		" TileCount: " << tileCount << std::endl;
 	std::unordered_set<int> visited;
 
 	std::queue<int> queue;
@@ -85,20 +91,6 @@ void Entity::BFS(sf::Vector2i destination)
 
 		path.push_back(node);
 
-		/*if (debug)
-		{
-			std::pair<int, int> pair = map.convert1Dto2D(node);
-			sf::RectangleShape rectangle;
-			rectangle.setPosition(pair.second * BLOCK_SZ, pair.first * BLOCK_SZ);
-			rectangle.setSize(sf::Vector2f(BLOCK_SZ, BLOCK_SZ));
-
-			sf::Color color = sf::Color::Green;
-
-			rectangle.setFillColor(color);
-
-			window.draw(rectangle);
-		}*/
-
 		if (node == VecToInt(destination))
 		{
 			int path = 0;
@@ -117,11 +109,12 @@ void Entity::BFS(sf::Vector2i destination)
 			if (prev == -1)//already at destination
 			{
 				//next location = root
-				std::cout << root << std::endl;
 				sf::Vector2f fRoot;
 				fRoot.x = static_cast<float>(IntToVec(root).x);
 				fRoot.y = static_cast<float>(IntToVec(root).y);
 				m_sprite.setPosition(fRoot);
+				std::cout << "root: " << root << std::endl;
+
 			}
 			else
 			{
@@ -130,11 +123,19 @@ void Entity::BFS(sf::Vector2i destination)
 				fPrev.x = static_cast<float>(IntToVec(prev).x);
 				fPrev.y = static_cast<float>(IntToVec(prev).y);
 				m_sprite.setPosition(fPrev);
-				std::cout << prev << std::endl;
+				
+				std::cout << "prev: " << prev << std::endl;
 			}
 		}
 
-		std::list <sf::Vector2i> edgesVec = Game::getWorld().getNeighbours(IntToVec(node));
+
+		std::list <sf::Vector2i> temp = Game::getWorld().getNeighbours(IntToVec(node)), edgesVec;
+		
+		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
+		{
+			//if (!willCollide(*it))//if tile is valid location(no collisions)
+				//edgesVec.push_back(*it);
+		}
 		std::list <int> edges;
 		while (!edges.empty())
 		{
@@ -293,5 +294,5 @@ Direction Entity::getFacing()
 
 Entity::~Entity()
 {
-	delete this;
+	//delete this;
 }

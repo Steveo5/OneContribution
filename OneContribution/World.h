@@ -21,7 +21,11 @@ public:
 
 	int getWidth();
 
+	int getRows();
+
 	int getHeight();
+
+	int getColumns();
 
 	std::list <sf::Vector2i> getNeighbours(sf::Vector2i);
 
