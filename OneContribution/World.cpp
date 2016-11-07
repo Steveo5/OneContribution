@@ -1,4 +1,5 @@
 #include "World.h"
+#include <list>
 
 World::World()
 {
@@ -69,4 +70,28 @@ const int World::getTileCount()
 sf::Vector2f World::getBounds()
 {
 	return m_worldBounds;
+}
+
+int World::getWidth()
+{
+	return m_worldBounds.x;
+}
+
+int World::getHeight()
+{
+	return m_worldBounds.y;
+}
+
+std::list<sf::Vector2i> World::getNeighbours(sf::Vector2i i)
+{
+	std::list<sf::Vector2i> neighbours;
+	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y - m_tileSize.y));//up-left
+	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y - m_tileSize.y));//up
+	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y - m_tileSize.y));//up-right
+	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y));//left
+	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y));//right
+	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y + m_tileSize.y));//down-left
+	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y + m_tileSize.y));//down
+	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y + m_tileSize.y));//down-right
+	return neighbours;
 }

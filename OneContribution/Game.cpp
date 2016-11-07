@@ -158,7 +158,11 @@ void Game::handleEvents()
 				//provide target location to BFS
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 				{
-					//m_entity.BFS(m_window.mapPixelToCoords(sf::Mouse::getPosition()));
+					/*sf::Vector2i temp;
+					temp.x = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).x);
+					temp.y = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).y);
+					m_entity.BFS(temp);*/
+
 				}
 				break;		
 			case sf::Event::KeyPressed:

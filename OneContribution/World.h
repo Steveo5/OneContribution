@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include "Entity.h"
 #include <iostream>
+#include <list>
 
 class World : public sf::Drawable
 {
@@ -17,6 +18,12 @@ public:
 	const int getTileCount();
 
 	sf::Vector2f getBounds();
+
+	int getWidth();
+
+	int getHeight();
+
+	std::list <sf::Vector2i> getNeighbours(sf::Vector2i);
 
 
 	void tick();
