@@ -11,7 +11,7 @@ Game::Game()
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
-	
+
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -36,7 +36,7 @@ Game::Game()
 	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
 	getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
 
-	
+
 }
 
 
@@ -135,48 +135,48 @@ void Game::handleEvents()
 	{
 		switch (event.type)
 		{
-			case sf::Event::Closed:
-				m_window.close();
-				break;
-			case sf::Event::MouseWheelScrolled:
-				if (event.mouseWheelScroll.delta == 1)
+		case sf::Event::Closed:
+			m_window.close();
+			break;
+		case sf::Event::MouseWheelScrolled:
+			if (event.mouseWheelScroll.delta == 1)
+			{
+				m_view.setSize(m_view.getSize().x + 20, m_view.getSize().y + 20);
+			}
+			else
+			{
+				m_view.setSize(m_view.getSize().x - 20, m_view.getSize().y - 20);
+			}
+			break;
+		case::sf::Event::MouseButtonPressed:
+			//Entity test
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				for (int i = 0; i < m_world.getEntities().size(); i++)
 				{
-					m_view.setSize(m_view.getSize().x + 20, m_view.getSize().y + 20);
+					if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
+					m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
+					if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
 				}
-				else
-				{
-					m_view.setSize(m_view.getSize().x - 20, m_view.getSize().y - 20);
-				}
-				break;
-			case::sf::Event::MouseButtonPressed:
-				//Entity test
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					for (int i = 0; i < m_world.getEntities().size(); i++)
-					{
-						if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
-						m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
-						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
-					}
-				}
-				//provide target location to BFS
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-				{
-					m_entity.BFS(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
-				}
-				break;		
-			case sf::Event::KeyPressed:
-				m_ui.handleInput(event.key.code);
-				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-					toggleFullscreen();
-				break;
-			case sf::Event::Resized:
-				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-				m_window.setView(sf::View(visibleArea));
-				break;
+			}
+			//provide target location to BFS
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				m_entity.BFS(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+			}
+			break;
+		case sf::Event::KeyPressed:
+			m_ui.handleInput(event.key.code);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				toggleFullscreen();
+			break;
+		case sf::Event::Resized:
+			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+			m_window.setView(sf::View(visibleArea));
+			break;
 		}
 	}
-	
+
 
 }
 

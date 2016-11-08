@@ -102,7 +102,7 @@ void Entity::BFS(sf::Vector2i destination)
 			int parent = node;
 
 			int prev = -1;//prev is a trail when tracing path, 
-							//so once path is tracked back to start, prev will be the next move
+						  //so once path is tracked back to start, prev will be the next move
 			while (parent != root)
 			{
 				prev = parent;
@@ -122,18 +122,18 @@ void Entity::BFS(sf::Vector2i destination)
 				//next location = prev
 				sf::Vector2f fPrev = static_cast<sf::Vector2f>(IntToVec(prev));
 				m_sprite.setPosition(fPrev);
-				
+
 				std::cout << "prev: " << prev << std::endl;
 			}
 		}
 
 
 		std::list <sf::Vector2i> temp = Game::getWorld().getNeighbours(IntToVec(node)), edgesVec;
-		
+
 		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
 		{
 			//if (!willCollide(*it))//if tile is valid location(no collisions)
-				//edgesVec.push_back(*it);
+			//edgesVec.push_back(*it);
 		}
 		std::list <int> edges;
 		while (!edges.empty())
@@ -155,10 +155,10 @@ void Entity::BFS(sf::Vector2i destination)
 			}
 		}
 	}
-	
 
 
-	
+
+
 }
 
 void Entity::tick()
@@ -190,7 +190,7 @@ void Entity::tick()
 	m_sprite.move(sf::Vector2f(0.0, 0.8));
 
 	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y - 30));
-	
+
 	//Update the entities m_facing property
 	if (m_lastPos != m_sprite.getPosition())
 	{
@@ -298,7 +298,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(m_sprite);
 	}
-		
+
 }
 
 bool Entity::isDead()

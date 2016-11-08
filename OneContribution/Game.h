@@ -11,25 +11,22 @@ public:
 	~Game();
 	void run();
 
-	UI* getUi();
-	tmx::MapLoader* getMapLoader();
-	World& getWorld();
-	static Game* getInstance();
+	static UI* getUi();
+	static tmx::MapLoader* getMapLoader();
+	static World& getWorld();
 
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
-	World m_world;
+	static World m_world;
 	sf::View m_view;
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;
 	bool m_fullscreen = true;
 
-	static Game* m_instance;
+	static tmx::MapLoader* m_ml;
 
-	tmx::MapLoader* m_ml;
-
-	UI m_ui;
+	static UI m_ui;
 
 	sf::Clock m_tickTimer;
 	//tickTimer interval in milliseconds
