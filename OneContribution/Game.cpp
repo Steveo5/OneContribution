@@ -11,7 +11,7 @@ Game::Game()
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
-	//m_world = new World();
+	
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -31,6 +31,7 @@ Game::Game()
 	//m_window.setVerticalSyncEnabled(true);
 
 	//m_ui = new UI();
+	m_world.setWorld(static_cast<sf::Vector2i>(m_ml->GetTileSize()), static_cast<sf::Vector2f>(m_ml->GetMapSize()));
 
 	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
 	
@@ -159,11 +160,7 @@ void Game::handleEvents()
 				//provide target location to BFS
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 				{
-					sf::Vector2i temp;
-					temp.x = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).x);
-					temp.y = static_cast<int>(m_window.mapPixelToCoords(sf::Mouse::getPosition()).y);
-					m_entity.BFS(temp);
-
+					m_entity.BFS(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 				}
 				break;		
 			case sf::Event::KeyPressed:

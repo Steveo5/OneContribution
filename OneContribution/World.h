@@ -8,7 +8,8 @@ class World : public sf::Drawable
 {
 public:
 	World();
-	World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds);
+	void setWorld(sf::Vector2i tileSize, sf::Vector2f worldBounds);
+	//World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds);
 	~World();
 	
 	Entity* spawnEntity(EntityType type, sf::Vector2f location);

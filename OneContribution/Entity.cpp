@@ -50,7 +50,7 @@ int Entity::VecToInt(sf::Vector2i v)
 {
 	return (v.x * Game::getWorld().getColumns()) + v.y;
 }
-sf::Vector2i Entity::IntToVec(int i)
+sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
 {
 	std::cout << "World: " << Game::getWorld().getHeight() << ", " << Game::getWorld().getHeight() << std::endl;
 	int row = i / Game::getWorld().getWidth();
@@ -63,9 +63,12 @@ sf::Vector2i Entity::IntToVec(int i)
 void Entity::BFS(sf::Vector2i destination)
 {
 	std::cout << "BFS" << std::endl;
+	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
+	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << Game::getMapLoader()->GetMapSize().y << std::endl;
+	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << Game::getMapLoader()->GetTileSize().y << std::endl;
 	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
-	const int tileCount = Game::getWorld().getTileCount();
+	const int tileCount = 10000;
 	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
 		" target:" << targetPos.x << ", " << targetPos.y <<
 		" TileCount: " << tileCount << std::endl;
@@ -109,19 +112,14 @@ void Entity::BFS(sf::Vector2i destination)
 			if (prev == -1)//already at destination
 			{
 				//next location = root
-				sf::Vector2f fRoot;
-				fRoot.x = static_cast<float>(IntToVec(root).x);
-				fRoot.y = static_cast<float>(IntToVec(root).y);
-				m_sprite.setPosition(fRoot);
+				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
 				std::cout << "root: " << root << std::endl;
 
 			}
 			else
 			{
 				//next location = prev
-				sf::Vector2f fPrev;
-				fPrev.x = static_cast<float>(IntToVec(prev).x);
-				fPrev.y = static_cast<float>(IntToVec(prev).y);
+				sf::Vector2f fPrev = static_cast<sf::Vector2f>(IntToVec(prev));
 				m_sprite.setPosition(fPrev);
 				
 				std::cout << "prev: " << prev << std::endl;

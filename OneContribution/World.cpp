@@ -1,11 +1,12 @@
 #include "World.h"
 #include <list>
+#include "Game.h"
 
 World::World()
 {
-
+	
 }
-World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds)
+void World::setWorld(sf::Vector2i tileSize, sf::Vector2f worldBounds)
 {
 
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
@@ -60,9 +61,11 @@ std::vector<Entity*> World::getEntities()
 
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
-	//return sf::Vector2i(150, 150);
 	std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
-	return sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));//tileSize is 0
+	sf::Vector2i temp = sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
+	temp.x /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).x;
+	temp.y /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).y;
+	std::cout << 
 }
 
 const int World::getTileCount()
