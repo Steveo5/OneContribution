@@ -236,6 +236,7 @@ void Entity::setSpriteSheet()
 					<< std::endl;
 			}
 			m_sprite.setTexture(m_characterSprite);
+			m_isCharacterSprite = true;
 		}
 		else if (m_entityType == ENEMY)
 		{
@@ -245,6 +246,7 @@ void Entity::setSpriteSheet()
 					<< std::endl;
 			}
 			m_sprite.setTexture(m_characterSprite);
+			m_isCharacterSprite = true;
 		}
 	}
 }
