@@ -33,12 +33,14 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setWidth(100);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
-	Game::getUi()->addComponent(m_hpBar);
+	Game::getInstance()->getUi()->addComponent(m_hpBar);
+	
 	m_lastPos = m_sprite.getPosition();
 }
 
 void Entity::tick()
 {
+	std::cout << m_entityType << std::endl;
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
@@ -50,7 +52,7 @@ void Entity::tick()
 
 	//Check if they are colliding and stop them
 	bool collision;
-	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::getInstance()->getMapLoader()->GetLayers().begin(); layer != Game::getInstance()->getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{
@@ -112,7 +114,7 @@ int Entity::getHealth()
 bool Entity::willCollide(sf::Vector2f position)
 {
 	bool collision;
-	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::getInstance()->getMapLoader()->GetLayers().begin(); layer != Game::getInstance()->getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{

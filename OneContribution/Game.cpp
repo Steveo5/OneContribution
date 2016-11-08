@@ -2,14 +2,14 @@
 
 #include "tmx\MapLoader.h"
 
-tmx::MapLoader* Game::m_ml;
-UI Game::m_ui;
-World Game::m_world;
+Game* Game::m_instance;
+
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
+	m_instance = this;
 	//m_world = new World();
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
@@ -225,6 +225,11 @@ UI *Game::getUi()
 World& Game::getWorld()
 {
 	return m_world;
+}
+
+Game* Game::getInstance()
+{
+	return m_instance;
 }
 
 //World& Game::getWorld()
