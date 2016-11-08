@@ -2,15 +2,16 @@
 
 #include "tmx\MapLoader.h"
 
-Game* Game::m_instance;
-
+tmx::MapLoader* Game::m_ml;
+UI Game::m_ui;
+World Game::m_world;
+Entity m_entity;
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
-	m_instance = this;
-	//m_world = new World();
+	
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -24,13 +25,17 @@ Game::Game()
 	//m_view.setSize(1280 * 4, 720 * 4);
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
+	m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
+	//m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
 	m_window.setView(m_view);
 	//m_window.setVerticalSyncEnabled(true);
 
 	//m_ui = new UI();
-
+	m_world.setWorld(sf::Vector2i(64, 32), static_cast<sf::Vector2i>(m_ml->GetMapSize()));
+	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
 	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
+
 	
 }
 
@@ -154,7 +159,12 @@ void Game::handleEvents()
 						if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
 					}
 				}
-				break;
+				//provide target location to BFS
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				{
+					m_entity.BFS(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				}
+				break;		
 			case sf::Event::KeyPressed:
 				m_ui.handleInput(event.key.code);
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -225,11 +235,6 @@ UI *Game::getUi()
 World& Game::getWorld()
 {
 	return m_world;
-}
-
-Game* Game::getInstance()
-{
-	return m_instance;
 }
 
 //World& Game::getWorld()

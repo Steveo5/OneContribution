@@ -9,10 +9,8 @@ int main()
 	Game* game = new Game();
 	game->run();
 
-	Game::getInstance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(100, 200));
-
-	game->getWorld().spawnEntity(EntityType::ARROW, sf::Vector2f(50, 50));
-
+	game->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	//game->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
 	return 0;
 }
 

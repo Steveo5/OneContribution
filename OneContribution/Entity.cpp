@@ -1,9 +1,17 @@
 #include "Entity.h"
-
+#include "Animation.hpp"
 #include "Game.h"
 
-HealthBar* Entity::m_hpBar;
+#include <unordered_set>
+#include <queue>
 
+HealthBar* Entity::m_hpBar;
+Animation m_animation;
+
+Entity::Entity()
+{
+
+}
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 {
 	m_maxHealth = 100;
@@ -11,7 +19,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_entityType = entityType;
 	m_health = 70;
 	m_visible = true;
-
+	m_isCharacterSprite = 0;
 	//m_rectangle.setPosition(location);
 	//m_rectangle.setFillColor(sf::Color::Red);
 	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
@@ -33,14 +41,135 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setWidth(100);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
-	Game::getInstance()->getUi()->addComponent(m_hpBar);
-	
+	Game::getUi()->addComponent(m_hpBar);
 	m_lastPos = m_sprite.getPosition();
+}
+
+
+
+int Entity::VecToInt(sf::Vector2i v)
+{
+	std::cout << "VecToInt: " << v.x << ", " << v.y << " -> ";
+	int m_vecToIntTemp = (v.x * Game::getWorld().getColumns()) + v.y;
+	std::cout << m_vecToIntTemp << std::endl;
+	return m_vecToIntTemp;
+}
+sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
+{
+	std::cout << "World: " << Game::getWorld().getColumns() << ", " << Game::getWorld().getRows() << std::endl;
+	std::cout << "IntToVec: " << i << " -> ";
+
+	int row = i / Game::getWorld().getColumns();
+	int col = i % Game::getWorld().getColumns();
+	std::cout << row << ", " << col << std::endl;
+	return sf::Vector2i(row, col);
+
+}
+
+void Entity::BFS(sf::Vector2i destination)
+{
+	std::cout << "BFS" << std::endl;
+	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
+	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << ", " << Game::getMapLoader()->GetMapSize().y << std::endl;
+	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << ", " << Game::getMapLoader()->GetTileSize().y << std::endl;
+	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
+	sf::Vector2i targetPos = destination;//ending point
+	const int tileCount = 10000;
+	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
+		" target:" << targetPos.x << ", " << targetPos.y <<
+		" TileCount: " << tileCount << std::endl;
+	std::unordered_set<int> visited;
+
+	std::queue<int> queue;
+
+	int root = VecToInt(startingPos);
+
+	queue.push(root); // enqueue the root node
+	visited.insert(root);
+
+	std::list<int> path;
+
+	int parents[10000];
+
+	parents[root] = -1;//-1 = start point
+
+	while (!queue.empty())
+	{
+		int node = queue.front();
+		queue.pop();
+
+		path.push_back(node);
+
+		if (node == VecToInt(destination))
+		{
+			int path = 0;
+
+			int parent = node;
+
+			int prev = -1;//prev is a trail when tracing path, 
+							//so once path is tracked back to start, prev will be the next move
+			while (parent != root)
+			{
+				prev = parent;
+				parent = parents[parent];
+
+			}
+
+			if (prev == -1)//already at destination
+			{
+				//next location = root
+				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
+				std::cout << "root: " << root << std::endl;
+
+			}
+			else
+			{
+				//next location = prev
+				sf::Vector2f fPrev = static_cast<sf::Vector2f>(IntToVec(prev));
+				m_sprite.setPosition(fPrev);
+				
+				std::cout << "prev: " << prev << std::endl;
+			}
+		}
+
+
+		std::list <sf::Vector2i> temp = Game::getWorld().getNeighbours(IntToVec(node)), edgesVec;
+		
+		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
+		{
+			std::cout << "neighbour: " << it->x << ", " << it->y << std::endl;
+			//if (!willCollide(*it))//if tile is valid location(no collisions)
+				//edgesVec.push_back(*it);
+		}
+		std::list <int> edges;
+		while (!edges.empty())
+		{
+			edges.push_back(VecToInt(edgesVec.front()));
+			edgesVec.pop_front();
+		}
+
+		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
+		{
+			int nde = *it;
+
+			if (visited.count(nde) == 0)
+			{
+				visited.insert(nde);
+				queue.push(nde);
+
+				parents[nde] = node;//child data = parent index
+			}
+		}
+	}
+	
+
+
+	
 }
 
 void Entity::tick()
 {
-	std::cout << m_entityType << std::endl;
+	//updateSprite();
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
@@ -52,7 +181,7 @@ void Entity::tick()
 
 	//Check if they are colliding and stop them
 	bool collision;
-	for (auto layer = Game::getInstance()->getMapLoader()->GetLayers().begin(); layer != Game::getInstance()->getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{
@@ -98,7 +227,48 @@ bool Entity::isHitting(sf::Vector2f position)
 
 void Entity::update()
 {
+	updateSprite();
+}
 
+//Load correct sprite sheet
+void Entity::setSpriteSheet()
+{
+	if (!m_isCharacterSprite)
+	{
+		if (m_entityType == KNIGHT)
+		{
+			if (!m_characterSprite.loadFromFile("KNIGHT.png"))
+			{
+				std::cout << "Error loading resource KNIGHT.png"
+					<< std::endl;
+			}
+			m_sprite.setTexture(m_characterSprite);
+			m_isCharacterSprite = true;
+		}
+		else if (m_entityType == ENEMY)
+		{
+			if (!m_characterSprite.loadFromFile("ENEMY.png"))
+			{
+				std::cout << "Error loading resource ENEMY.png"
+					<< std::endl;
+			}
+			m_sprite.setTexture(m_characterSprite);
+			m_isCharacterSprite = true;
+		}
+	}
+}
+
+void Entity::updateSprite()
+{
+	m_animation.clearFrames();
+
+	for (int i = 0; i < m_curFrames; i++)
+	{
+		m_animation.addFrame(
+			sf::IntRect(m_curStart.x, m_curStart.y, m_frameSize.x, m_frameSize.y)
+		);
+		m_curStart.x += m_frameSize.x;
+	}
 }
 
 void Entity::setHealth(int health)
@@ -114,7 +284,7 @@ int Entity::getHealth()
 bool Entity::willCollide(sf::Vector2f position)
 {
 	bool collision;
-	for (auto layer = Game::getInstance()->getMapLoader()->GetLayers().begin(); layer != Game::getInstance()->getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{
@@ -171,5 +341,5 @@ Direction Entity::getFacing()
 
 Entity::~Entity()
 {
-	delete this;
+	//delete this;
 }

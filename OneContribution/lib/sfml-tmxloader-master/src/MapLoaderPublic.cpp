@@ -199,6 +199,7 @@ sf::Vector2u MapLoader::GetTileSize() const
 
 sf::Vector2u MapLoader::GetMapSize() const
 {
+	std::cout << "GetMapSize(): " << m_width * m_tileWidth << ", " << m_height * m_tileHeight << std::endl;
 	return sf::Vector2u(m_width * m_tileWidth, m_height * m_tileHeight);
 }
 
