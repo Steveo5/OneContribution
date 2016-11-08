@@ -1,5 +1,5 @@
 #include "Entity.h"
-
+#include "Animation.hpp"
 #include "Game.h"
 
 #include <unordered_set>
@@ -218,6 +218,11 @@ bool Entity::isHitting(sf::Vector2f position)
 }
 
 void Entity::update()
+{
+	updateSprite();
+}
+
+void Entity::updateSprite()
 {
 
 }

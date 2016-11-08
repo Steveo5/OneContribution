@@ -30,6 +30,7 @@ public:
 	void tick();
 	void update();
 
+
 	void setHealth(int health);
 	int getHealth();
 	bool willCollide(sf::Vector2f position);
@@ -48,6 +49,18 @@ public:
 	//m_sprite stuff here
 	sf::Sprite m_sprite;
 	sf::Texture m_characterSprite;
+	void updateSprite();
+	int movingFrames;
+	int idleFrames;
+	int deathFrames;
+	int actionFrames;
+	sf::Vector2i startMove;
+	sf::Vector2i startIdle;
+	sf::Vector2i startDeath;
+	sf::Vector2i startAction;
+	sf::Vector2i frameSize;
+
+
 	//m_sprite stuff ends
 
 private:
