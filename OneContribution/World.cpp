@@ -6,7 +6,7 @@ World::World()
 {
 	
 }
-void World::setWorld(sf::Vector2i tileSize, sf::Vector2f worldBounds)
+void World::setWorld(sf::Vector2i tileSize, sf::Vector2i worldBounds)
 {
 
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
@@ -63,17 +63,21 @@ sf::Vector2i World::getTile(sf::Vector2i location)
 {
 	std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
 	sf::Vector2i temp = sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
-	temp.x /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).x;
-	temp.y /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).y;
-	//std::cout << 
+	sf::Vector2i tempTileSize(static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()));
+	std::cout << tempTileSize.x << ", " << tempTileSize.y << std::endl;
+	temp.x /= tempTileSize.x;
+	temp.y /= tempTileSize.y;
+	std::cout << "getTile(): " << temp.x << ", " << temp.y << std::endl;
 	return temp;
 }
 
 const int World::getTileCount()
 {
-	return ((m_worldBounds.x / m_tileSize.x) * (m_worldBounds.y / m_tileSize.y));
+	int m_tileCountTemp = ((m_worldBounds.x / m_tileSize.x) * (m_worldBounds.y / m_tileSize.y));
+	std::cout << "tileCount: " << m_tileCountTemp << std::endl;
+	return m_tileCountTemp;
 }
-sf::Vector2f World::getBounds()
+sf::Vector2i World::getBounds()
 {
 	return m_worldBounds;
 }
@@ -101,13 +105,13 @@ int World::getColumns()
 std::list<sf::Vector2i> World::getNeighbours(sf::Vector2i i)
 {
 	std::list<sf::Vector2i> neighbours;
-	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y - m_tileSize.y));//up-left
+	//neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y - m_tileSize.y));//up-left
 	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y - m_tileSize.y));//up
-	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y - m_tileSize.y));//up-right
+	//neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y - m_tileSize.y));//up-right
 	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y));//left
 	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y));//right
-	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y + m_tileSize.y));//down-left
+	//neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y + m_tileSize.y));//down-left
 	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y + m_tileSize.y));//down
-	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y + m_tileSize.y));//down-right
+	//neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y + m_tileSize.y));//down-right
 	return neighbours;
 }

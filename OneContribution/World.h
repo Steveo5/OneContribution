@@ -8,7 +8,7 @@ class World : public sf::Drawable
 {
 public:
 	World();
-	void setWorld(sf::Vector2i tileSize, sf::Vector2f worldBounds);
+	void setWorld(sf::Vector2i tileSize, sf::Vector2i worldBounds);
 	//World::World(sf::Vector2i tileSize, sf::Vector2f worldBounds);
 	~World();
 	
@@ -18,7 +18,7 @@ public:
 
 	const int getTileCount();
 
-	sf::Vector2f getBounds();
+	sf::Vector2i getBounds();
 
 	int getWidth();
 
@@ -42,6 +42,6 @@ private:
 	std::vector<Entity*> m_entities;
 
 	sf::Vector2i m_tileSize;
-	sf::Vector2f m_worldBounds;
+	sf::Vector2i m_worldBounds;
 };
 

@@ -49,14 +49,19 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 int Entity::VecToInt(sf::Vector2i v)
 {
-	return (v.x * Game::getWorld().getColumns()) + v.y;
+	std::cout << "VecToInt: " << v.x << ", " << v.y << " -> ";
+	int m_vecToIntTemp = (v.x * Game::getWorld().getColumns()) + v.y;
+	std::cout << m_vecToIntTemp << std::endl;
+	return m_vecToIntTemp;
 }
 sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
 {
-	std::cout << "World: " << Game::getWorld().getHeight() << ", " << Game::getWorld().getHeight() << std::endl;
-	int row = i / Game::getWorld().getWidth();
-	int col = i % Game::getWorld().getHeight();
+	std::cout << "World: " << Game::getWorld().getColumns() << ", " << Game::getWorld().getRows() << std::endl;
+	std::cout << "IntToVec: " << i << " -> ";
 
+	int row = i / Game::getWorld().getColumns();
+	int col = i % Game::getWorld().getColumns();
+	std::cout << row << ", " << col << std::endl;
 	return sf::Vector2i(row, col);
 
 }
@@ -65,8 +70,8 @@ void Entity::BFS(sf::Vector2i destination)
 {
 	std::cout << "BFS" << std::endl;
 	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
-	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << Game::getMapLoader()->GetMapSize().y << std::endl;
-	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << Game::getMapLoader()->GetTileSize().y << std::endl;
+	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << ", " << Game::getMapLoader()->GetMapSize().y << std::endl;
+	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << ", " << Game::getMapLoader()->GetTileSize().y << std::endl;
 	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
 	const int tileCount = 10000;
@@ -132,6 +137,7 @@ void Entity::BFS(sf::Vector2i destination)
 		
 		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
 		{
+			std::cout << "neighbour: " << it->x << ", " << it->y << std::endl;
 			//if (!willCollide(*it))//if tile is valid location(no collisions)
 				//edgesVec.push_back(*it);
 		}
@@ -151,7 +157,7 @@ void Entity::BFS(sf::Vector2i destination)
 				visited.insert(nde);
 				queue.push(nde);
 
-				parents[nde] = node;//chld data = parent index
+				parents[nde] = node;//child data = parent index
 			}
 		}
 	}
@@ -163,6 +169,7 @@ void Entity::BFS(sf::Vector2i destination)
 
 void Entity::tick()
 {
+	//updateSprite();
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
@@ -232,7 +239,7 @@ void Entity::setSpriteSheet()
 		{
 			if (!m_characterSprite.loadFromFile("KNIGHT.png"))
 			{
-				std::cout << "Error loading resource sprite.png"
+				std::cout << "Error loading resource KNIGHT.png"
 					<< std::endl;
 			}
 			m_sprite.setTexture(m_characterSprite);
@@ -242,7 +249,7 @@ void Entity::setSpriteSheet()
 		{
 			if (!m_characterSprite.loadFromFile("ENEMY.png"))
 			{
-				std::cout << "Error loading resource sprite.png"
+				std::cout << "Error loading resource ENEMY.png"
 					<< std::endl;
 			}
 			m_sprite.setTexture(m_characterSprite);

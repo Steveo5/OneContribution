@@ -31,9 +31,11 @@ Game::Game()
 	//m_window.setVerticalSyncEnabled(true);
 
 	//m_ui = new UI();
-	m_world.setWorld(static_cast<sf::Vector2i>(m_ml->GetTileSize()), static_cast<sf::Vector2f>(m_ml->GetMapSize()));
-
+	m_world.setWorld(sf::Vector2i(64, 32), static_cast<sf::Vector2i>(m_ml->GetMapSize()));
+	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
 	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
+
 	
 }
 
