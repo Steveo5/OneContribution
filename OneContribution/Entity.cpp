@@ -6,6 +6,7 @@
 #include <queue>
 
 HealthBar* Entity::m_hpBar;
+Animation m_animation;
 
 Entity::Entity()
 {
@@ -18,7 +19,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_entityType = entityType;
 	m_health = 70;
 	m_visible = true;
-
+	m_isCharacterSprite = 0;
 	//m_rectangle.setPosition(location);
 	//m_rectangle.setFillColor(sf::Color::Red);
 	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
@@ -222,9 +223,43 @@ void Entity::update()
 	updateSprite();
 }
 
+//Load correct sprite sheet
+void Entity::setSpriteSheet()
+{
+	if (!m_isCharacterSprite)
+	{
+		if (m_entityType == KNIGHT)
+		{
+			if (!m_characterSprite.loadFromFile("KNIGHT.png"))
+			{
+				std::cout << "Error loading resource sprite.png"
+					<< std::endl;
+			}
+			m_sprite.setTexture(m_characterSprite);
+		}
+		else if (m_entityType == ENEMY)
+		{
+			if (!m_characterSprite.loadFromFile("ENEMY.png"))
+			{
+				std::cout << "Error loading resource sprite.png"
+					<< std::endl;
+			}
+			m_sprite.setTexture(m_characterSprite);
+		}
+	}
+}
+
 void Entity::updateSprite()
 {
+	m_animation.clearFrames();
 
+	for (int i = 0; i < m_curFrames; i++)
+	{
+		m_animation.addFrame(
+			sf::IntRect(m_curStart.x, m_curStart.y, m_frameSize.x, m_frameSize.y)
+		);
+		m_curStart.x += m_frameSize.x;
+	}
 }
 
 void Entity::setHealth(int health)

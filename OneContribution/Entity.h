@@ -4,7 +4,7 @@
 #pragma once
 enum EntityType
 {
-	ARROW,
+	ENEMY,
 	KNIGHT
 };
 
@@ -30,6 +30,8 @@ public:
 	void tick();
 	void update();
 
+	void setSpriteSheet();
+
 
 	void setHealth(int health);
 	int getHealth();
@@ -49,16 +51,19 @@ public:
 	//m_sprite stuff here
 	sf::Sprite m_sprite;
 	sf::Texture m_characterSprite;
+	bool m_isCharacterSprite;
 	void updateSprite();
 	int movingFrames;
 	int idleFrames;
 	int deathFrames;
 	int actionFrames;
+	int m_curFrames;
 	sf::Vector2i startMove;
 	sf::Vector2i startIdle;
 	sf::Vector2i startDeath;
 	sf::Vector2i startAction;
-	sf::Vector2i frameSize;
+	sf::Vector2i m_curStart;
+	sf::Vector2i m_frameSize;
 
 
 	//m_sprite stuff ends
