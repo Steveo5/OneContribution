@@ -65,7 +65,8 @@ sf::Vector2i World::getTile(sf::Vector2i location)
 	sf::Vector2i temp = sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
 	temp.x /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).x;
 	temp.y /= static_cast<sf::Vector2i>(Game::getMapLoader()->GetTileSize()).y;
-	std::cout << 
+	//std::cout << 
+	return temp;
 }
 
 const int World::getTileCount()
