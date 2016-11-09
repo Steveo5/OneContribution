@@ -71,6 +71,16 @@ sf::Vector2i World::getTile(sf::Vector2i location)
 	return temp;
 }
 
+sf::Vector2i World::getTilePos(sf::Vector2i location)
+{
+	sf::Vector2i temp;
+	temp.x = location.x * Game::instance()->getMapLoader()->GetTileSize().x;
+	temp.x = location.y * Game::instance()->getMapLoader()->GetTileSize().y;
+	std::cout << "getTilePos(): " << temp.x << ", " << temp.y << std::endl;
+	return temp;
+	
+}
+
 const int World::getTileCount()
 {
 	int m_tileCountTemp = ((m_worldBounds.x / m_tileSize.x) * (m_worldBounds.y / m_tileSize.y));

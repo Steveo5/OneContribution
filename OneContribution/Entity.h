@@ -50,7 +50,7 @@ public:
 	sf::Vector2i IntToVec(int i);
 	~Entity();
 
-	void BFS(sf::Vector2i, sf::Vector2i);
+	void BFS();
 
 	void tick();
 	void update();
@@ -67,6 +67,7 @@ public:
 	int getHealth();
 	bool willCollide(sf::Vector2f position);
 	bool isHitting(sf::Vector2f position);
+	void Entity::setTarget(sf::Vector2i);
 	//Move an entity to a position in target seconds
 	void moveTo(sf::Vector2f position, int seconds);
 	bool isDead();
@@ -115,7 +116,7 @@ private:
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;
 
-	void Entity::setTarget(sf::Vector2i);
+	
 	sf::Vector2i m_target;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

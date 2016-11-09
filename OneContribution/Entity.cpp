@@ -53,26 +53,30 @@ int Entity::VecToInt(sf::Vector2i v)
 }
 sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
 {
-	std::cout << "World: " << Game::instance()->getWorld().getHeight() << ", " << Game::instance()->getWorld().getHeight() << std::endl;
-	int row = i / Game::instance()->getWorld().getWidth();
-	int col = i % Game::instance()->getWorld().getHeight();
+	std::cout << "World: " << Game::instance()->getWorld().getRows() << ", " << Game::instance()->getWorld().getColumns() << std::endl;
+	int row = i / Game::instance()->getWorld().getColumns();
+	int col = i % Game::instance()->getWorld().getColumns();
 
 	return sf::Vector2i(row, col);
 
 }
 
-void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
+void Entity::BFS()
 {
 	std::cout << "BFS" << std::endl;
-	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
+	//std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
 	std::cout << "mapSize: " << Game::instance()->getMapLoader()->GetMapSize().x << Game::instance()->getMapLoader()->GetMapSize().y << std::endl;
 	std::cout << "tileSize: " << Game::instance()->getMapLoader()->GetTileSize().x << Game::instance()->getMapLoader()->GetTileSize().y << std::endl;
 	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
+
+
 	sf::Vector2i startingPos = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
-	sf::Vector2i targetPos = destination;//ending point
-	const int tileCount = 10000;
+	//	ending point = m_target
+	//m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(m_target)));//test movement
+
+	const int tileCount = Game::instance()->getWorld().getTileCount();
 	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
-		" target:" << targetPos.x << ", " << targetPos.y <<
+		" target:" << m_target.x << ", " << m_target.y <<
 		" TileCount: " << tileCount << std::endl;
 	std::unordered_set<int> visited;
 
@@ -96,7 +100,7 @@ void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 
 		path.push_back(node);
 
-		if (node == VecToInt(destination))
+		if (node == VecToInt(m_target))
 		{
 			int path = 0;
 
@@ -114,16 +118,16 @@ void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 			if (prev == -1)//already at destination
 			{
 				//next location = root
-				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
+				m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(IntToVec(root))));
+				std::cout << "SpritePos post change: "<< m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
 				std::cout << "root: " << root << std::endl;
 
 			}
 			else
 			{
 				//next location = prev
-				sf::Vector2f fPrev = static_cast<sf::Vector2f>(IntToVec(prev));
-				m_sprite.setPosition(fPrev);
-
+				m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(IntToVec(prev))));
+				std::cout << "SpritePos post change: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
 				std::cout << "prev: " << prev << std::endl;
 			}
 		}
@@ -173,7 +177,7 @@ void Entity::tick()
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
-	//BFS((Game::instance()->getWorld()->getTile(static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+	BFS();//start BFS on each tick
 
 	if (isDead())
 	{
@@ -196,7 +200,7 @@ void Entity::tick()
 		}
 	}
 
-	m_sprite.move(sf::Vector2f(0.0, 0.8));
+	//m_sprite.move(sf::Vector2f(0.0, 0.8));
 
 	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y - 30));
 
@@ -326,6 +330,7 @@ bool Entity::isControllable()
 
 void Entity::setTarget(sf::Vector2i t)
 {
+	std::cout << "setTarget(): " << t.x << ", " << t.y << std::endl;
 	m_target = t;
 }
 

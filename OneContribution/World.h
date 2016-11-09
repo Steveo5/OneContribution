@@ -16,6 +16,8 @@ public:
 	std::vector<Entity*> getEntities();
 	sf::Vector2i getTile(sf::Vector2i location);
 
+	sf::Vector2i getTilePos(sf::Vector2i location);
+
 	const int getTileCount();
 
 	sf::Vector2i getBounds();

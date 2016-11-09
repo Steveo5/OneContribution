@@ -33,9 +33,9 @@ Game::Game()
 	//m_window.setVerticalSyncEnabled(true);
 
 	//m_ui = new UI();
-	m_world.setWorld(sf::Vector2i(64, 32), static_cast<sf::Vector2i>(m_ml->GetMapSize()));
+	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(6400, 3200));//manually set fix
 	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
-	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
+	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 150.f));
 	//getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
 	std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
 
@@ -120,22 +120,23 @@ void Game::handleEvents()
 		//m_view.move(0.0, 1.5);
 		m_view.setCenter(m_view.getCenter().x, m_view.getCenter().y + 5);
 	}
+
 	sf::Vector2i mousePos = sf::Mouse::getPosition();
-	if (mousePos.x > m_window.getSize().x - 5)
+	if (mousePos.x > m_window.getSize().x + m_window.getPosition().x - 50)
 	{
-		m_view.move(2.0, 0.0);
+		m_view.move(4.0, 0.0);
 	}
-	if (mousePos.x < 5)
+	if (mousePos.x <  m_window.getPosition().x + 50)
 	{
-		m_view.move(-2.0, 0.0);
+		m_view.move(-4.0, 0.0);
 	}
-	if (mousePos.y > m_window.getSize().y - 5)
+	if (mousePos.y > m_window.getSize().y + m_window.getPosition().y - 50)
 	{
-		m_view.move(0.0, 1.5);
+		m_view.move(0.0, 3.0);
 	}
-	if (mousePos.y < 5)
+	if (mousePos.y < m_window.getPosition().y + 50)
 	{
-		m_view.move(0.0, -1.5);
+		m_view.move(0.0, -3.0);
 	}
 	sf::Event event;
 	while (m_window.pollEvent(event))
@@ -169,8 +170,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				//instance()->getWorld().getEntities[0]().setTarget(instance()->getWorld.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
-				//m_world.getEntities()[0].BFS((m_world.getTile(static_cast<sf::Vector2i>(getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				instance()->getWorld().getEntities()[0]->setTarget( instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
 		case sf::Event::KeyPressed:
