@@ -6,6 +6,7 @@ tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
 World Game::m_world;
 Entity m_entity;
+Game* Game::m_instance;
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
@@ -89,6 +90,16 @@ void Game::run()
 		//Display everything to the screen
 		endDraw();
 	}
+}
+
+Game* Game::instance()
+{
+	if (m_instance == 0)
+	{
+		m_instance = new Game();
+	}
+
+	return m_instance;
 }
 
 void Game::handleEvents()

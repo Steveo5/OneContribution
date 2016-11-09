@@ -15,6 +15,8 @@ public:
 	static tmx::MapLoader* getMapLoader();
 	static World& getWorld();
 
+	static Game* instance();
+
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
@@ -23,6 +25,8 @@ private:
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;
 	bool m_fullscreen = true;
+
+	static Game* m_instance;
 
 	static tmx::MapLoader* m_ml;
 
