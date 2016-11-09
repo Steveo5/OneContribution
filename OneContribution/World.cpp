@@ -54,7 +54,7 @@ Entity* World::spawnEntity(EntityType type, sf::Vector2f location)
 	return ent;
 }
 
-std::vector<Entity*> World::getEntities()
+std::vector<Entity*>& World::getEntities()
 {
 	return m_entities;
 }

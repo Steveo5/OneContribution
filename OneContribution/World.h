@@ -13,7 +13,7 @@ public:
 	~World();
 	
 	Entity* spawnEntity(EntityType type, sf::Vector2f location);
-	std::vector<Entity*> getEntities();
+	std::vector<Entity*>& getEntities();
 	sf::Vector2i getTile(sf::Vector2i location);
 
 	sf::Vector2i getTilePos(sf::Vector2i location);

@@ -108,7 +108,7 @@ private:
 	int m_health;
 	bool m_visible;
 	int m_maxHealth;
-	static HealthBar* m_hpBar;
+	HealthBar* m_hpBar;
 	Direction m_facing;
 
 	Path* m_path;

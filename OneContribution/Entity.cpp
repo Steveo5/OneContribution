@@ -5,7 +5,6 @@
 #include <unordered_set>
 #include <queue>
 
-HealthBar* Entity::m_hpBar;
 Animation m_animation;
 
 Entity::Entity()

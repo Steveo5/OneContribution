@@ -3,6 +3,7 @@
 #include "tmx\MapLoader.h"
 #include "UI.h"
 #include "World.h"
+#include <iostream>
 
 class Game
 {
@@ -17,6 +18,10 @@ public:
 
 	static Game* instance();
 
+	void setTest(std::string test);
+	std::string getTest();
+
+
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
@@ -25,6 +30,8 @@ private:
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;
 	bool m_fullscreen = true;
+
+	std::string m_test;
 
 	static Game* m_instance;
 

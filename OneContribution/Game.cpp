@@ -51,6 +51,7 @@ void Game::run()
 	if (!m_ml->Load("Map.tmx"))
 	{
 		std::cout << "failed to load map" << std::endl;
+		return;
 	}
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -78,7 +79,7 @@ void Game::run()
 
 		m_window.draw(*m_ml);
 		m_window.draw(getWorld());
-		m_window.draw(m_miniMapSprite);
+		//m_window.draw(m_miniMapSprite);
 
 		//Objects to draw to minimap
 		m_window.setView(m_miniMap);
@@ -91,6 +92,15 @@ void Game::run()
 		//Display everything to the screen
 		endDraw();
 	}
+}
+
+void Game::setTest(std::string test)
+{
+	m_test = test;
+}
+std::string Game::getTest()
+{
+	return m_test;
 }
 
 Game* Game::instance()
@@ -208,9 +218,10 @@ void Game::tick()
 void Game::update()
 {
 	m_world.update();
-	m_ui.update(m_window);
+	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	//m_window.setView(m_view);
+	m_ui.update(m_window);
 }
 
 

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Game.h"
+
 UI::UI()
 {
 	m_debugOverlay.setSize(sf::Vector2f(600, 400));
@@ -92,7 +94,9 @@ void UI::update(sf::RenderWindow &window)
 	m_txtDebug.setPosition(newDebugPos);
 	std::string fps = "Fps: " + std::to_string(m_fps);
 	std::string mousePosStr = "Mouse Position: x " + std::to_string(mousePos.x) + " y " + std::to_string(mousePos.y);
-	m_txtDebug.setString(fps + "\n" + mousePosStr);
+	std::string entityCount = "Total entities: " +  std::to_string(Game::instance()->getWorld().getEntities().size());
+	
+	m_txtDebug.setString(fps + "\n" + mousePosStr + "\n" + entityCount);
 	
 
 	for (int i = 0; i < m_components.size(); i++)
