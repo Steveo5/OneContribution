@@ -50,7 +50,7 @@ public:
 	sf::Vector2i IntToVec(int i);
 	~Entity();
 
-	void BFS(sf::Vector2i);
+	void BFS(sf::Vector2i, sf::Vector2i);
 
 	void tick();
 	void update();
@@ -75,6 +75,8 @@ public:
 	bool isVisible();
 	void setVisible(bool visible);
 	Direction getFacing();
+
+	sf::Vector2f getSpritePosition();
 
 	//sf::RectangleShape m_rectangle;
 

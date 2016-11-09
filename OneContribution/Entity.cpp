@@ -61,12 +61,13 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 
 }
 
-void Entity::BFS(sf::Vector2i destination)
+void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 {
 	std::cout << "BFS" << std::endl;
 	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
 	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << Game::getMapLoader()->GetMapSize().y << std::endl;
 	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << Game::getMapLoader()->GetTileSize().y << std::endl;
+	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
 	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
 	const int tileCount = 10000;
@@ -340,6 +341,11 @@ void Entity::setVisible(bool visible)
 Direction Entity::getFacing()
 {
 	return m_facing;
+}
+
+sf::Vector2f Entity::getSpritePosition()
+{
+	return m_sprite.getPosition();
 }
 
 Entity::~Entity()
