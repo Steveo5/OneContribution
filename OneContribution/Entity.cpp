@@ -69,9 +69,8 @@ void Entity::BFS()
 	std::cout << "tileSize: " << Game::instance()->getMapLoader()->GetTileSize().x << Game::instance()->getMapLoader()->GetTileSize().y << std::endl;
 	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
 
-
 	sf::Vector2i startingPos = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
-	//	ending point = m_target
+	//	ending point is m_target
 	//m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(m_target)));//test movement
 
 	const int tileCount = Game::instance()->getWorld().getTileCount();
@@ -83,8 +82,10 @@ void Entity::BFS()
 	std::queue<int> queue;
 
 	int root = VecToInt(startingPos);
+	std::cout << "root: " << root << std::endl;
 
 	queue.push(root); // enqueue the root node
+	std::cout << "queue.back: " << queue.back() << std::endl;
 	visited.insert(root);
 
 	std::list<int> path;
@@ -95,6 +96,7 @@ void Entity::BFS()
 
 	while (!queue.empty())
 	{
+		std::cout << "queue is not empty" << std::endl;
 		int node = queue.front();
 		queue.pop();
 
