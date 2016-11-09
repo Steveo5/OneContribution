@@ -23,7 +23,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	//m_rectangle.setPosition(location);
 	//m_rectangle.setFillColor(sf::Color::Red);
 	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
-
+	m_path = new Path();
 
 	//m_sprite stuff here
 	m_sprite.setPosition(location);
@@ -161,8 +161,14 @@ void Entity::BFS(sf::Vector2i destination)
 
 }
 
+sf::Clock pathTimer;
 void Entity::tick()
 {
+	if (pathTimer.getElapsedTime().asSeconds() > 1)
+	{
+		pathTimer.restart();
+		std::cout << "second" << std::endl;
+	}
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
@@ -209,6 +215,10 @@ void Entity::tick()
 		else if (m_lastPos.y < m_sprite.getPosition().y)
 		{
 			m_facing = Direction::DOWN;
+		}
+		else
+		{
+			m_facing = Direction::NONE;
 		}
 	}
 }
@@ -326,7 +336,7 @@ void Entity::setVisible(bool visible)
 	m_visible = visible;
 }
 
-/* Get the entities current direction (UP, LEFT, DOWN, RIGHT) */
+/* Get the entities current direction (UP, LEFT, DOWN, RIGHT, NONE) */
 Direction Entity::getFacing()
 {
 	return m_facing;
@@ -335,4 +345,66 @@ Direction Entity::getFacing()
 Entity::~Entity()
 {
 	//delete this;
+}
+
+Path* Entity::getPath()
+{
+	return m_path;
+}
+
+void Entity::setPath(Path* newPath)
+{
+	m_path = newPath;
+}
+
+void Entity::startPathing()
+{
+
+}
+
+void Entity::pausePathing()
+{
+
+}
+
+void Entity::stopPathing()
+{
+
+}
+
+bool Path::isPaused()
+{
+	return m_currentTile != NULL;
+}
+bool Path::isStopped()
+{
+	return m_currentTile == NULL;
+}
+
+sf::Vector2f* Path::getCurrentTile()
+{
+	return m_currentTile;
+}
+
+std::vector<sf::Vector2f>* Path::getTiles()
+{
+	return m_tiles;
+}
+void Path::setTiles(std::vector<sf::Vector2f>* tiles)
+{
+	m_tiles = tiles;
+}
+void Path::addTile(sf::Vector2f tile)
+{
+	m_tiles->push_back(tile);
+}
+
+void Path::removeTile(int index)
+{
+	/*
+	if (m_tiles->size() > index)
+	{
+		m_tiles->erase(std::remove(m_tiles->begin(), m_tiles->end(), index), m_tiles->end());
+	}
+	*/
 }
