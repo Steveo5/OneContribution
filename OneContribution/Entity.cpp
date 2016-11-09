@@ -173,6 +173,8 @@ void Entity::tick()
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
+	//BFS((Game::instance()->getWorld()->getTile(static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+
 	if (isDead())
 	{
 		setVisible(false);
@@ -320,6 +322,11 @@ bool Entity::isDead()
 bool Entity::isControllable()
 {
 	return m_controllable;
+}
+
+void Entity::setTarget(sf::Vector2i t)
+{
+	m_target = t;
 }
 
 void Entity::setControllable(bool control)

@@ -169,6 +169,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
+				//instance()->getWorld().getEntities[0]().setTarget(instance()->getWorld.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 				//m_world.getEntities()[0].BFS((m_world.getTile(static_cast<sf::Vector2i>(getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;

@@ -115,6 +115,10 @@ private:
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;
 
+	void Entity::setTarget(sf::Vector2i);
+	sf::Vector2i m_target;
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
+
 
