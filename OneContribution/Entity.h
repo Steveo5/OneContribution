@@ -13,7 +13,32 @@ enum Direction
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	NONE
+};
+
+enum Action
+{
+	DYING,
+	SPAWNING,
+	ATTACKING,
+	TAKING_DAMAGE
+};
+
+class Path
+{
+public:
+	std::vector<sf::Vector2f>* getTiles();
+	void setTiles(std::vector<sf::Vector2f>* tiles);
+	void addTile(sf::Vector2f tile);
+	void removeTile(int index);
+	sf::Vector2f* getCurrentTile();
+	bool isPaused();
+	bool isStopped();
+
+private:
+	std::vector<sf::Vector2f>* m_tiles;
+	sf::Vector2f* m_currentTile = NULL;
 };
 
 class Entity : public sf::Drawable
@@ -32,6 +57,11 @@ public:
 
 	void setSpriteSheet();
 
+	Path* getPath();
+	void setPath(Path* newPath);
+	void startPathing();
+	void pausePathing();
+	void stopPathing();
 
 	void setHealth(int health);
 	int getHealth();
@@ -79,6 +109,8 @@ private:
 	int m_maxHealth;
 	static HealthBar* m_hpBar;
 	Direction m_facing;
+
+	Path* m_path;
 
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;

@@ -1,17 +1,19 @@
 #include "Game.h"
 
 #include "tmx\MapLoader.h"
-
+/*
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
 World Game::m_world;
 Entity m_entity;
+*/
+Game* Game::m_instance = 0;
 Game::Game()
 	: m_view(sf::FloatRect(0, 0, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
-
+	m_instance = this;
 	m_ml = new tmx::MapLoader("Resources");
 	m_miniMap.zoom(10);
 	m_miniMapSprite.setOutlineColor(sf::Color::Blue);
@@ -91,6 +93,11 @@ void Game::run()
 	}
 }
 
+Game* Game::instance()
+{
+	return m_instance;
+}
+
 void Game::handleEvents()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -162,7 +169,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				m_entity.BFS((m_world.getTile(static_cast<sf::Vector2i>(getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				//m_world.getEntities()[0].BFS((m_world.getTile(static_cast<sf::Vector2i>(getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
 		case sf::Event::KeyPressed:
