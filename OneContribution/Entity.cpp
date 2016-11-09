@@ -68,7 +68,7 @@ void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << Game::getMapLoader()->GetMapSize().y << std::endl;
 	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << Game::getMapLoader()->GetTileSize().y << std::endl;
 	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
+	sf::Vector2i startingPos = start;
 	sf::Vector2i targetPos = destination;//ending point
 	const int tileCount = 10000;
 	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
