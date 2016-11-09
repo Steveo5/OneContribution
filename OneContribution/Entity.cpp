@@ -41,7 +41,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setWidth(100);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
-	Game::getUi()->addComponent(m_hpBar);
+	Game::instance()->getUi()->addComponent(m_hpBar);
 	m_lastPos = m_sprite.getPosition();
 }
 
@@ -49,13 +49,13 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 int Entity::VecToInt(sf::Vector2i v)
 {
-	return (v.x * Game::getWorld().getColumns()) + v.y;
+	return (v.x * Game::instance()->getWorld().getColumns()) + v.y;
 }
 sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
 {
-	std::cout << "World: " << Game::getWorld().getHeight() << ", " << Game::getWorld().getHeight() << std::endl;
-	int row = i / Game::getWorld().getWidth();
-	int col = i % Game::getWorld().getHeight();
+	std::cout << "World: " << Game::instance()->getWorld().getHeight() << ", " << Game::instance()->getWorld().getHeight() << std::endl;
+	int row = i / Game::instance()->getWorld().getWidth();
+	int col = i % Game::instance()->getWorld().getHeight();
 
 	return sf::Vector2i(row, col);
 
@@ -65,10 +65,10 @@ void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 {
 	std::cout << "BFS" << std::endl;
 	std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
-	std::cout << "mapSize: " << Game::getMapLoader()->GetMapSize().x << Game::getMapLoader()->GetMapSize().y << std::endl;
-	std::cout << "tileSize: " << Game::getMapLoader()->GetTileSize().x << Game::getMapLoader()->GetTileSize().y << std::endl;
+	std::cout << "mapSize: " << Game::instance()->getMapLoader()->GetMapSize().x << Game::instance()->getMapLoader()->GetMapSize().y << std::endl;
+	std::cout << "tileSize: " << Game::instance()->getMapLoader()->GetTileSize().x << Game::instance()->getMapLoader()->GetTileSize().y << std::endl;
 	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-	sf::Vector2i startingPos = Game::getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
+	sf::Vector2i startingPos = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
 	sf::Vector2i targetPos = destination;//ending point
 	const int tileCount = 10000;
 	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
@@ -129,7 +129,7 @@ void Entity::BFS(sf::Vector2i start, sf::Vector2i destination)
 		}
 
 
-		std::list <sf::Vector2i> temp = Game::getWorld().getNeighbours(IntToVec(node)), edgesVec;
+		std::list <sf::Vector2i> temp = Game::instance()->getWorld().getNeighbours(IntToVec(node)), edgesVec;
 
 		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
 		{
@@ -181,7 +181,7 @@ void Entity::tick()
 
 	//Check if they are colliding and stop them
 	bool collision;
-	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::instance()->getMapLoader()->GetLayers().begin(); layer != Game::instance()->getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{
@@ -288,7 +288,7 @@ int Entity::getHealth()
 bool Entity::willCollide(sf::Vector2f position)
 {
 	bool collision;
-	for (auto layer = Game::getMapLoader()->GetLayers().begin(); layer != Game::getMapLoader()->GetLayers().end(); ++layer)
+	for (auto layer = Game::instance()->getMapLoader()->GetLayers().begin(); layer != Game::instance()->getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
 		{

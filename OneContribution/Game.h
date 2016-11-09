@@ -11,16 +11,16 @@ public:
 	~Game();
 	void run();
 
-	static UI* getUi();
-	static tmx::MapLoader* getMapLoader();
-	static World& getWorld();
+	UI* getUi();
+	tmx::MapLoader* getMapLoader();
+	World& getWorld();
 
 	static Game* instance();
 
 	//static World& getWorld();
 private:
 	sf::RenderWindow m_window;
-	static World m_world;
+	World m_world;
 	sf::View m_view;
 	sf::View m_miniMap;
 	sf::RectangleShape m_miniMapSprite;
@@ -28,9 +28,9 @@ private:
 
 	static Game* m_instance;
 
-	static tmx::MapLoader* m_ml;
+	tmx::MapLoader* m_ml;
 
-	static UI m_ui;
+	UI m_ui;
 
 	sf::Clock m_tickTimer;
 	//tickTimer interval in milliseconds
