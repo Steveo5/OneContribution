@@ -34,8 +34,8 @@ Game::Game()
 	m_world.setWorld(sf::Vector2i(64, 32), static_cast<sf::Vector2i>(m_ml->GetMapSize()));
 	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
 	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-50.f, 0.f));
-	getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
-
+	//getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
+	std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
 
 }
 
@@ -162,7 +162,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				m_entity.BFS(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				m_entity.BFS((m_world.getTile(static_cast<sf::Vector2i>(getWorld().getEntities()[0]->getSpritePosition()))), m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
 		case sf::Event::KeyPressed:
