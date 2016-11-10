@@ -174,11 +174,12 @@ void Entity::tick()
 	{
 		pathTimer.restart();
 		std::cout << "second" << std::endl;
+		BFS();
 	}
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 
-	BFS();//start BFS on each tick
+	//BFS();//start BFS on each tick
 
 	if (isDead())
 	{
