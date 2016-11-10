@@ -12,7 +12,13 @@ int main()
 
 	std::cout << game->getTest() << std::endl;
 
-	Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(-100.f, 0.f));
+	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(50.f, 0.f));
+
+	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 100.f));
+
+
+	//Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(50.f, 0.f));
+
 	//game->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
 
 	std::cout << game->getTest() << std::endl;

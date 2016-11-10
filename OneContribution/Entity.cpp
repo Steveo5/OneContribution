@@ -196,7 +196,7 @@ void Entity::tick()
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
 		pathTimer.restart();
-		std::cout << "second" << std::endl;
+		m_sprite.setPosition(m_sprite.getPosition().x + 30, m_sprite.getPosition().y);
 		BFS();
 	}
 	m_hpBar->setVisible(m_visible);
@@ -400,19 +400,43 @@ void Entity::setPath(Path* newPath)
 	m_path = newPath;
 }
 
-void Entity::startPathing()
+sf::Vector2f* Path::getPreviousTile()
 {
-
+	if (m_currentTile - 1 < 0)
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile - 1];
+	}
 }
 
-void Entity::pausePathing()
+sf::Vector2f* Path::getNextTile()
 {
+	if (m_currentTile + 1 > m_tiles.size())
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile + 1];
+	}
+}
 
+void Entity::startPathing()
+{
+	resetPathing();
+}
+
+void Entity::resetPathing()
+{
+	m_path->setCurrentTile(0);
 }
 
 void Entity::stopPathing()
 {
-
+	m_path->setCurrentTile(-1);
 }
 
 bool Path::isPaused()
@@ -424,22 +448,34 @@ bool Path::isStopped()
 	return m_currentTile == NULL;
 }
 
+void Path::setCurrentTile(int index)
+{
+	m_currentTile = index;
+}
+
 sf::Vector2f* Path::getCurrentTile()
 {
-	return m_currentTile;
+	if (m_currentTile > m_tiles.size())
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile];
+	}
 }
 
 std::vector<sf::Vector2f>* Path::getTiles()
 {
-	return m_tiles;
+	return &m_tiles;
 }
-void Path::setTiles(std::vector<sf::Vector2f>* tiles)
+void Path::setTiles(std::vector<sf::Vector2f> tiles)
 {
 	m_tiles = tiles;
 }
 void Path::addTile(sf::Vector2f tile)
 {
-	m_tiles->push_back(tile);
+	m_tiles.push_back(tile);
 }
 
 void Path::removeTile(int index)
