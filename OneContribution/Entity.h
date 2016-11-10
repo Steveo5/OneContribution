@@ -37,6 +37,9 @@ public:
 	bool isPaused();
 	bool isStopped();
 
+	sf::Vector2f* getPreviousTile();
+	sf::Vector2f* getNextTile();
+
 private:
 	std::vector<sf::Vector2f> m_tiles;
 	int m_currentTile = -1;

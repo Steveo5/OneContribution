@@ -173,7 +173,7 @@ void Entity::tick()
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
 		pathTimer.restart();
-		std::cout << "second" << std::endl;
+		m_sprite.setPosition(m_sprite.getPosition().x + 30, m_sprite.getPosition().y);
 		BFS();
 	}
 	m_hpBar->setVisible(m_visible);
@@ -375,6 +375,30 @@ Path* Entity::getPath()
 void Entity::setPath(Path* newPath)
 {
 	m_path = newPath;
+}
+
+sf::Vector2f* Path::getPreviousTile()
+{
+	if (m_currentTile - 1 < 0)
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile - 1];
+	}
+}
+
+sf::Vector2f* Path::getNextTile()
+{
+	if (m_currentTile + 1 > m_tiles.size())
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile + 1];
+	}
 }
 
 void Entity::startPathing()
