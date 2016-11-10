@@ -379,17 +379,17 @@ void Entity::setPath(Path* newPath)
 
 void Entity::startPathing()
 {
-
+	resetPathing();
 }
 
-void Entity::pausePathing()
+void Entity::resetPathing()
 {
-
+	m_path->setCurrentTile(0);
 }
 
 void Entity::stopPathing()
 {
-
+	m_path->setCurrentTile(-1);
 }
 
 bool Path::isPaused()
@@ -401,22 +401,34 @@ bool Path::isStopped()
 	return m_currentTile == NULL;
 }
 
+void Path::setCurrentTile(int index)
+{
+	m_currentTile = index;
+}
+
 sf::Vector2f* Path::getCurrentTile()
 {
-	return m_currentTile;
+	if (m_currentTile > m_tiles.size())
+	{
+		return NULL;
+	}
+	else
+	{
+		return &m_tiles[m_currentTile];
+	}
 }
 
 std::vector<sf::Vector2f>* Path::getTiles()
 {
-	return m_tiles;
+	return &m_tiles;
 }
-void Path::setTiles(std::vector<sf::Vector2f>* tiles)
+void Path::setTiles(std::vector<sf::Vector2f> tiles)
 {
 	m_tiles = tiles;
 }
 void Path::addTile(sf::Vector2f tile)
 {
-	m_tiles->push_back(tile);
+	m_tiles.push_back(tile);
 }
 
 void Path::removeTile(int index)

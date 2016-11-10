@@ -29,16 +29,17 @@ class Path
 {
 public:
 	std::vector<sf::Vector2f>* getTiles();
-	void setTiles(std::vector<sf::Vector2f>* tiles);
+	void setTiles(std::vector<sf::Vector2f> tiles);
 	void addTile(sf::Vector2f tile);
 	void removeTile(int index);
 	sf::Vector2f* getCurrentTile();
+	void setCurrentTile(int index);
 	bool isPaused();
 	bool isStopped();
 
 private:
-	std::vector<sf::Vector2f>* m_tiles;
-	sf::Vector2f* m_currentTile = NULL;
+	std::vector<sf::Vector2f> m_tiles;
+	int m_currentTile = -1;
 };
 
 class Entity : public sf::Drawable
@@ -60,7 +61,7 @@ public:
 	Path* getPath();
 	void setPath(Path* newPath);
 	void startPathing();
-	void pausePathing();
+	void resetPathing();
 	void stopPathing();
 
 	void setHealth(int health);
