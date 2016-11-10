@@ -61,13 +61,13 @@ std::vector<Entity*>& World::getEntities()
 
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
-	std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
+	//std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
 	sf::Vector2i temp = sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
 	sf::Vector2i tempTileSize(static_cast<sf::Vector2i>(Game::instance()->getMapLoader()->GetTileSize()));
-	std::cout << tempTileSize.x << ", " << tempTileSize.y << std::endl;
+	//std::cout << tempTileSize.x << ", " << tempTileSize.y << std::endl;
 	temp.x /= tempTileSize.x;
 	temp.y /= tempTileSize.y;
-	std::cout << "getTile(): " << temp.x << ", " << temp.y << std::endl;
+	//std::cout << "getTile(): " << temp.x << ", " << temp.y << std::endl;
 	return temp;
 }
 
