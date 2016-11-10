@@ -59,20 +59,62 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 	return sf::Vector2i(row, col);
 
 }
+
+int Entity::getParentDir(sf::Vector2i parent, sf::Vector2i child)
+{
+	//return the direction of the parent from the child for back-trace
+	//1 = up-left
+	//2 = up-right
+	//3 = down-left
+	//4 = down-right
+	int toReturn = 0;
+	if (child.x > parent.x)
+		if (child.y > parent.y)
+			return 4;
+		else
+			return 2;
+	else
+		if (child.y < parent.y)
+			return 1;
+		else
+			return 3;
+}
+
 void Entity::newBFS()
-{/*
-	std::list<sf::Vector2i, int> visited, open;
-	open.push_back= (Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition())), 0);
+{
+	bool isEnd = false;
+	std::list<std::pair<sf::Vector2i, int>> open, visited;
+	sf::Vector2i start = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
+	open.push_back(std::pair<sf::Vector2i, int>(start, 0));
+	std::pair<sf::Vector2i, int> currentTile;
 	std::list<sf::Vector2i> neighbours;
 
-	while ()//while not not ending location
+	while (isEnd != true)//while not not ending location
 	{
-		for (std::list<sf::Vector2i, int>::iterator it = open.begin(); it != open.end(); ++it)
+		while (open.size() > 0)//std::list<std::pair<sf::Vector2i, int>>::iterator it = open.begin(); it != open.end(); ++it
 		{
-			neighbours = Game::instance()->getWorld().getNeighbours(*it);
+			currentTile = open.front();//get from open tile list
+			open.pop_front();//pop front tile from open (no longer open)
+			neighbours = Game::instance()->getWorld().getNeighbours(currentTile.first);//get the neighbours of the popped tile
+			for (std::list<sf::Vector2i>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)//loop over the neighbours
+			{
+				if (willCollide(static_cast<sf::Vector2f>(*it)))//if collision, don't add it to the open list
+				{
+					std::cout << "collision on tile: " << it->x << ", " << it->y << std::endl;//nothing
+				}
+				else if (*it == m_target)//found the end
+				{
+					visited.push_back(std::pair<sf::Vector2i, int>(*it, getParentDir(currentTile.first, *it)));//add to list of visited tiles and trace back.
+					isEnd = true;
+				}
+				else//not end or collision
+				{
+					open.push_back(std::pair<sf::Vector2i, int>(*it, getParentDir(currentTile.first, *it)));//add to list to get neighbours from later.
+				}
+			}
 		}
 
-	}*/
+	}
 }
 
 void Entity::BFS()
