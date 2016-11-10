@@ -56,6 +56,8 @@ public:
 	
 	~Entity();
 
+	int getParentDir(sf::Vector2i parent, sf::Vector2i child);
+
 	void newBFS();
 	void BFS();
 

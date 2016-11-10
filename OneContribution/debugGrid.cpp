@@ -1,6 +1,6 @@
 #include "debugGrid.h"
 #include <iostream>
-
+#include "Game.h"
 
 debugGrid::debugGrid(float x, float y)
 	: UIComponent(new std::string("debugGrid"))
@@ -11,24 +11,26 @@ debugGrid::debugGrid(float x, float y)
 
 void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 {
-	//m_RW = static_cast<sf::RenderWindow>(target.);
-	for (int i = 0; i < 6400; i += 64)
+	for (int i = 0; i < Game::instance()->getWorld().getWidth(); i += (Game::instance()->getWorld().getWidth() / Game::instance()->getWorld().getColumns()))
 	{
 		sf::Vertex line[] =
 		{
+			//getTileAt(sf::Vector2f(i, window.getSize().y))
 			sf::Vertex(sf::Vector2f(i, 0), sf::Color::Red),
-			sf::Vertex(sf::Vector2f(i, target.getSize().y), sf::Color::Red)
+			sf::Vertex(sf::Vector2f(i, Game::instance()->getWorld().getHeight()), sf::Color::Red)
 		};
+
 		target.draw(line, 2, sf::Lines);
 	}
-
-	for (int j = 0; j < 3200; j += 64)
+	//Draw the vertical lines
+	for (int i = 0; i < Game::instance()->getWorld().getHeight(); i += (Game::instance()->getWorld().getHeight() / Game::instance()->getWorld().getRows()))
 	{
 		sf::Vertex line[] =
 		{
-			sf::Vertex(sf::Vector2f(0, j), sf::Color::Red),
-			sf::Vertex(sf::Vector2f(target.getSize().y, j), sf::Color::Red)
+			sf::Vertex(sf::Vector2f(0.f, i), sf::Color::Red),
+			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getWidth(), i), sf::Color::Red)
 		};
+
 		target.draw(line, 2, sf::Lines);
 	}
 	
