@@ -34,7 +34,7 @@ public:
 
 
 	void tick();
-	void update();
+	void update(sf::Time deltaTime);
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

@@ -13,6 +13,10 @@ Entity::Entity()
 }
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 {
+	m_characterSelectionBox.setFillColor(sf::Color::Transparent);
+	m_characterSelectionBox.setOutlineColor(sf::Color::White);
+	m_characterSelectionBox.setOutlineThickness(1.f);
+	m_characterSelectionBox.setSize(sf::Vector2f(70, 150));
 	m_maxHealth = 100;
 	//m_rectangle.setOrigin(m_rectangle.getSize().x / 2, m_rectangle.getSize().y / 2);
 	m_entityType = entityType;
@@ -243,13 +247,20 @@ void Entity::BFS()
 sf::Clock pathTimer;
 void Entity::tick()
 {
-	if (pathTimer.getElapsedTime().asSeconds() > 1)
+	if (isDead())
+	{
+		setVisible(false);
+		return;
+	}
+
+	if (pathTimer.getElapsedTime().asSeconds() > 5)
 	{
 		pathTimer.restart();
 		if (m_path->getNextTile() != NULL)
 		{
 			std::cout << "Next tile = " << m_path->getNextTile()->x << " " << m_path->getNextTile()->y << std::endl;
-			m_sprite.setPosition(*m_path->getNextTile());
+			std::cout << "Current Pos " << m_sprite.getPosition().x << " " << m_sprite.getPosition().y << std::endl;
+			//m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
 		BFS();
@@ -258,12 +269,6 @@ void Entity::tick()
 	m_hpBar->setHealth(m_health);
 
 	//BFS();//start BFS on each tick
-
-	if (isDead())
-	{
-		setVisible(false);
-		return;
-	}
 
 	//Check if they are colliding and stop them
 	bool collision;
@@ -310,13 +315,33 @@ void Entity::tick()
 	}
 }
 
+void Entity::setSelected(bool selected)
+{
+	m_isSelected = selected;
+}
+bool Entity::isSelected()
+{
+	return m_isSelected;
+}
+
 bool Entity::isHitting(sf::Vector2f position)
 {
 	return m_sprite.getGlobalBounds().contains(position);
 }
 
-void Entity::update()
+void Entity::update(sf::Time deltaTime)
 {
+	if (isSelected())
+	{
+		m_characterSelectionBox.setPosition(getSpritePosition());
+	}
+
+	if (m_path->getNextTile() != NULL)
+	{
+		sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
+		
+		m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
+	}
 	updateSprite();
 }
 
@@ -366,6 +391,11 @@ void Entity::updateSprite()
 	}
 }
 
+sf::FloatRect Entity::getGlobalBounds()
+{
+	return m_sprite.getGlobalBounds();
+}
+
 void Entity::setHealth(int health)
 {
 	m_health = health;
@@ -378,7 +408,7 @@ int Entity::getHealth()
 
 bool Entity::willCollide(sf::Vector2f position)
 {
-	bool collision;
+	bool collision = false;
 	for (auto layer = Game::instance()->getMapLoader()->GetLayers().begin(); layer != Game::instance()->getMapLoader()->GetLayers().end(); ++layer)
 	{
 		if (layer->name == "Collision")
@@ -399,6 +429,11 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	if (m_visible)
 	{
 		target.draw(m_sprite);
+	}
+
+	if (m_isSelected == true)
+	{
+		target.draw(m_characterSelectionBox);
 	}
 
 }

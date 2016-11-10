@@ -44,6 +44,17 @@ Game::Game()
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
+	if (!m_music.openFromFile("Resources/Menu.ogg"))
+	{
+
+	}
+	m_music.setPitch(1);
+	m_music.setPosition(0, 1, 10);
+	m_music.setVolume(75.f);
+	m_music.setLoop(true);
+	m_music.play();
+
+	m_animator = new AnimationManager();
 }
 
 
@@ -72,7 +83,7 @@ void Game::run()
 			//Handle all events
 			handleEvents();
 			//Update the game
-			update();
+			update(timeSinceLastUpdate);
 			//Do a game tick
 			if (m_tickTimer.getElapsedTime().asMilliseconds() > m_tickRate)
 			{
@@ -203,6 +214,11 @@ void Game::handleEvents()
 
 }
 
+AnimationManager* Game::getAnimator()
+{
+	return m_animator;
+}
+
 void Game::beginDraw()
 {
 	m_window.clear(sf::Color::Black);
@@ -220,9 +236,9 @@ void Game::tick()
 	getWorld().tick();
 }
 
-void Game::update()
+void Game::update(sf::Time deltaTime)
 {
-	m_world.update();
+	m_world.update(deltaTime);
 	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	//m_window.setView(m_view);

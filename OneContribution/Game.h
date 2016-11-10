@@ -4,6 +4,8 @@
 #include "UI.h"
 #include "World.h"
 #include <iostream>
+#include "SFML\Audio.hpp"
+#include "AnimationManager.h"
 
 class Game
 {
@@ -15,6 +17,7 @@ public:
 	UI* getUi();
 	tmx::MapLoader* getMapLoader();
 	World& getWorld();
+	AnimationManager* getAnimator();
 
 	static Game* instance();
 
@@ -35,7 +38,11 @@ private:
 
 	static Game* m_instance;
 
+	AnimationManager* m_animator;
+
 	tmx::MapLoader* m_ml;
+
+	sf::Music m_music;
 
 	UI m_ui;
 
@@ -49,7 +56,7 @@ private:
 	void beginDraw();
 	void endDraw();
 	void tick();
-	void update();
+	void update(sf::Time deltaTime);
 
 	void toggleFullscreen();
 };

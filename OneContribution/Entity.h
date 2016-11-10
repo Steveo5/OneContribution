@@ -1,6 +1,7 @@
 #include "SFML\Graphics.hpp"
 //#include "Game.h"
 #include "HealthBar.h"
+#include "Math.cpp"
 #pragma once
 enum EntityType
 {
@@ -62,7 +63,7 @@ public:
 	void BFS();
 
 	void tick();
-	void update();
+	void update(sf::Time deltaTime);
 
 	void setSpriteSheet();
 
@@ -78,6 +79,8 @@ public:
 	void setName(std::string name);
 	bool willCollide(sf::Vector2f position);
 	bool isHitting(sf::Vector2f position);
+	void setSelected(bool selected);
+	bool isSelected();
 	void Entity::setTarget(sf::Vector2i);
 	//Move an entity to a position in target seconds
 	void moveTo(sf::Vector2f position, int seconds);
@@ -86,6 +89,8 @@ public:
 	void setControllable(bool control);
 	bool isVisible();
 	void setVisible(bool visible);
+
+	sf::FloatRect getGlobalBounds();
 	Direction getFacing();
 
 	sf::Text& getTextName();
@@ -97,6 +102,7 @@ public:
 	//m_sprite stuff here
 	sf::Sprite m_sprite;
 	sf::Texture m_characterSprite;
+	sf::RectangleShape m_characterSelectionBox;
 	bool m_isCharacterSprite;
 	void updateSprite();
 	int movingFrames;
@@ -126,6 +132,8 @@ private:
 
 	sf::Font m_font;
 	sf::Text m_textName;
+
+	bool m_isSelected;
 
 	Path* m_path;
 

@@ -37,12 +37,12 @@ void World::tick()
 	}
 }
 
-void World::update()
+void World::update(sf::Time deltaTime)
 {
 	//Update the entities
 	for (int i = 0; i < m_entities.size(); i++)
 	{
-		m_entities[i]->update();
+		m_entities[i]->update(deltaTime);
 	}
 }
 
