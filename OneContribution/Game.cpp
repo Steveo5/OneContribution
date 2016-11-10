@@ -212,7 +212,7 @@ void Game::endDraw()
 
 void Game::tick()
 {
-	m_world.tick();
+	getWorld().tick();
 }
 
 void Game::update()
