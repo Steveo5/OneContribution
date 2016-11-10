@@ -35,9 +35,9 @@ Game::Game()
 	//m_ui = new UI();
 	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(6400, 3200));//manually set fix
 	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
-	getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 150.f));
+	//getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 150.f));
 	//getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
-	std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
+	//std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 }
