@@ -1,13 +1,13 @@
 #include "BasicComponent.h"
 
 
-/*
+
 BasicComponent::BasicComponent()
 	: UIComponent(new std::string("BasicComponent"))
 {
 
 }
-*/
+
 
 BasicComponent::~BasicComponent()
 {
