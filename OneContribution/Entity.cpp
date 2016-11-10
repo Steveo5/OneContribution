@@ -59,6 +59,21 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 	return sf::Vector2i(row, col);
 
 }
+void Entity::newBFS()
+{/*
+	std::list<sf::Vector2i, int> visited, open;
+	open.push_back= (Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition())), 0);
+	std::list<sf::Vector2i> neighbours;
+
+	while ()//while not not ending location
+	{
+		for (std::list<sf::Vector2i, int>::iterator it = open.begin(); it != open.end(); ++it)
+		{
+			neighbours = Game::instance()->getWorld().getNeighbours(*it);
+		}
+
+	}*/
+}
 
 void Entity::BFS()
 {
@@ -97,12 +112,15 @@ void Entity::BFS()
 	{
 		std::cout << "queue is not empty" << std::endl;
 		int node = queue.front();
+		std::cout << "node: " << node << std::endl;
 		queue.pop();
 
 		path.push_back(node);
+		std::cout << "path back: " << path.back() << std::endl;
 
 		if (node == VecToInt(m_target))
 		{
+			std::cout << "node = m_target" << std::endl;
 			int path = 0;
 
 			int parent = node;
@@ -138,22 +156,27 @@ void Entity::BFS()
 
 		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
 		{
-			//if (!willCollide(*it))//if tile is valid location(no collisions)
-			//edgesVec.push_back(*it);
+			std::cout << "for: neighbours" << std::endl;
+			if (!willCollide(static_cast<sf::Vector2f>(*it)))//if tile is valid location(no collisions)
+				std::cout << "no collision" << std::endl;
+				edgesVec.push_back(*it);
 		}
 		std::list <int> edges;
 		while (!edges.empty())
 		{
+			std::cout << "edges not empty" << std::endl;
 			edges.push_back(VecToInt(edgesVec.front()));
 			edgesVec.pop_front();
 		}
 
 		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
 		{
+			std::cout << "for: edges" << std::endl;
 			int nde = *it;
 
 			if (visited.count(nde) == 0)
 			{
+				std::cout << "visited.count = 0" << std::endl;
 				visited.insert(nde);
 				queue.push(nde);
 

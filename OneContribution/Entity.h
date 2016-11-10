@@ -53,8 +53,10 @@ public:
 	Entity(EntityType entityType, sf::Vector2f location);
 	int VecToInt(sf::Vector2i v);
 	sf::Vector2i IntToVec(int i);
+	
 	~Entity();
 
+	void newBFS();
 	void BFS();
 
 	void tick();
