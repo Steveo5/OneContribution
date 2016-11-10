@@ -42,6 +42,14 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::instance()->getUi()->addComponent(m_hpBar);
 	m_lastPos = m_sprite.getPosition();
+
+	if (!m_font.loadFromFile("Resources/arial.ttf"))
+	{
+
+	}
+
+	m_textName.setColor(sf::Color::Blue);
+	m_textName.setFont(m_font);
 }
 
 
@@ -340,6 +348,11 @@ void Entity::setSpriteSheet()
 	}
 }
 
+sf::Text& Entity::getTextName()
+{
+	return m_textName;
+}
+
 void Entity::updateSprite()
 {
 	m_animation.clearFrames();
@@ -435,6 +448,7 @@ sf::Vector2f Entity::getSpritePosition()
 void Entity::setName(std::string name)
 {
 	m_name = name;
+	m_textName.setString(m_name);
 }
 
 std::string Entity::getName()

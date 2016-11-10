@@ -88,6 +88,8 @@ public:
 	void setVisible(bool visible);
 	Direction getFacing();
 
+	sf::Text& getTextName();
+
 	sf::Vector2f getSpritePosition();
 
 	//sf::RectangleShape m_rectangle;
@@ -109,7 +111,6 @@ public:
 	sf::Vector2i m_curStart;
 	sf::Vector2i m_frameSize;
 
-
 	//m_sprite stuff ends
 
 private:
@@ -122,6 +123,9 @@ private:
 	int m_maxHealth;
 	HealthBar* m_hpBar;
 	Direction m_facing;
+
+	sf::Font m_font;
+	sf::Text m_textName;
 
 	Path* m_path;
 

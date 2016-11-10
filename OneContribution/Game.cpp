@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "debugGrid.h"
+#include "BasicComponent.h"
 #include "tmx\MapLoader.h"
 /*
 tmx::MapLoader* Game::m_ml;
@@ -40,6 +41,9 @@ Game::Game()
 	//std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
+
+	BasicComponent* basicComponentUI = new BasicComponent();
+	m_ui.addComponent(basicComponentUI);
 }
 
 
