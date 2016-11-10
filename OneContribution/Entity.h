@@ -33,6 +33,7 @@ public:
 	void addTile(sf::Vector2f tile);
 	void removeTile(int index);
 	sf::Vector2f* getCurrentTile();
+	int getCurrentTileNumber();
 	void setCurrentTile(int index);
 	bool isPaused();
 	bool isStopped();
@@ -73,6 +74,8 @@ public:
 
 	void setHealth(int health);
 	int getHealth();
+	std::string getName();
+	void setName(std::string name);
 	bool willCollide(sf::Vector2f position);
 	bool isHitting(sf::Vector2f position);
 	void Entity::setTarget(sf::Vector2i);
@@ -115,6 +118,7 @@ private:
 	EntityType m_entityType;
 	int m_health;
 	bool m_visible;
+	std::string m_name;
 	int m_maxHealth;
 	HealthBar* m_hpBar;
 	Direction m_facing;

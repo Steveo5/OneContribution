@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Component">
+      <UniqueIdentifier>{f765f3a1-852e-4ff3-994f-e6f072ad09ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{a07c05c1-91f0-498e-9507-15179f9f4cf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tmx">
+      <UniqueIdentifier>{1b54efb8-88e3-4915-ae57-1a2cb87ca20f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,9 +45,6 @@
     <ClInclude Include="Animation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -46,9 +52,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HealthBar.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="debugGrid.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,37 +83,40 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HealthBar.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="debugGrid.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="lib\sfml-tmxloader-master\src\pugixml\pugixml.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="lib\sfml-tmxloader-master\src\DebugShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\sfml-tmxloader-master\src\MapLayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tmx</Filter>
     </ClCompile>
     <ClCompile Include="lib\sfml-tmxloader-master\src\MapLoaderPrivate.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tmx</Filter>
     </ClCompile>
     <ClCompile Include="lib\sfml-tmxloader-master\src\MapLoaderPublic.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tmx</Filter>
     </ClCompile>
     <ClCompile Include="lib\sfml-tmxloader-master\src\MapObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\sfml-tmxloader-master\src\pugixml\pugixml.cpp">
+      <Filter>Source Files\Tmx</Filter>
     </ClCompile>
     <ClCompile Include="lib\sfml-tmxloader-master\src\QuadTreeNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Tmx</Filter>
     </ClCompile>
-    <ClCompile Include="debugGrid.cpp">
+    <ClCompile Include="lib\sfml-tmxloader-master\src\MapLayer.cpp">
+      <Filter>Source Files\Tmx</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

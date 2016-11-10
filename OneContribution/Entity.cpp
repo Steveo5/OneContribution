@@ -238,7 +238,12 @@ void Entity::tick()
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
 		pathTimer.restart();
-		m_sprite.setPosition(m_sprite.getPosition().x + 30, m_sprite.getPosition().y);
+		if (m_path->getNextTile() != NULL)
+		{
+			std::cout << "Next tile = " << m_path->getNextTile()->x << " " << m_path->getNextTile()->y << std::endl;
+			m_sprite.setPosition(*m_path->getNextTile());
+			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
+		}
 		BFS();
 	}
 	m_hpBar->setVisible(m_visible);
@@ -427,6 +432,16 @@ sf::Vector2f Entity::getSpritePosition()
 	return m_sprite.getPosition();
 }
 
+void Entity::setName(std::string name)
+{
+	m_name = name;
+}
+
+std::string Entity::getName()
+{
+	return m_name;
+}
+
 Entity::~Entity()
 {
 	//delete this;
@@ -456,7 +471,7 @@ sf::Vector2f* Path::getPreviousTile()
 
 sf::Vector2f* Path::getNextTile()
 {
-	if (m_currentTile + 1 > m_tiles.size())
+	if (m_currentTile == -1 || m_currentTile + 1 > m_tiles.size() - 1)
 	{
 		return NULL;
 	}
@@ -518,6 +533,11 @@ void Path::setTiles(std::vector<sf::Vector2f> tiles)
 void Path::addTile(sf::Vector2f tile)
 {
 	m_tiles.push_back(tile);
+}
+
+int Path::getCurrentTileNumber()
+{
+	return m_currentTile;
 }
 
 void Path::removeTile(int index)
