@@ -196,6 +196,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
+				std::cout << "mouseClick Coords: " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).x << ", " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).y << std::endl;
 				instance()->getWorld().getEntities()[0]->setTarget( instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
