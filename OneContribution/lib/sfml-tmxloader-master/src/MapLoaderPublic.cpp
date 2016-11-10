@@ -38,8 +38,8 @@ using namespace tmx;
 MapLoader::MapLoader(const std::string& mapDirectory, sf::Uint8 patchSize)
 	: m_width			(1u),
 	m_height			(1u),
-	m_tileWidth			(1u),
-	m_tileHeight		(1u),
+	m_tileWidth			(64u),
+	m_tileHeight		(32u),
 	m_tileRatio			(1.f),
 	m_patchSize			(patchSize),
 	m_mapLoaded			(false),
