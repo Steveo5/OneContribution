@@ -88,51 +88,6 @@ int Entity::getParentDir(sf::Vector2i parent, sf::Vector2i child)
 			return 3;
 }
 
-void Entity::newBFS()
-{
-	std::cout << "newBFS" << std::endl;
-	bool isEnd = false;
-	std::list<std::pair<sf::Vector2i, int>> open, visited;
-	sf::Vector2i start = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
-	open.push_back(std::pair<sf::Vector2i, int>(start, 0));
-	std::pair<sf::Vector2i, int> currentTile;
-	std::list<sf::Vector2i> neighbours;
-
-	while (open.size() > 0)//std::list<std::pair<sf::Vector2i, int>>::iterator it = open.begin(); it != open.end(); ++it
-	{
-		std::cout << "not end" << std::endl;
-		currentTile = open.front();//get from open tile list
-		std::cout << "current tile: " << currentTile.first.x << ", " << currentTile.first.y << std::endl;
-		open.pop_front();//pop front tile from open (no longer open)
-		neighbours = Game::instance()->getWorld().getNeighbours(currentTile.first);//get the neighbours of the popped tile
-		for (std::list<sf::Vector2i>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)//loop over the neighbours
-		{
-			//if (std::find(visited.begin()->first, visited.end()->first, it) != visited.end()->first)
-			{
-				std::cout << "checking: " << it->x << ", " << it->y << std::endl;
-				if (willCollide(static_cast<sf::Vector2f>(*it)))//if collision, don't add it to the open list
-				{
-					std::cout << "collision on tile: " << it->x << ", " << it->y << std::endl;//nothing
-				}
-				else if (*it == m_target)//found the end
-				{
-					std::cout << "end found" << std::endl;
-					visited.push_back(std::pair<sf::Vector2i, int>(*it, getParentDir(currentTile.first, *it)));//add to list of visited tiles and trace back.
-					break;
-				}
-				else//not end or collision
-				{
-					std::cout << "keep looking" << std::endl;
-					open.push_back(std::pair<sf::Vector2i, int>(*it, getParentDir(currentTile.first, *it)));//add to list to get neighbours from later.
-				}
-			}
-			
-		}
-	}
-
-
-}
-
 void Entity::BFS()
 {
 	std::cout << "BFS" << std::endl;
@@ -271,7 +226,7 @@ void Entity::tick()
 			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
-		//newBFS();
+		BFS();
 	}
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
