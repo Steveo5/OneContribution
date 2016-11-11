@@ -15,7 +15,7 @@ sf::Texture* AnimationManager::getTexture(EntityType type)
 {
 	if (m_textures.count(type) > 0)
 	{
-		return &m_textures[type];
+		return m_textures[type];
 	}
 	else
 	{
@@ -23,7 +23,7 @@ sf::Texture* AnimationManager::getTexture(EntityType type)
 	}
 }
 
-void AnimationManager::setTexture(EntityType type, sf::Texture newTexture)
+void AnimationManager::setTexture(EntityType type, sf::Texture* newTexture)
 {
 	m_textures[type] = newTexture;
 }
@@ -34,7 +34,7 @@ Animation* AnimationManager::getAnimation(EntityType type, std::string animation
 	{
 		if (m_animations[type].count(animationName) > 0)
 		{
-			return &m_animations[type][animationName];
+			return m_animations[type][animationName];
 		}
 		return NULL;
 	}
@@ -44,21 +44,35 @@ Animation* AnimationManager::getAnimation(EntityType type, std::string animation
 	}
 }
 
-void AnimationManager::registerAnimation(EntityType entityType, std::string animationName, Animation animation)
+void AnimationManager::registerAnimation(EntityType entityType, std::string animationName, Animation* animation)
 {
 	m_animations[entityType][animationName] = animation;
 }
 
-Animation* AnimationManager::generateAnimation(sf::Texture& texture, int row, int rowHeight, int rowWidth, int frameCount)
+Animation* AnimationManager::generateAnimation(std::string directory, EntityType type, int row, int rowHeight, int rowWidth, int frameCount)
 {
+	sf::Texture* texture = new sf::Texture();
+	if (!texture->loadFromFile(directory))
+	{
+		return NULL;
+	}
+	setTexture(type, texture);
 	Animation* animation = new Animation();
-	animation->setSpriteSheet(texture);
-
+	animation->setSpriteSheet(*texture);
+	
 	int rowPixel = row * rowHeight;
 	for (int i=0;i<frameCount;i++)
 	{
 		int columnPixel = i * rowWidth;
-		animation->addFrame(sf::IntRect(rowPixel, columnPixel, rowWidth, rowHeight));
+		std::cout << "Column pixel " << columnPixel << " Row Pixel " << rowPixel << std::endl;
+		
+		sf::IntRect* rectangle = new sf::IntRect();
+		rectangle->top = rowPixel;
+		rectangle->left = columnPixel;
+		rectangle->height = rowHeight;
+		rectangle->width = rowWidth;
+		animation->addFrame(*rectangle);
 	}
+	
 	return animation;
 }

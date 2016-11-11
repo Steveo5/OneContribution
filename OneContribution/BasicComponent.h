@@ -14,6 +14,11 @@ private:
 	sf::RectangleShape m_selectionBox;
 	bool m_isFirstClick = true;
 
+	sf::Texture m_bottomSpriteTexture;
+	sf::Sprite m_bottomSprite;
+	sf::Font m_arialFont;
+	sf::Text m_textEntities;
+
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 

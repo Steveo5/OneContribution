@@ -12,14 +12,14 @@ public:
 	~AnimationManager();
 
 	sf::Texture* getTexture(EntityType type);
-	void setTexture(EntityType type, sf::Texture newTexture);
+	void setTexture(EntityType type, sf::Texture* newTexture);
 
 	Animation* getAnimation(EntityType type, std::string animationName);
-	void registerAnimation(EntityType entityType, std::string animationName, Animation animation);
+	void registerAnimation(EntityType entityType, std::string animationName, Animation* animation);
 
-	Animation* generateAnimation(sf::Texture& texture, int row, int rowHeight, int rowWidth, int frameCount);
+	Animation* generateAnimation(std::string directory, EntityType type, int row, int rowHeight, int rowWidth, int frameCount);
 private:
-	std::map<EntityType, sf::Texture> m_textures;
-	std::map<EntityType, std::map<std::string, Animation>> m_animations;
+	std::map<EntityType, sf::Texture*> m_textures;
+	std::map<EntityType, std::map<std::string, Animation*>> m_animations;
 };
 

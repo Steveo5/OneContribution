@@ -60,11 +60,11 @@
     <ClInclude Include="debugGrid.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="BasicComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,14 +119,14 @@
     <ClCompile Include="lib\sfml-tmxloader-master\src\MapLayer.cpp">
       <Filter>Source Files\Tmx</Filter>
     </ClCompile>
-    <ClCompile Include="BasicComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AnimationManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

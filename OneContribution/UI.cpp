@@ -43,10 +43,19 @@ void UI::handleInput(sf::Keyboard::Key key)
 		toggleDebugMenu();
 		break;
 	}
+
+	for (int i = 0; i < m_components.size(); i++)
+	{
+		//m_components[i]->handleInput(key);
+	}
+	m_components[0]->handleInput(key);
 }
 void UI::handleInput(sf::Mouse::Button button)
 {
-
+	for (int i = 0; i < m_components.size(); i++)
+	{
+		m_components[i]->handleInput(button);
+	}
 }
 
 void UI::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -133,6 +142,10 @@ void UIComponent::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 
 }
+
+void UIComponent::handleInput(sf::Keyboard::Key key) {}
+
+void UIComponent::handleInput(sf::Mouse::Button button) {}
 
 void UIComponent::setPosition(sf::Vector2f location)
 {

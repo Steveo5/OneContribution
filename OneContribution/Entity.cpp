@@ -12,7 +12,9 @@ Entity::Entity()
 
 }
 Entity::Entity(EntityType entityType, sf::Vector2f location)
+	: m_sprite(sf::seconds(0.2), true, false)
 {
+	m_isSelected = false;
 	m_characterSelectionBox.setFillColor(sf::Color::Transparent);
 	m_characterSelectionBox.setOutlineColor(sf::Color::White);
 	m_characterSelectionBox.setOutlineThickness(1.f);
@@ -22,7 +24,6 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_entityType = entityType;
 	m_health = 70;
 	m_visible = true;
-	m_isCharacterSprite = 0;
 	//m_rectangle.setPosition(location);
 	//m_rectangle.setFillColor(sf::Color::Red);
 	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
@@ -30,13 +31,6 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	//m_sprite stuff here
 	m_sprite.setPosition(location);
-	if (!m_characterSprite.loadFromFile("sprite.png"))
-	{
-		std::cout << "Error loading resource sprite.png"
-			<< std::endl;
-	}
-	m_sprite.setTextureRect(sf::IntRect(30, 50, 65, 95));
-	m_sprite.setTexture(m_characterSprite);
 	//m_sprite stuff ends
 
 
@@ -54,6 +48,8 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	m_textName.setColor(sf::Color::Blue);
 	m_textName.setFont(m_font);
+
+	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
 }
 
 
@@ -261,6 +257,18 @@ void Entity::tick()
 		return;
 	}
 
+	//m_sprite.setAnimation()
+	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
+	m_sprite.play(*anim);
+
+	for (int i = 0; i < anim->getSize(); i++)
+	{
+		std::cout << "Top " << anim->getFrame(i).top << std::endl;
+		std::cout << "Left " << anim->getFrame(i).left << std::endl;
+		std::cout << "Height " << anim->getFrame(i).height << std::endl;
+		std::cout << "Width " << anim->getFrame(i).width << std::endl;
+	}
+
 	if (pathTimer.getElapsedTime().asSeconds() > 5)
 	{
 		pathTimer.restart();
@@ -268,7 +276,7 @@ void Entity::tick()
 		{
 			std::cout << "Next tile = " << m_path->getNextTile()->x << " " << m_path->getNextTile()->y << std::endl;
 			std::cout << "Current Pos " << m_sprite.getPosition().x << " " << m_sprite.getPosition().y << std::endl;
-			//m_sprite.setPosition(*m_path->getNextTile());
+			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
 		//newBFS();
@@ -345,57 +353,15 @@ void Entity::update(sf::Time deltaTime)
 
 	if (m_path->getNextTile() != NULL)
 	{
-		sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
+		//sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
 		
-		m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
-	}
-	updateSprite();
-}
-
-//Load correct sprite sheet
-void Entity::setSpriteSheet()
-{
-	if (!m_isCharacterSprite)
-	{
-		if (m_entityType == KNIGHT)
-		{
-			if (!m_characterSprite.loadFromFile("KNIGHT.png"))
-			{
-				std::cout << "Error loading resource sprite.png"
-					<< std::endl;
-			}
-			m_sprite.setTexture(m_characterSprite);
-			m_isCharacterSprite = true;
-		}
-		else if (m_entityType == ENEMY)
-		{
-			if (!m_characterSprite.loadFromFile("ENEMY.png"))
-			{
-				std::cout << "Error loading resource sprite.png"
-					<< std::endl;
-			}
-			m_sprite.setTexture(m_characterSprite);
-			m_isCharacterSprite = true;
-		}
+		//m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
 	}
 }
 
 sf::Text& Entity::getTextName()
 {
 	return m_textName;
-}
-
-void Entity::updateSprite()
-{
-	m_animation.clearFrames();
-
-	for (int i = 0; i < m_curFrames; i++)
-	{
-		m_animation.addFrame(
-			sf::IntRect(m_curStart.x, m_curStart.y, m_frameSize.x, m_frameSize.y)
-		);
-		m_curStart.x += m_frameSize.x;
-	}
 }
 
 sf::FloatRect Entity::getGlobalBounds()

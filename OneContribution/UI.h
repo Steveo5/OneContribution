@@ -10,6 +10,8 @@ public:
 	~UIComponent();
 
 	virtual void update(sf::RenderWindow& window);
+	virtual void handleInput(sf::Keyboard::Key key);
+	virtual void handleInput(sf::Mouse::Button button);
 
 	std::string* getName();
 

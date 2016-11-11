@@ -11,6 +11,10 @@ debugGrid::debugGrid(float x, float y)
 
 void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 {
+	if (m_enabled == false)
+	{
+		return;
+	}
 	for (int i = 0; i < Game::instance()->getWorld().getWidth(); i += (Game::instance()->getWorld().getWidth() / Game::instance()->getWorld().getColumns()))
 	{
 		sf::Vertex line[] =
@@ -40,6 +44,21 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 void debugGrid::update(sf::RenderWindow& window)
 {
 
+}
+
+void debugGrid::handleInput(sf::Keyboard::Key key)
+{
+	if (key == sf::Keyboard::F4)
+	{
+		if (m_enabled == true)
+		{
+			m_enabled = false;
+		}
+		else
+		{
+			m_enabled = true;
+		}
+	}
 }
 
 debugGrid::~debugGrid()

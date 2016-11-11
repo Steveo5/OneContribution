@@ -2,6 +2,7 @@
 //#include "Game.h"
 #include "HealthBar.h"
 #include "Math.cpp"
+#include "AnimatedSprite.hpp"
 #pragma once
 enum EntityType
 {
@@ -65,8 +66,6 @@ public:
 	void tick();
 	void update(sf::Time deltaTime);
 
-	void setSpriteSheet();
-
 	Path* getPath();
 	void setPath(Path* newPath);
 	void startPathing();
@@ -100,22 +99,8 @@ public:
 	//sf::RectangleShape m_rectangle;
 
 	//m_sprite stuff here
-	sf::Sprite m_sprite;
-	sf::Texture m_characterSprite;
+	AnimatedSprite m_sprite;
 	sf::RectangleShape m_characterSelectionBox;
-	bool m_isCharacterSprite;
-	void updateSprite();
-	int movingFrames;
-	int idleFrames;
-	int deathFrames;
-	int actionFrames;
-	int m_curFrames;
-	sf::Vector2i startMove;
-	sf::Vector2i startIdle;
-	sf::Vector2i startDeath;
-	sf::Vector2i startAction;
-	sf::Vector2i m_curStart;
-	sf::Vector2i m_frameSize;
 
 	//m_sprite stuff ends
 
@@ -133,7 +118,7 @@ private:
 	sf::Font m_font;
 	sf::Text m_textName;
 
-	bool m_isSelected;
+	bool m_isSelected = false;
 
 	Path* m_path;
 
