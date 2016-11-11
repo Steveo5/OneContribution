@@ -13,7 +13,7 @@ int main()
 	std::cout << game->getTest() << std::endl;
 
 	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(50.f, 0.f));
-	ent->setName("Knight");
+	ent->setName("Chandler");
 	Path* path = new Path();
 	path->addTile(sf::Vector2f(50, 50));
 	path->addTile(sf::Vector2f(150, 50));
@@ -30,7 +30,7 @@ int main()
 	path2->addTile(sf::Vector2f(50, 100));
 	path2->setCurrentTile(0);
 	ent2->setPath(path);
-	ent2->setName("Also Knight");
+	ent2->setName("Pidwick");
 	
 	//Initialize animations
 	AnimationManager* animator = Game::instance()->getAnimator();

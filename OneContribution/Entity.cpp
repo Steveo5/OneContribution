@@ -261,14 +261,6 @@ void Entity::tick()
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
 
-	for (int i = 0; i < anim->getSize(); i++)
-	{
-		std::cout << "Top " << anim->getFrame(i).top << std::endl;
-		std::cout << "Left " << anim->getFrame(i).left << std::endl;
-		std::cout << "Height " << anim->getFrame(i).height << std::endl;
-		std::cout << "Width " << anim->getFrame(i).width << std::endl;
-	}
-
 	if (pathTimer.getElapsedTime().asSeconds() > 5)
 	{
 		pathTimer.restart();
