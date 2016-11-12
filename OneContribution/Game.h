@@ -18,7 +18,7 @@ public:
 	tmx::MapLoader* getMapLoader();
 	World& getWorld();
 	AnimationManager* getAnimator();
-
+	 
 	static Game* instance();
 
 	void setTest(std::string test);
