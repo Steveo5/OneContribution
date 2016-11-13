@@ -11,7 +11,7 @@ void World::setWorld(sf::Vector2i tileSize, sf::Vector2i worldBounds)
 
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
 	m_tileSize = tileSize;
-	m_worldBounds = worldBounds;
+	m_worldBounds = sf::Vector2i(worldBounds.x * tileSize.x, worldBounds.y * tileSize.y);
 }
 
 
@@ -61,21 +61,21 @@ std::vector<Entity*>& World::getEntities()
 
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
-	//std::cout << "tileSize: " << m_tileSize.x << ", " << m_tileSize.y << std::endl;
-	sf::Vector2i temp = sf::Vector2i(location.x - (location.x % m_tileSize.x), location.y - (location.y % m_tileSize.y));
-	sf::Vector2i tempTileSize(static_cast<sf::Vector2i>(Game::instance()->getMapLoader()->GetTileSize()));
-	//std::cout << tempTileSize.x << ", " << tempTileSize.y << std::endl;
-	temp.x /= tempTileSize.x;
-	temp.y /= tempTileSize.y;
-	//std::cout << "getTile(): " << temp.x << ", " << temp.y << std::endl;
-	return temp;
+	std::cout << "getTile: " << location.x << ", " << location.y << std::endl;
+	sf::Vector2i m_location = static_cast<sf::Vector2i>(Game::instance()->getWindow().mapPixelToCoords(location));
+	//location.x -= getWidth();
+	sf::Vector2i m_tileCoords = sf::Vector2i(m_location.x - (m_location.x % m_tileSize.x), m_location.y - (m_location.y % m_tileSize.y));
+	sf::Vector2i m_tempTileSize(static_cast<sf::Vector2i>(Game::instance()->getMapLoader()->GetTileSize()));
+	m_tileCoords.x /= m_tempTileSize.x;
+	m_tileCoords.y /= m_tempTileSize.y;
+	return m_tileCoords;
 }
 
 sf::Vector2i World::getTilePos(sf::Vector2i location)
 {
 	sf::Vector2i temp;
-	temp.x = location.x * Game::instance()->getMapLoader()->GetTileSize().x;
-	temp.x = location.y * Game::instance()->getMapLoader()->GetTileSize().y;
+	temp.x = (location.x * Game::instance()->getMapLoader()->GetTileSize().x) - (getWidth() / 2);
+	temp.x = (location.y * Game::instance()->getMapLoader()->GetTileSize().y);
 	std::cout << "getTilePos(): " << temp.x << ", " << temp.y << std::endl;
 	return temp;
 	
@@ -112,16 +112,79 @@ int World::getColumns()
 	return m_worldBounds.y / m_tileSize.y;
 }
 
-std::list<sf::Vector2i> World::getNeighbours(sf::Vector2i i)
+sf::Vector2i World::getTileSize()
 {
-	std::list<sf::Vector2i> neighbours;
-	//neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y - m_tileSize.y));//up-left
-	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y - m_tileSize.y));//up
-	//neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y - m_tileSize.y));//up-right
-	neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y));//left
-	neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y));//right
-	//neighbours.push_back(sf::Vector2i(getTile(i).x - m_tileSize.x, getTile(i).y + m_tileSize.y));//down-left
-	neighbours.push_back(sf::Vector2i(getTile(i).x, getTile(i).y + m_tileSize.y));//down
-	//neighbours.push_back(sf::Vector2i(getTile(i).x + m_tileSize.x, getTile(i).y + m_tileSize.y));//down-right
-	return neighbours;
+	return m_tileSize;
+}
+
+int World::VecToInt(sf::Vector2i v)
+{
+	return (v.x * getColumns()) + v.y;
+}
+sf::Vector2i World::IntToVec(int i)//height and width should be tile based not world based
+{
+	std::cout << "World: " << getRows() << ", " << getColumns() << std::endl;
+	int row = i / getColumns();
+	int col = i % getColumns();
+
+	return sf::Vector2i(row, col);
+
+}
+
+bool World::willCollide(sf::Vector2f position)
+{
+	bool collision = false;
+	for (auto layer = Game::instance()->getMapLoader()->GetLayers().begin(); layer != Game::instance()->getMapLoader()->GetLayers().end(); ++layer)
+	{
+		if (layer->name == "Collision")
+		{
+			for (auto object = layer->objects.begin(); object != layer->objects.end(); ++object)
+			{
+				collision = object->Contains(position);
+
+				if (collision) return true;
+			}
+		}
+	}
+	return collision;
+}
+
+std::unordered_map<int, std::list<int>>* World::getGraph()
+{
+	return &graph;
+}
+
+void World::createGraph()
+{
+	for (int row = -3200; row < 3200; row+= 64)
+	{
+		for (int col = 0; col < 3200; col+=32)
+		{
+			int id = VecToInt(sf::Vector2i(row, col));
+
+			if (!willCollide(sf::Vector2f(row, col)))
+			{
+				std::list <int> edges;
+
+				if (!willCollide(sf::Vector2f(row - 1, col)))
+				{
+					edges.emplace_front(VecToInt(sf::Vector2i(row - 1, col)));
+				}
+				if (!willCollide(sf::Vector2f(row + 1, col)))
+				{
+					edges.emplace_front(VecToInt(sf::Vector2i(row + 1, col)));
+				}
+				if (!willCollide(sf::Vector2f(row, col - 1)))
+				{
+					edges.emplace_front(VecToInt(sf::Vector2i(row, col - 1)));
+				}
+				if (!willCollide(sf::Vector2f(row, col + 1)))
+				{
+					edges.emplace_front(VecToInt(sf::Vector2i(row, col + 1)));
+				}
+
+				graph[id] = edges;
+			}
+		}
+	}
 }

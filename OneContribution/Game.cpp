@@ -34,11 +34,10 @@ Game::Game()
 	//m_window.setVerticalSyncEnabled(true);
 
 	//m_ui = new UI();
-	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(6400, 3200));//manually set fix
-	//std::cout << "game() tileSize: " << m_ml->GetTileSize().x << ", " << m_ml->GetTileSize().y << std::endl;
-	//getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 150.f));
-	//getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
-	//std::cout << "Game(): spritePos: " << getWorld().getEntities()[0]->getSpritePosition().x << ", " << getWorld().getEntities()[0]->getSpritePosition().x << std::endl;
+	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(100, 100));//tile size, rows and columns
+	m_world.createGraph();
+	std::cout << "Game(): map size: " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).x << ", " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).y << std::endl;
+	
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 
@@ -175,11 +174,11 @@ void Game::handleEvents()
 		case sf::Event::MouseWheelScrolled:
 			if (event.mouseWheelScroll.delta == 1)
 			{
-				m_view.setSize(m_view.getSize().x + 20, m_view.getSize().y + 20);
+				m_view.setSize(m_view.getSize().x + 100, m_view.getSize().y + 100);
 			}
 			else
 			{
-				m_view.setSize(m_view.getSize().x - 20, m_view.getSize().y - 20);
+				m_view.setSize(m_view.getSize().x - 100, m_view.getSize().y - 100);
 			}
 			break;
 		case::sf::Event::MouseButtonPressed:
@@ -197,7 +196,8 @@ void Game::handleEvents()
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				std::cout << "mouseClick Coords: " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).x << ", " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).y << std::endl;
-				instance()->getWorld().getEntities()[0]->setTarget( instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				std::cout << "mouseClick Tile: " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).x << ", " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).y << std::endl;
+				instance()->getWorld().getEntities()[0]->setTarget(instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
 		case sf::Event::KeyPressed:
@@ -278,7 +278,7 @@ World& Game::getWorld()
 	return m_world;
 }
 
-//World& Game::getWorld()
-//{
-//	return m_world;
-//}
+sf::RenderWindow& Game::getWindow()
+{
+	return m_window;
+}

@@ -15,19 +15,12 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 	{
 		return;
 	}
-	sf::Vertex line[] =
-	{
-		//getTileAt(sf::Vector2f(i, window.getSize().y))
-		sf::Vertex(sf::Vector2f(0, 0), sf::Color::Green),
-		sf::Vertex(sf::Vector2f(100, 100), sf::Color::Green)
-	};
-	target.draw(line, 2, sf::Lines);
+	
 
 	for (int i = -(Game::instance()->getWorld().getWidth() / 2); i <= Game::instance()->getWorld().getWidth() / 2; i += (Game::instance()->getWorld().getWidth() / Game::instance()->getWorld().getColumns()))
 	{
 		sf::Vertex line[] =
 		{
-			//getTileAt(sf::Vector2f(i, window.getSize().y))
 			sf::Vertex(sf::Vector2f(i, 0), sf::Color::Red),
 			sf::Vertex(sf::Vector2f(i, Game::instance()->getWorld().getHeight()), sf::Color::Red)
 		};
@@ -45,6 +38,17 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 
 		target.draw(line, 2, sf::Lines);
 	}
+	sf::Vertex line[] =
+	{
+		
+		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getBounds()), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(3200,0), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(3200, 3200), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(-3200, 3200), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(-3200, 0), sf::Color::Green),
+
+	};
+	target.draw(line, 5, sf::LinesStrip);
 	
 	
 }

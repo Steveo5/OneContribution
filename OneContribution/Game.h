@@ -17,6 +17,7 @@ public:
 	UI* getUi();
 	tmx::MapLoader* getMapLoader();
 	World& getWorld();
+	sf::RenderWindow & getWindow();
 	AnimationManager* getAnimator();
 	 
 	static Game* instance();

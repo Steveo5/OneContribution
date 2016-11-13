@@ -19,16 +19,16 @@ int main()
 	path->addTile(sf::Vector2f(150, 50));
 	path->addTile(sf::Vector2f(250, 50));
 	path->addTile(sf::Vector2f(350, 200));
-	path->setCurrentTile(0);
+	//path->setCurrentTile(0);
 	ent->setPath(path);
 	
 	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 100.f));
 	Path* path2 = new Path();
-	path2->addTile(sf::Vector2f(10, 40));
-	path2->addTile(sf::Vector2f(40, 50));
-	path2->addTile(sf::Vector2f(50, 300));
-	path2->addTile(sf::Vector2f(50, 100));
-	path2->setCurrentTile(0);
+	//path2->addTile(sf::Vector2f(10, 40));
+	//path2->addTile(sf::Vector2f(40, 50));
+	//path2->addTile(sf::Vector2f(50, 300));
+	//path2->addTile(sf::Vector2f(50, 100));
+	//path2->setCurrentTile(0);
 	ent2->setPath(path);
 	ent2->setName("Pidwick");
 	

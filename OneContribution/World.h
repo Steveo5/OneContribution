@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include <iostream>
 #include <list>
+#include <unordered_map>
 
 class World : public sf::Drawable
 {
@@ -30,8 +31,18 @@ public:
 
 	int getColumns();
 
-	std::list <sf::Vector2i> getNeighbours(sf::Vector2i);
+	sf::Vector2i getTileSize();
 
+	int VecToInt(sf::Vector2i v);
+
+	sf::Vector2i IntToVec(int i);
+
+	bool willCollide(sf::Vector2f position);
+
+	std::unordered_map <int, std::list<int>> graph;
+	void createGraph();
+	std::unordered_map <int, std::list<int>>* getGraph();
+	
 
 	void tick();
 	void update(sf::Time deltaTime);

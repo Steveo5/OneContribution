@@ -53,7 +53,6 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 }
 
 
-
 int Entity::VecToInt(sf::Vector2i v)
 {
 	return (v.x * Game::instance()->getWorld().getColumns()) + v.y;
@@ -68,139 +67,135 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 
 }
 
-int Entity::getParentDir(sf::Vector2i parent, sf::Vector2i child)
-{
-	//return the direction of the parent from the child for back-trace
-	//1 = up-left
-	//2 = up-right
-	//3 = down-left
-	//4 = down-right
-	int toReturn = 0;
-	if (child.x > parent.x)
-		if (child.y > parent.y)
-			return 4;
-		else
-			return 2;
-	else
-		if (child.y < parent.y)
-			return 1;
-		else
-			return 3;
-}
-
 void Entity::BFS()
 {
+	m_target = static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
+
+	if (m_sprite.getPosition().x > m_target.x)
+	{
+		if (m_sprite.getPosition().y > m_target.y)
+		{
+			std::cout << "move down-right" << std::endl;
+			//move down-right
+			Path().setTiles(std::vector<sf::Vector2f>{
+				sf::Vector2f(Game::instance()->getWorld().getTilePos(
+				sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x + Game::instance()->getWorld().getTileSize().x,
+				Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y + Game::instance()->getWorld().getTileSize().y)))
+			});
+		}
+		else
+		{
+			std::cout << "move up-right" << std::endl;
+			//move up-right
+			Path().setTiles(std::vector<sf::Vector2f>{
+				sf::Vector2f(Game::instance()->getWorld().getTilePos(
+				sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x + Game::instance()->getWorld().getTileSize().x,
+				Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y - Game::instance()->getWorld().getTileSize().y)))
+			});
+		}
+	}
+	else
+	{
+		if (m_sprite.getPosition().y > m_target.y)
+		{
+			std::cout << "move down-left" << std::endl;
+			//move down-left
+			Path().setTiles(std::vector<sf::Vector2f>{
+				sf::Vector2f(Game::instance()->getWorld().getTilePos(
+					sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x - Game::instance()->getWorld().getTileSize().x,
+						Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y + Game::instance()->getWorld().getTileSize().y)))
+			});
+		}
+		else
+		{
+			std::cout << "move up-left" << std::endl;
+			//move up-left
+			Path().setTiles(std::vector<sf::Vector2f>{
+				sf::Vector2f(Game::instance()->getWorld().getTilePos(
+					sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x - Game::instance()->getWorld().getTileSize().x,
+						Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y - Game::instance()->getWorld().getTileSize().y)))
+			});
+		}
+	}
+
+
+	/*
 	std::cout << "BFS" << std::endl;
-	//std::cout << "Dest: " << destination.x << ", " << destination.y << std::endl;
-	std::cout << "mapSize: " << Game::instance()->getMapLoader()->GetMapSize().x << Game::instance()->getMapLoader()->GetMapSize().y << std::endl;
-	std::cout << "tileSize: " << Game::instance()->getMapLoader()->GetTileSize().x << Game::instance()->getMapLoader()->GetTileSize().y << std::endl;
-	std::cout << "spritePos: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-
-	sf::Vector2i startingPos = Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_sprite.getPosition()));//starting point
-	//	ending point is m_target
-	//m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(m_target)));//test movement
-
-	const int tileCount = Game::instance()->getWorld().getTileCount();
-	std::cout << "start: " << startingPos.x << ", " << startingPos.y <<
-		" target:" << m_target.x << ", " << m_target.y <<
-		" TileCount: " << tileCount << std::endl;
+	std::cout << "tile coords: " << Game::instance()->getWorld().getTilePos(m_target).x << ", " << Game::instance()->getWorld().getTilePos(m_target).y << std::endl;
+	std::unordered_map <int, std::list<int>> m_graph = *Game::instance()->getWorld().getGraph();
 	std::unordered_set<int> visited;
 
 	std::queue<int> queue;
 
-	int root = VecToInt(startingPos);
-	std::cout << "root: " << root << std::endl;
+	int root = VecToInt(m_target);
 
 	queue.push(root); // enqueue the root node
-	std::cout << "queue.back: " << queue.back() << std::endl;
 	visited.insert(root);
 
 	std::list<int> path;
 
 	int parents[10000];
 
-	parents[root] = -1;//-1 = start point
+	parents[root] = -1;
 
 	while (!queue.empty())
 	{
-		std::cout << "queue is not empty" << std::endl;
 		int node = queue.front();
-		std::cout << "node: " << node << std::endl;
 		queue.pop();
 
 		path.push_back(node);
-		std::cout << "path back: " << path.back() << std::endl;
 
 		if (node == VecToInt(m_target))
 		{
-			std::cout << "node = m_target" << std::endl;
 			int path = 0;
 
 			int parent = node;
 
-			int prev = -1;//prev is a trail when tracing path, 
-						  //so once path is tracked back to start, prev will be the next move
+			while (parent != -1)
+			{
+				parent = parents[parent];
+				path++;
+			}
+			parent = node;
+
+			float progress = (float)path;
+			int prev = -1;
 			while (parent != root)
 			{
 				prev = parent;
 				parent = parents[parent];
 
+				
+				progress = progress - 1.0f;
 			}
 
-			if (prev == -1)//already at destination
+			if (prev == -1)
 			{
-				//next location = root
-				m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(IntToVec(root))));
-				std::cout << "SpritePos post change: "<< m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-				std::cout << "root: " << root << std::endl;
-
+				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
+				std::cout << "ROOT!" << root << std::endl;;
 			}
 			else
 			{
-				//next location = prev
-				m_sprite.setPosition(static_cast<sf::Vector2f>(Game::instance()->getWorld().getTilePos(IntToVec(prev))));
-				std::cout << "SpritePos post change: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-				std::cout << "prev: " << prev << std::endl;
+				std::cout << "PREV!" << std::endl;;
 			}
 		}
 
-
-		std::list <sf::Vector2i> temp = Game::instance()->getWorld().getNeighbours(IntToVec(node)), edgesVec;
-
-		for (std::list<sf::Vector2i>::iterator it = temp.begin(); it != temp.end(); ++it)
-		{
-			std::cout << "for: neighbours" << std::endl;
-			if (!willCollide(static_cast<sf::Vector2f>(*it)))//if tile is valid location(no collisions)
-				std::cout << "no collision" << std::endl;
-				edgesVec.push_back(*it);
-		}
-		std::list <int> edges;
-		while (!edges.empty())
-		{
-			std::cout << "edges not empty" << std::endl;
-			edges.push_back(VecToInt(edgesVec.front()));
-			edgesVec.pop_front();
-		}
+		std::list <int> edges = m_graph[node];
 
 		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
 		{
-			std::cout << "for: edges" << std::endl;
+			std::cout << "edges " << *it << std::endl;
 			int nde = *it;
 
 			if (visited.count(nde) == 0)
 			{
-				std::cout << "visited.count = 0" << std::endl;
 				visited.insert(nde);
 				queue.push(nde);
 
-				parents[nde] = node;//chld data = parent index
+				parents[nde] = node;
 			}
 		}
-	}
-
-
-
-
+	}*/
 }
 
 sf::Clock pathTimer;

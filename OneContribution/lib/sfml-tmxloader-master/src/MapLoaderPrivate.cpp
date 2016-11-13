@@ -1010,7 +1010,7 @@ void MapLoader::ParseLayerProperties(const pugi::xml_node& propertiesNode, MapLa
 
 void MapLoader::CreateDebugGrid()
 {
-	sf::Color debugColour(0u, 0u, 0u, 120u);
+	sf::Color debugColour(200u, 200u, 200u, 120u);
 	float mapHeight = static_cast<float>(m_tileHeight * m_height);
 	for(int x = 0; x <= m_width; x += 2)
 	{

@@ -98,7 +98,7 @@ void UI::updateDrawTime()
 void UI::update(sf::RenderWindow &window)
 {
 	sf::Vector2f newDebugPos = window.mapPixelToCoords(sf::Vector2i(0, 0));
-	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition());
+	sf::Vector2f mousePos = (window.mapPixelToCoords(sf::Mouse::getPosition()));
 	m_debugOverlay.setPosition(newDebugPos);
 	m_txtDebug.setPosition(newDebugPos);
 	std::string fps = "Fps: " + std::to_string(m_fps);
