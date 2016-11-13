@@ -115,6 +115,7 @@ void Entity::BFS()
 					sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x - Game::instance()->getWorld().getTileSize().x,
 						Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y - Game::instance()->getWorld().getTileSize().y)))
 			});
+			std::cout << "debug: " << Path().getNextTile() << ", " << Path().getNextTile() << std::endl;
 		}
 	}
 
