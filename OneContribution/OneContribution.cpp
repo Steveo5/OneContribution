@@ -12,17 +12,17 @@ int main()
 
 	std::cout << game->getTest() << std::endl;
 
-	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(50.f, 0.f));
+	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(0, 1600));
 	ent->setName("Chandler");
 	Path* path = new Path();
-	path->addTile(sf::Vector2f(50, 50));
-	path->addTile(sf::Vector2f(150, 50));
-	path->addTile(sf::Vector2f(250, 50));
-	path->addTile(sf::Vector2f(350, 200));
+	//path->addTile(sf::Vector2f(50, 50));
+	//path->addTile(sf::Vector2f(150, 50));
+	//path->addTile(sf::Vector2f(250, 50));
+	//path->addTile(sf::Vector2f(350, 200));
 	//path->setCurrentTile(0);
 	ent->setPath(path);
 	
-	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(150.f, 100.f));
+	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(150.f, 100.f));
 	Path* path2 = new Path();
 	//path2->addTile(sf::Vector2f(10, 40));
 	//path2->addTile(sf::Vector2f(40, 50));

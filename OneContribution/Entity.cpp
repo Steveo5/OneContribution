@@ -69,55 +69,51 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 
 void Entity::BFS()
 {
-	m_target = static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
+	std::cout << "BFS" << std::endl;
+	if (m_entityType == EntityType::KNIGHT)
+	{
+		m_sprite.setPosition(static_cast<sf::Vector2f>(m_target));
+		std::cout << "m_sprite position: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
+	}
+	else if (m_entityType == EntityType::ENEMY)
+	{
+		m_target = static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
 
-	if (m_sprite.getPosition().x > m_target.x)
-	{
-		if (m_sprite.getPosition().y > m_target.y)
+		if (m_sprite.getPosition().x > m_target.x)
 		{
-			std::cout << "move down-right" << std::endl;
-			//move down-right
-			Path().setTiles(std::vector<sf::Vector2f>{
-				sf::Vector2f(Game::instance()->getWorld().getTilePos(
-				sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x + Game::instance()->getWorld().getTileSize().x,
-				Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y + Game::instance()->getWorld().getTileSize().y)))
-			});
+			if (m_sprite.getPosition().y > m_target.y)
+			{
+				std::cout << "move down-right" << std::endl;
+				//move down-right
+				Path().addTile(sf::Vector2f(getSpritePosition().x + 64, getSpritePosition().y + 32));
+			}
+			else
+			{
+				std::cout << "move up-right" << std::endl;
+				//move up-right
+				Path().addTile(sf::Vector2f(getSpritePosition().x + 64, getSpritePosition().y - 32));
+			}
 		}
 		else
 		{
-			std::cout << "move up-right" << std::endl;
-			//move up-right
-			Path().setTiles(std::vector<sf::Vector2f>{
-				sf::Vector2f(Game::instance()->getWorld().getTilePos(
-				sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x + Game::instance()->getWorld().getTileSize().x,
-				Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y - Game::instance()->getWorld().getTileSize().y)))
-			});
+			if (m_sprite.getPosition().y > m_target.y)
+			{
+				std::cout << "move down-left" << std::endl;
+				//move down-left
+				Path().addTile(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y + 32));
+			}
+			else
+			{
+				std::cout << "move up-left" << std::endl;
+				//move up-left
+
+				m_lastPos = getSpritePosition();
+				Path().addTile(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
+				//m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
+			}
 		}
 	}
-	else
-	{
-		if (m_sprite.getPosition().y > m_target.y)
-		{
-			std::cout << "move down-left" << std::endl;
-			//move down-left
-			Path().setTiles(std::vector<sf::Vector2f>{
-				sf::Vector2f(Game::instance()->getWorld().getTilePos(
-					sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x - Game::instance()->getWorld().getTileSize().x,
-						Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y + Game::instance()->getWorld().getTileSize().y)))
-			});
-		}
-		else
-		{
-			std::cout << "move up-left" << std::endl;
-			//move up-left
-			Path().setTiles(std::vector<sf::Vector2f>{
-				sf::Vector2f(Game::instance()->getWorld().getTilePos(
-					sf::Vector2i(Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).x - Game::instance()->getWorld().getTileSize().x,
-						Game::instance()->getWorld().getTile(sf::Vector2i(m_sprite.getPosition())).y - Game::instance()->getWorld().getTileSize().y)))
-			});
-			std::cout << "debug: " << Path().getNextTile() << ", " << Path().getNextTile() << std::endl;
-		}
-	}
+	
 
 
 	/*
@@ -142,6 +138,7 @@ void Entity::BFS()
 	while (!queue.empty())
 	{
 		int node = queue.front();
+		std::cout << "node: " << node << std::endl;
 		queue.pop();
 
 		path.push_back(node);
@@ -366,8 +363,12 @@ bool Entity::isControllable()
 
 void Entity::setTarget(sf::Vector2i t)
 {
-	std::cout << "setTarget(): " << t.x << ", " << t.y << std::endl;
-	m_target = t;
+	if (m_entityType == EntityType::KNIGHT && isSelected())
+	{
+		std::cout << "setTarget(): " << t.x << ", " << t.y << std::endl;
+		m_target = t;
+	}
+	
 }
 
 void Entity::setControllable(bool control)
