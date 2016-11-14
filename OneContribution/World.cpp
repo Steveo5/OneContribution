@@ -31,10 +31,12 @@ void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void World::tick()
 {
 	//Entity logic tick
-	for (int i = 0; i < m_entities.size(); i++)
+	/*for (int i = 0; i < m_entities.size(); i++)
 	{
 		m_entities[i]->tick();
-	}
+	}*/
+	m_entities[1]->tick();
+	m_entities[0]->tick();
 }
 
 void World::update(sf::Time deltaTime)
