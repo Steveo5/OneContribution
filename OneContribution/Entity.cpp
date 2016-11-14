@@ -18,7 +18,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_characterSelectionBox.setFillColor(sf::Color::Transparent);
 	m_characterSelectionBox.setOutlineColor(sf::Color::White);
 	m_characterSelectionBox.setOutlineThickness(1.f);
-	m_characterSelectionBox.setSize(sf::Vector2f(70, 150));
+	m_characterSelectionBox.setSize(sf::Vector2f(20, 40));
 	m_maxHealth = 100;
 	//m_rectangle.setOrigin(m_rectangle.getSize().x / 2, m_rectangle.getSize().y / 2);
 	m_entityType = entityType;
