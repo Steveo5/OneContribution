@@ -22,7 +22,7 @@ int main()
 	//path->setCurrentTile(0);
 	ent->setPath(path);
 	
-	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(150.f, 100.f));
+	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(64, 64));
 	Path* path2 = new Path();
 	//path2->addTile(sf::Vector2f(10, 40));
 	//path2->addTile(sf::Vector2f(40, 50));

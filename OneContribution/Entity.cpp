@@ -75,32 +75,33 @@ void Entity::BFS()
 		m_sprite.setPosition(static_cast<sf::Vector2f>(m_target));
 		std::cout << "m_sprite position: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
 	}
-	else if (m_entityType == EntityType::ENEMY)
+	else
 	{
+		std::cout << "enemy BFS" << std::endl;
 		m_target = static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
 
-		if (m_sprite.getPosition().x > m_target.x)
+		if (getSpritePosition().x < m_target.x)
 		{
-			if (m_sprite.getPosition().y > m_target.y)
+			if (getSpritePosition().y < m_target.y)
 			{
 				std::cout << "move down-right" << std::endl;
 				//move down-right
-				Path().addTile(sf::Vector2f(getSpritePosition().x + 64, getSpritePosition().y + 32));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y + 16));
 			}
 			else
 			{
 				std::cout << "move up-right" << std::endl;
 				//move up-right
-				Path().addTile(sf::Vector2f(getSpritePosition().x + 64, getSpritePosition().y - 32));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y - 16));
 			}
 		}
 		else
 		{
-			if (m_sprite.getPosition().y > m_target.y)
+			if (getSpritePosition().y < m_target.y)
 			{
 				std::cout << "move down-left" << std::endl;
 				//move down-left
-				Path().addTile(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y + 32));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y + 16));
 			}
 			else
 			{
@@ -108,7 +109,7 @@ void Entity::BFS()
 				//move up-left
 
 				m_lastPos = getSpritePosition();
-				Path().addTile(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y - 16));
 				//m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
 			}
 		}
@@ -208,18 +209,18 @@ void Entity::tick()
 	//m_sprite.setAnimation()
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
-
-	if (pathTimer.getElapsedTime().asSeconds() > 5)
+	BFS();
+	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
 		pathTimer.restart();
 		if (m_path->getNextTile() != NULL)
 		{
-			std::cout << "Next tile = " << m_path->getNextTile()->x << " " << m_path->getNextTile()->y << std::endl;
-			std::cout << "Current Pos " << m_sprite.getPosition().x << " " << m_sprite.getPosition().y << std::endl;
+			//std::cout << "Next tile = " << m_path->getNextTile()->x << " " << m_path->getNextTile()->y << std::endl;
+			//std::cout << "Current Pos " << m_sprite.getPosition().x << " " << m_sprite.getPosition().y << std::endl;
 			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
-		BFS();
+		//BFS();
 	}
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
