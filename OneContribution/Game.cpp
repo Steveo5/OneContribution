@@ -204,6 +204,14 @@ void Game::handleEvents()
 			m_ui.handleInput(event.key.code);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				toggleFullscreen();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::PageUp))
+			{
+				m_view.setSize(m_view.getSize().x + 200, m_view.getSize().y + 200);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::PageDown))
+			{
+				m_view.setSize(m_view.getSize().x - 200, m_view.getSize().y - 200);
+			}
 			break;
 		case sf::Event::Resized:
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
