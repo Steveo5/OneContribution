@@ -10,7 +10,7 @@ Entity m_entity;
 */
 Game* Game::m_instance = 0;
 Game::Game()
-	: m_view(sf::FloatRect(0, 0, 1280, 720))
+	: m_view(sf::FloatRect(-600, 1280, 1280, 720))
 	, m_miniMap(sf::FloatRect(sf::FloatRect(0.f, 0.f, 200, 200)))
 	, m_miniMapSprite(sf::RectangleShape(sf::Vector2f(m_miniMap.getSize().x, m_miniMap.getSize().y)))
 {
@@ -195,9 +195,10 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
+				
 				std::cout << "mouseClick Coords: " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).x << ", " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).y << std::endl;
 				std::cout << "mouseClick Tile: " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).x << ", " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).y << std::endl;
-				instance()->getWorld().getEntities()[0]->setTarget(instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
 		case sf::Event::KeyPressed:
