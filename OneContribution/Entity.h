@@ -56,6 +56,7 @@ public:
 	int VecToInt(sf::Vector2i v);
 	sf::Vector2i IntToVec(int i);
 	sf::Vector2i m_tileSize;
+	sf::Vector2i m_nextMove;
 
 	~Entity();
 
@@ -93,6 +94,8 @@ public:
 	sf::Text& getTextName();
 
 	sf::Vector2f getSpritePosition();
+
+	sf::Vector2i getSpritePositionInt();
 
 	//sf::RectangleShape m_rectangle;
 

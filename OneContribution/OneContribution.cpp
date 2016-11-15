@@ -12,6 +12,8 @@ int main()
 
 	std::cout << game->getTest() << std::endl;
 
+
+
 	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(0, 1600))));
 	ent->setName("Chandler");
 	Path* path = new Path();
@@ -22,7 +24,7 @@ int main()
 	//path->setCurrentTile(0);
 	ent->setPath(path);
 	
-	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(64, 64))));
+	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(0, 256))));
 	Path* path2 = new Path();
 	//path2->addTile(sf::Vector2f(10, 40));
 	//path2->addTile(sf::Vector2f(40, 50));
@@ -32,9 +34,15 @@ int main()
 	//ent2->setPath(path);
 	ent2->setName("Pidwick");
 
-	/*Entity* ent3 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(1600, 1600));
+	Entity* ent3 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(800, 2400))));
 	Path* path3 = new Path();
-	ent3->setName("Elton");*/
+	//path2->addTile(sf::Vector2f(10, 40));
+	//path2->addTile(sf::Vector2f(40, 50));
+	//path2->addTile(sf::Vector2f(50, 300));
+	//path2->addTile(sf::Vector2f(50, 100));
+	//path2->setCurrentTile(0);
+	//ent2->setPath(path);
+	ent3->setName("Hodor");
 	
 	//Initialize animations
 	AnimationManager* animator = Game::instance()->getAnimator();
