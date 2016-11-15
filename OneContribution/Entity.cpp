@@ -14,11 +14,13 @@ Entity::Entity()
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 	: m_sprite(sf::seconds(0.2), true, false)
 {
+	m_tileSize = Game::instance()->getWorld().getTileSize();
 	m_isSelected = false;
 	m_characterSelectionBox.setFillColor(sf::Color::Transparent);
 	m_characterSelectionBox.setOutlineColor(sf::Color::White);
 	m_characterSelectionBox.setOutlineThickness(1.f);
 	m_characterSelectionBox.setSize(sf::Vector2f(20, 40));
+	m_characterSelectionBox.setOrigin(-21, 20);
 	m_maxHealth = 100;
 	//m_rectangle.setOrigin(m_rectangle.getSize().x / 2, m_rectangle.getSize().y / 2);
 	m_entityType = entityType;
@@ -31,6 +33,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	//m_sprite stuff here
 	m_sprite.setPosition(location);
+	m_sprite.setOrigin(-42, 40/*m_sprite.getLocalBounds().width/2, m_sprite.getLocalBounds().height*/);
 	//m_sprite stuff ends
 
 
@@ -86,13 +89,13 @@ void Entity::BFS()
 			{
 				std::cout << "move down-right" << std::endl;
 				//move down-right
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y + 16));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
 			}
 			else
 			{
 				std::cout << "move up-right" << std::endl;
 				//move up-right
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y - 16));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
 			}
 		}
 		else
@@ -101,7 +104,7 @@ void Entity::BFS()
 			{
 				std::cout << "move down-left" << std::endl;
 				//move down-left
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y + 16));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
 			}
 			else
 			{
@@ -109,8 +112,7 @@ void Entity::BFS()
 				//move up-left
 
 				m_lastPos = getSpritePosition();
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y - 16));
-				//m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
+				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - (m_tileSize.x/2), getSpritePosition().y - (m_tileSize.y / 2)));
 			}
 		}
 	}
@@ -220,6 +222,7 @@ void Entity::tick()
 			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
+		//std::cout << "spriteSize: " << getGlobalBounds().width << ", " << getGlobalBounds().height << std::endl;
 		//BFS();
 	}
 	m_hpBar->setVisible(m_visible);
@@ -289,7 +292,7 @@ void Entity::update(sf::Time deltaTime)
 {
 	if (isSelected())
 	{
-		m_characterSelectionBox.setPosition(getSpritePosition());
+		m_characterSelectionBox.setPosition(m_sprite.getPosition());
 	}
 
 	if (m_path->getNextTile() != NULL)

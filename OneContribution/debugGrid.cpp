@@ -17,18 +17,18 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 	}
 	
 
-	for (int i = -(Game::instance()->getWorld().getWidth() / 2); i <= Game::instance()->getWorld().getWidth() / 2; i += (Game::instance()->getWorld().getWidth() / Game::instance()->getWorld().getColumns()))
+	for (int i = -(Game::instance()->getWorld().getWidth() / 2); i <= Game::instance()->getWorld().getWidth() / 2; i += ((Game::instance()->getWorld().getWidth() / Game::instance()->getWorld().getColumns())))
 	{
 		sf::Vertex line[] =
 		{
-			sf::Vertex(sf::Vector2f(i, 0), sf::Color::Red),
+			sf::Vertex(sf::Vector2f(i, 16), sf::Color::Red),
 			sf::Vertex(sf::Vector2f(i, Game::instance()->getWorld().getHeight()), sf::Color::Red)
 		};
 
 		target.draw(line, 2, sf::Lines);
 	}
 	//Draw the horizontal lines
-	for (int i = 0; i <= Game::instance()->getWorld().getHeight(); i += (Game::instance()->getWorld().getHeight() / Game::instance()->getWorld().getRows()))
+	for (int i = 16; i <= Game::instance()->getWorld().getHeight(); i += ((Game::instance()->getWorld().getHeight() / Game::instance()->getWorld().getRows())))
 	{
 		sf::Vertex line[] =
 		{
@@ -41,7 +41,7 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 	sf::Vertex line[] =
 	{
 		
-		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getBounds()), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(-3200,0), sf::Color::Green),
 		sf::Vertex(sf::Vector2f(3200,0), sf::Color::Green),
 		sf::Vertex(sf::Vector2f(3200, 3200), sf::Color::Green),
 		sf::Vertex(sf::Vector2f(-3200, 3200), sf::Color::Green),
