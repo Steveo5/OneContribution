@@ -90,12 +90,14 @@ void Entity::BFS()
 				std::cout << "move down-right" << std::endl;
 				//move down-right
 				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				//Path().addTile(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
 			}
 			else
 			{
 				std::cout << "move up-right" << std::endl;
 				//move up-right
 				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+				//Path().addTile(sf::Vector2f(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
 			}
 		}
 		else
@@ -105,98 +107,18 @@ void Entity::BFS()
 				std::cout << "move down-left" << std::endl;
 				//move down-left
 				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				//Path().addTile(sf::Vector2f(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
 			}
 			else
 			{
 				std::cout << "move up-left" << std::endl;
 				//move up-left
 
-				m_lastPos = getSpritePosition();
 				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - (m_tileSize.x/2), getSpritePosition().y - (m_tileSize.y / 2)));
+				//Path().addTile(sf::Vector2f(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
 			}
 		}
 	}
-	
-
-
-	/*
-	std::cout << "BFS" << std::endl;
-	std::cout << "tile coords: " << Game::instance()->getWorld().getTilePos(m_target).x << ", " << Game::instance()->getWorld().getTilePos(m_target).y << std::endl;
-	std::unordered_map <int, std::list<int>> m_graph = *Game::instance()->getWorld().getGraph();
-	std::unordered_set<int> visited;
-
-	std::queue<int> queue;
-
-	int root = VecToInt(m_target);
-
-	queue.push(root); // enqueue the root node
-	visited.insert(root);
-
-	std::list<int> path;
-
-	int parents[10000];
-
-	parents[root] = -1;
-
-	while (!queue.empty())
-	{
-		int node = queue.front();
-		std::cout << "node: " << node << std::endl;
-		queue.pop();
-
-		path.push_back(node);
-
-		if (node == VecToInt(m_target))
-		{
-			int path = 0;
-
-			int parent = node;
-
-			while (parent != -1)
-			{
-				parent = parents[parent];
-				path++;
-			}
-			parent = node;
-
-			float progress = (float)path;
-			int prev = -1;
-			while (parent != root)
-			{
-				prev = parent;
-				parent = parents[parent];
-
-				
-				progress = progress - 1.0f;
-			}
-
-			if (prev == -1)
-			{
-				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
-				std::cout << "ROOT!" << root << std::endl;;
-			}
-			else
-			{
-				std::cout << "PREV!" << std::endl;;
-			}
-		}
-
-		std::list <int> edges = m_graph[node];
-
-		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
-		{
-			std::cout << "edges " << *it << std::endl;
-			int nde = *it;
-
-			if (visited.count(nde) == 0)
-			{
-				visited.insert(nde);
-				queue.push(nde);
-
-				parents[nde] = node;
-			}
-		}
-	}*/
 }
 
 sf::Clock pathTimer;
@@ -297,9 +219,10 @@ void Entity::update(sf::Time deltaTime)
 
 	if (m_path->getNextTile() != NULL)
 	{
-		//sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
+		std::cout << "getNextTile" << std::endl;
+		sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
 		
-		//m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
+		m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
 	}
 }
 
