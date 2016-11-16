@@ -61,7 +61,6 @@ std::vector<Entity*>& World::getEntities()
 
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
-	std::cout << "getTile(): " << location.x << ", " << location.y << std::endl;
 	sf::Vector2i m_location = sf::Vector2i(location.x + 3168, location.y + 1584);
 	sf::Vector2i m_tileCoords = sf::Vector2i(m_location.x - (m_location.x % (m_tileSize.x)), m_location.y - (m_location.y % (m_tileSize.y/2)));
 	m_tileCoords.x -= 3200;
@@ -80,7 +79,6 @@ sf::Vector2i World::getTilePos(sf::Vector2i location)
 	sf::Vector2i temp;
 	temp.x = (location.x * getTileSize().x) - 6400;
 	temp.x = (location.y * getTileSize().y);
-	std::cout << "getTilePos(): " << temp.x << ", " << temp.y << std::endl;
 	return temp;
 	
 }
@@ -88,7 +86,6 @@ sf::Vector2i World::getTilePos(sf::Vector2i location)
 const int World::getTileCount()
 {
 	int m_tileCountTemp = ((m_worldBounds.x / m_tileSize.x) * (m_worldBounds.y / m_tileSize.y));
-	std::cout << "tileCount: " << m_tileCountTemp << std::endl;
 	return m_tileCountTemp;
 }
 sf::Vector2i World::getBounds()
@@ -127,12 +124,10 @@ int World::VecToInt(sf::Vector2i v)
 }
 sf::Vector2i World::IntToVec(int i)//height and width should be tile based not world based
 {
-	std::cout << "World: " << getRows() << ", " << getColumns() << std::endl;
 	int row = i / getColumns();
 	int col = i % getColumns();
 
 	return sf::Vector2i(row, col);
-
 }
 
 bool World::willCollide(sf::Vector2f position)
@@ -153,42 +148,3 @@ bool World::willCollide(sf::Vector2f position)
 	return collision;
 }
 
-std::unordered_map<int, std::list<int>>* World::getGraph()
-{
-	return &graph;
-}
-
-void World::createGraph()
-{
-	for (int row = -3200; row < 3200; row+= 64)
-	{
-		for (int col = 0; col < 3200; col+=32)
-		{
-			int id = VecToInt(sf::Vector2i(row, col));
-
-			if (!willCollide(sf::Vector2f(row, col)))
-			{
-				std::list <int> edges;
-
-				if (!willCollide(sf::Vector2f(row - 64, col)))
-				{
-					edges.emplace_front(VecToInt(sf::Vector2i(row - 64, col)));
-				}
-				if (!willCollide(sf::Vector2f(row + 64, col)))
-				{
-					edges.emplace_front(VecToInt(sf::Vector2i(row + 64, col)));
-				}
-				if (!willCollide(sf::Vector2f(row, col - 32)))
-				{
-					edges.emplace_front(VecToInt(sf::Vector2i(row, col - 32)));
-				}
-				if (!willCollide(sf::Vector2f(row, col + 32)))
-				{
-					edges.emplace_front(VecToInt(sf::Vector2i(row, col + 32)));
-				}
-
-				graph[id] = edges;
-			}
-		}
-	}
-}

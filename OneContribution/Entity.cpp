@@ -35,7 +35,8 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 
 	m_hpBar = new HealthBar();
-	m_hpBar->setWidth(100);
+	m_hpBar->setWidth(50);
+	m_hpBar->setHeight(5);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::instance()->getUi()->addComponent(m_hpBar);
@@ -47,89 +48,92 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	}
 
 	if (m_entityType == EntityType::KNIGHT)
+	{
 		m_textName.setColor(sf::Color::Blue);
+		m_speedStep = 1;
+	}
 	else
+	{
 		m_textName.setColor(sf::Color::Red);
+		m_speedStep = 1;
+	}
 	m_textName.setFont(m_font);
 	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
-	m_textName.setScale(m_sprite.getScale());
+	m_textName.setScale(m_sprite.getScale());//match scale of sprite
 
 	m_nextMove = getSpritePositionInt();
 	m_target = getSpritePositionInt();
 
 }
 
-
-int Entity::VecToInt(sf::Vector2i v)
-{
-	return (v.x * Game::instance()->getWorld().getColumns()) + v.y;
-}
-sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not world based
-{
-	std::cout << "World: " << Game::instance()->getWorld().getRows() << ", " << Game::instance()->getWorld().getColumns() << std::endl;
-	int row = i / Game::instance()->getWorld().getColumns();
-	int col = i % Game::instance()->getWorld().getColumns();
-
-	return sf::Vector2i(row, col);
-
-}
-
 void Entity::BFS()
-{
-	if (m_entityType == EntityType::KNIGHT)
+{		
+	if ((getSpritePositionInt().x >= (m_nextMove.x - m_speedStep) && getSpritePositionInt().x <= (m_nextMove.x + m_speedStep))//fix entity never reaching exactly m_nextMove (thus not updating)
+		&& (getSpritePositionInt().y >= (m_nextMove.y - m_speedStep) && getSpritePositionInt().y <= (m_nextMove.y + m_speedStep)))
 	{
-		if (getSpritePositionInt() != m_target)
-		{
-			m_sprite.move(Math::normalize(static_cast<sf::Vector2f>(m_target) - getSpritePosition()));
-			//std::cout << "knight position: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-		}
-		
-	}
+		//std::cout << "pos = nextMove" << std::endl;
+		m_sprite.setPosition(static_cast<sf::Vector2f>(m_nextMove));
+	}	
+	
+	//debug purposes
+	if (m_entityType == EntityType::ENEMY) m_target = Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt();
 	else
 	{
-		//std::cout << "enemy m_target: " << m_target.x << ", " << m_target.y << std::endl;
-		//std::cout << "enemy m_nextMove: " << m_nextMove.x << ", " << m_nextMove.y << std::endl;
-		//std::cout << "enemy position: " << getSpritePositionInt().x << ", " << getSpritePositionInt().y << std::endl;
-		if ((getSpritePositionInt().x >= (m_nextMove.x - 1) && getSpritePositionInt().x <= (m_nextMove.x + 1)) && (getSpritePositionInt().y >= (m_nextMove.y - 1) && getSpritePositionInt().y <= (m_nextMove.y + 1)))
-			m_sprite.setPosition(static_cast<sf::Vector2f>(m_nextMove));
-		
-		m_target = Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt();
+		std::cout << "m_target: " << m_target.x << ", " << m_target.y << std::endl;
+		std::cout << "m_nextMove: " << m_nextMove.x << ", " << m_nextMove.y << std::endl;
+		std::cout << "position: " << getSpritePositionInt().x << ", " << getSpritePositionInt().y << std::endl;
+	}
 
-		if (getSpritePositionInt() == m_nextMove)
+	//if closer to target than nextMove, nextMove = target.
+	if (abs(getSpritePositionInt().x - m_nextMove.x) > abs(getSpritePositionInt().x - m_target.x) && abs(getSpritePositionInt().y - m_nextMove.y) > abs(getSpritePositionInt().y - m_target.y))
+	{
+		m_nextMove = m_target;
+	}
+
+	else if (getSpritePositionInt() == m_nextMove)
+	{
+		if (getSpritePosition().x < m_target.x)
 		{
-			if (getSpritePosition().x < m_target.x)
+			if (getSpritePosition().y < m_target.y)
 			{
-				if (getSpritePosition().y < m_target.y)
-				{
-					//std::cout << "move down-right" << std::endl;
-					//move down-right
-					m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
-				}
-				else
-				{
-					//std::cout << "move up-right" << std::endl;
-					//move up-right
-					m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
-				}
+				//move down-right
+				m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
 			}
 			else
 			{
-				if (getSpritePosition().y < m_target.y)
-				{
-					//std::cout << "move down-left" << std::endl;
-					//move down-left
-					m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
-				}
-				else
-				{
-					//std::cout << "move up-left" << std::endl;
-					//move up-left
-					m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
-				}
+				//move up-right
+				m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
 			}
 		}
-		
-		m_sprite.move(Math::normalize(static_cast<sf::Vector2f>(m_nextMove) - getSpritePosition()));
+		else
+		{
+			if (getSpritePosition().y < m_target.y)
+			{
+				//move down-left
+				m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+			}
+			else
+			{
+				//move up-left
+				m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+			}
+		}
+	}
+	
+	//apply player movement
+	if (m_entityType == EntityType::KNIGHT)
+	{
+		sf::Vector2f m_tempMovement = Math::normalize(static_cast<sf::Vector2f>(m_nextMove) - getSpritePosition());
+		m_tempMovement.x *= m_speedStep;
+		m_tempMovement.y *= m_speedStep;
+		m_sprite.move(m_tempMovement);
+	}
+	else//apply enemy movement
+	{
+		sf::Vector2f m_tempMovement = Math::normalize(static_cast<sf::Vector2f>(m_nextMove) - getSpritePosition());
+		m_tempMovement.x *= m_speedStep;
+		m_tempMovement.y *= m_speedStep;
+		m_sprite.move(m_tempMovement);
 	}
 }
 
@@ -140,6 +144,15 @@ void Entity::tick()
 	{
 		setVisible(false);
 		return;
+	}
+
+	//check for doing damage
+	if (m_entityType == EntityType::ENEMY)
+	{
+		if ((abs(getSpritePositionInt().x - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().x) < 50) && (abs(getSpritePositionInt().y - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().y) < 50))
+		{
+			Game::instance()->getWorld().getEntities()[0]->applyDamage(10);
+		}
 	}
 
 	//m_sprite.setAnimation()
@@ -161,6 +174,7 @@ void Entity::tick()
 	}
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
+	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x + 7, m_sprite.getPosition().y - 30));
 
 
 	//Check if they are colliding and stop them
@@ -177,10 +191,6 @@ void Entity::tick()
 			}
 		}
 	}
-
-	//m_sprite.move(sf::Vector2f(0.0, 0.8));
-
-	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y - 30));
 
 	//Update the entities m_facing property
 	if (m_lastPos != m_sprite.getPosition())
@@ -253,6 +263,14 @@ void Entity::setHealth(int health)
 	m_health = health;
 }
 
+void Entity::applyDamage(int damage)
+{
+	//only do damage when alive
+	if (m_health > 0) m_health -= damage;
+
+	//adjust if too much damage is dealt
+	if (m_health < 0) m_health = 0;
+}
 int Entity::getHealth()
 {
 	return m_health;

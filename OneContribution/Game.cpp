@@ -35,8 +35,6 @@ Game::Game()
 
 	//m_ui = new UI();
 	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(100, 100));//tile size, rows and columns
-	m_world.createGraph();
-	std::cout << "Game(): map size: " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).x << ", " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).y << std::endl;
 	
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);

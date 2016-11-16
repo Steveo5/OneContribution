@@ -83,6 +83,7 @@ public:
 	//Move an entity to a position in target seconds
 	void moveTo(sf::Vector2f position, int seconds);
 	bool isDead();
+	void applyDamage(int damage);
 	bool isControllable();
 	void setControllable(bool control);
 	bool isVisible();
@@ -125,9 +126,8 @@ private:
 
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;
-
-	
 	sf::Vector2i m_target;
+	int m_speedStep;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
