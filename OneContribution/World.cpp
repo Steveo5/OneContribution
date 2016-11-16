@@ -31,12 +31,10 @@ void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void World::tick()
 {
 	//Entity logic tick
-	/*for (int i = 0; i < m_entities.size(); i++)
+	for (int i = 0; i < m_entities.size(); i++)
 	{
 		m_entities[i]->tick();
-	}*/
-	m_entities[1]->tick();
-	m_entities[0]->tick();
+	}
 }
 
 void World::update(sf::Time deltaTime)
@@ -64,11 +62,16 @@ std::vector<Entity*>& World::getEntities()
 sf::Vector2i World::getTile(sf::Vector2i location)
 {
 	std::cout << "getTile(): " << location.x << ", " << location.y << std::endl;
-	sf::Vector2i m_location = static_cast<sf::Vector2i>(location);
-	//location.x -= getWidth();
-	sf::Vector2i m_tileCoords = sf::Vector2i(m_location.x - (m_location.x % m_tileSize.x), m_location.y - (m_location.y % m_tileSize.y));
-	//sf::Vector2i m_tileCoords = sf::Vector2i(m_location.x - (m_location.x % 64), m_location.y - (m_location.y %32));
-	std::cout << "getTile(): tile coords: " << m_tileCoords.x << ", " << m_tileCoords.y << std::endl;
+	sf::Vector2i m_location = sf::Vector2i(location.x + 3168, location.y + 1584);
+	sf::Vector2i m_tileCoords = sf::Vector2i(m_location.x - (m_location.x % (m_tileSize.x)), m_location.y - (m_location.y % (m_tileSize.y/2)));
+	m_tileCoords.x -= 3200;
+	m_tileCoords.y -= 1600;
+	//fix alignment for isometric tile locations
+	if (m_tileCoords.y / 16 % 2 == 0)
+		m_tileCoords.x -= 32;
+	if (m_tileCoords.x / 16 % 2 == 0)
+		m_tileCoords.x += 32;
+	
 	return m_tileCoords;
 }
 

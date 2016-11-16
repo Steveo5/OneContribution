@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <queue>
+#include <math.h>
 
 Animation m_animation;
 
@@ -14,23 +15,22 @@ Entity::Entity()
 Entity::Entity(EntityType entityType, sf::Vector2f location)
 	: m_sprite(sf::seconds(0.2), true, false)
 {
+	m_tileSize = Game::instance()->getWorld().getTileSize();
 	m_isSelected = false;
 	m_characterSelectionBox.setFillColor(sf::Color::Transparent);
 	m_characterSelectionBox.setOutlineColor(sf::Color::White);
 	m_characterSelectionBox.setOutlineThickness(1.f);
 	m_characterSelectionBox.setSize(sf::Vector2f(20, 40));
+	m_characterSelectionBox.setOrigin(-21, 20);
 	m_maxHealth = 100;
-	//m_rectangle.setOrigin(m_rectangle.getSize().x / 2, m_rectangle.getSize().y / 2);
 	m_entityType = entityType;
 	m_health = 70;
 	m_visible = true;
-	//m_rectangle.setPosition(location);
-	//m_rectangle.setFillColor(sf::Color::Red);
-	//m_rectangle.setSize(sf::Vector2f(100.f, 100.f));
 	m_path = new Path();
 
 	//m_sprite stuff here
 	m_sprite.setPosition(location);
+	m_sprite.setOrigin(-42, 40);
 	//m_sprite stuff ends
 
 
@@ -46,10 +46,17 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	}
 
-	m_textName.setColor(sf::Color::Blue);
+	if (m_entityType == EntityType::KNIGHT)
+		m_textName.setColor(sf::Color::Blue);
+	else
+		m_textName.setColor(sf::Color::Red);
 	m_textName.setFont(m_font);
-
 	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
+	m_textName.setScale(m_sprite.getScale());
+
+	m_nextMove = getSpritePositionInt();
+	m_target = getSpritePositionInt();
+
 }
 
 
@@ -69,132 +76,61 @@ sf::Vector2i Entity::IntToVec(int i)//height and width should be tile based not 
 
 void Entity::BFS()
 {
-	std::cout << "BFS" << std::endl;
 	if (m_entityType == EntityType::KNIGHT)
 	{
-		m_sprite.setPosition(static_cast<sf::Vector2f>(m_target));
-		std::cout << "m_sprite position: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
+		if (getSpritePositionInt() != m_target)
+		{
+			m_sprite.move(Math::normalize(static_cast<sf::Vector2f>(m_target) - getSpritePosition()));
+			//std::cout << "knight position: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
+		}
+		
 	}
 	else
 	{
-		std::cout << "enemy BFS" << std::endl;
-		m_target = static_cast<sf::Vector2i>(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
+		//std::cout << "enemy m_target: " << m_target.x << ", " << m_target.y << std::endl;
+		//std::cout << "enemy m_nextMove: " << m_nextMove.x << ", " << m_nextMove.y << std::endl;
+		//std::cout << "enemy position: " << getSpritePositionInt().x << ", " << getSpritePositionInt().y << std::endl;
+		if ((getSpritePositionInt().x >= (m_nextMove.x - 1) && getSpritePositionInt().x <= (m_nextMove.x + 1)) && (getSpritePositionInt().y >= (m_nextMove.y - 1) && getSpritePositionInt().y <= (m_nextMove.y + 1)))
+			m_sprite.setPosition(static_cast<sf::Vector2f>(m_nextMove));
+		
+		m_target = Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt();
 
-		if (getSpritePosition().x < m_target.x)
+		if (getSpritePositionInt() == m_nextMove)
 		{
-			if (getSpritePosition().y < m_target.y)
+			if (getSpritePosition().x < m_target.x)
 			{
-				std::cout << "move down-right" << std::endl;
-				//move down-right
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y + 16));
+				if (getSpritePosition().y < m_target.y)
+				{
+					//std::cout << "move down-right" << std::endl;
+					//move down-right
+					m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				}
+				else
+				{
+					//std::cout << "move up-right" << std::endl;
+					//move up-right
+					m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+				}
 			}
 			else
 			{
-				std::cout << "move up-right" << std::endl;
-				//move up-right
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x + 32, getSpritePosition().y - 16));
+				if (getSpritePosition().y < m_target.y)
+				{
+					//std::cout << "move down-left" << std::endl;
+					//move down-left
+					m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				}
+				else
+				{
+					//std::cout << "move up-left" << std::endl;
+					//move up-left
+					m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+				}
 			}
 		}
-		else
-		{
-			if (getSpritePosition().y < m_target.y)
-			{
-				std::cout << "move down-left" << std::endl;
-				//move down-left
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y + 16));
-			}
-			else
-			{
-				std::cout << "move up-left" << std::endl;
-				//move up-left
-
-				m_lastPos = getSpritePosition();
-				m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 32, getSpritePosition().y - 16));
-				//m_sprite.setPosition(sf::Vector2f(getSpritePosition().x - 64, getSpritePosition().y - 32));
-			}
-		}
+		
+		m_sprite.move(Math::normalize(static_cast<sf::Vector2f>(m_nextMove) - getSpritePosition()));
 	}
-	
-
-
-	/*
-	std::cout << "BFS" << std::endl;
-	std::cout << "tile coords: " << Game::instance()->getWorld().getTilePos(m_target).x << ", " << Game::instance()->getWorld().getTilePos(m_target).y << std::endl;
-	std::unordered_map <int, std::list<int>> m_graph = *Game::instance()->getWorld().getGraph();
-	std::unordered_set<int> visited;
-
-	std::queue<int> queue;
-
-	int root = VecToInt(m_target);
-
-	queue.push(root); // enqueue the root node
-	visited.insert(root);
-
-	std::list<int> path;
-
-	int parents[10000];
-
-	parents[root] = -1;
-
-	while (!queue.empty())
-	{
-		int node = queue.front();
-		std::cout << "node: " << node << std::endl;
-		queue.pop();
-
-		path.push_back(node);
-
-		if (node == VecToInt(m_target))
-		{
-			int path = 0;
-
-			int parent = node;
-
-			while (parent != -1)
-			{
-				parent = parents[parent];
-				path++;
-			}
-			parent = node;
-
-			float progress = (float)path;
-			int prev = -1;
-			while (parent != root)
-			{
-				prev = parent;
-				parent = parents[parent];
-
-				
-				progress = progress - 1.0f;
-			}
-
-			if (prev == -1)
-			{
-				m_sprite.setPosition(static_cast<sf::Vector2f>(IntToVec(root)));
-				std::cout << "ROOT!" << root << std::endl;;
-			}
-			else
-			{
-				std::cout << "PREV!" << std::endl;;
-			}
-		}
-
-		std::list <int> edges = m_graph[node];
-
-		for (std::list<int>::iterator it = edges.begin(); it != edges.end(); it++)
-		{
-			std::cout << "edges " << *it << std::endl;
-			int nde = *it;
-
-			if (visited.count(nde) == 0)
-			{
-				visited.insert(nde);
-				queue.push(nde);
-
-				parents[nde] = node;
-			}
-		}
-	}*/
 }
 
 sf::Clock pathTimer;
@@ -220,6 +156,7 @@ void Entity::tick()
 			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
+		//std::cout << "spriteSize: " << getGlobalBounds().width << ", " << getGlobalBounds().height << std::endl;
 		//BFS();
 	}
 	m_hpBar->setVisible(m_visible);
@@ -289,11 +226,12 @@ void Entity::update(sf::Time deltaTime)
 {
 	if (isSelected())
 	{
-		m_characterSelectionBox.setPosition(getSpritePosition());
+		m_characterSelectionBox.setPosition(m_sprite.getPosition());
 	}
 
 	if (m_path->getNextTile() != NULL)
 	{
+		//std::cout << "getNextTile" << std::endl;
 		//sf::Vector2f direction = Math::normalize(getSpritePosition() - *m_path->getNextTile());
 		
 		//m_sprite.setPosition(m_sprite.getPosition() + (direction * (1000.f * deltaTime.asSeconds())));
@@ -396,6 +334,11 @@ Direction Entity::getFacing()
 sf::Vector2f Entity::getSpritePosition()
 {
 	return m_sprite.getPosition();
+}
+
+sf::Vector2i Entity::getSpritePositionInt()
+{
+	return static_cast<sf::Vector2i>(m_sprite.getPosition());
 }
 
 void Entity::setName(std::string name)

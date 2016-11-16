@@ -55,12 +55,11 @@ public:
 	Entity(EntityType entityType, sf::Vector2f location);
 	int VecToInt(sf::Vector2i v);
 	sf::Vector2i IntToVec(int i);
-	
+	sf::Vector2i m_tileSize;
+	sf::Vector2i m_nextMove;
+
 	~Entity();
 
-	int getParentDir(sf::Vector2i parent, sf::Vector2i child);
-
-	void newBFS();
 	void BFS();
 
 	void tick();
@@ -95,6 +94,8 @@ public:
 	sf::Text& getTextName();
 
 	sf::Vector2f getSpritePosition();
+
+	sf::Vector2i getSpritePositionInt();
 
 	//sf::RectangleShape m_rectangle;
 
