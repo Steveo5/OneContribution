@@ -23,27 +23,109 @@ int main()
 	//path->addTile(sf::Vector2f(350, 200));
 	//path->setCurrentTile(0);
 	ent->setPath(path);
+	std::string enemyNames[20] = {"Ipes", "Ranesorth", "Margroth", "Zaramoran", "Ankruulde", "Ushu", "Ferran", "Gaapan", "Oskelze", "Drasnee", "Raxskel", "teca", "Shandrek", "Zergmo", "Tagamil", "Fenla", "Lormy", "Nockdruk", "Zergca"};
+	sf::Vector2i spawnPoints[20] = {sf::Vector2i(-448,288), sf::Vector2i(-736,464), sf::Vector2i(-1120,656), sf::Vector2i(-1664,928), sf::Vector2i(-2272,1232), //top-left edge
+									sf::Vector2i(2208,1264), sf::Vector2i(1696,976), sf::Vector2i(1312,816), sf::Vector2i(960,640), sf::Vector2i(544,368), //top-right edge
+									sf::Vector2i(128,2944), sf::Vector2i(512,2720), sf::Vector2i(864,2512), sf::Vector2i(1024,2208), sf::Vector2i(1888,2000), //bottom-right edge
+									sf::Vector2i(-320,2976), sf::Vector2i(-1088,2560), sf::Vector2i(-2720,1720), sf::Vector2i(-2240,1984), sf::Vector2i(-1888,2160) //bottom-left edge
+									};
 	
-	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(0, 256))));
+	int i = 0;
+	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
 	Path* path2 = new Path();
-	//path2->addTile(sf::Vector2f(10, 40));
-	//path2->addTile(sf::Vector2f(40, 50));
-	//path2->addTile(sf::Vector2f(50, 300));
-	//path2->addTile(sf::Vector2f(50, 100));
-	//path2->setCurrentTile(0);
-	//ent2->setPath(path);
-	ent2->setName("Pidwick");
+	ent2->setName(enemyNames[i]);
+	i++;
 
-	Entity* ent3 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(800, 2400))));
+	Entity* ent3 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
 	Path* path3 = new Path();
-	//path2->addTile(sf::Vector2f(10, 40));
-	//path2->addTile(sf::Vector2f(40, 50));
-	//path2->addTile(sf::Vector2f(50, 300));
-	//path2->addTile(sf::Vector2f(50, 100));
-	//path2->setCurrentTile(0);
-	//ent2->setPath(path);
-	ent3->setName("Hodor");
+	ent3->setName(enemyNames[i]);
+	i++;
 	
+	Entity* ent4 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path4 = new Path();
+	ent4->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent5 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path5 = new Path();
+	ent5->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent6 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path6 = new Path();
+	ent6->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent7 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path7 = new Path();
+	ent7->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent8 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path8 = new Path();
+	ent8->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent9 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path9 = new Path();
+	ent9->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent10 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path10 = new Path();
+	ent10->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent11 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path11 = new Path();
+	ent11->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent12 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path12 = new Path();
+	ent12->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent13 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path13 = new Path();
+	ent13->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent14 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path14 = new Path();
+	ent14->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent15 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path15 = new Path();
+	ent15->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent16 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path16 = new Path();
+	ent16->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent17 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path17 = new Path();
+	ent17->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent18 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path18 = new Path();
+	ent18->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent19 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path19 = new Path();
+	ent19->setName(enemyNames[i]);
+	i++;
+
+	Entity* ent20 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
+	Path* path20 = new Path();
+	ent20->setName(enemyNames[i]);
+	i++;
+
 	//Initialize animations
 	AnimationManager* animator = Game::instance()->getAnimator();
 
