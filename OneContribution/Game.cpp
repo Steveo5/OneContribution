@@ -28,8 +28,8 @@ Game::Game()
 	//m_view.setSize(1280 * 4, 720 * 4);
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	//m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
-	m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
+	m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
+	//m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
 	m_window.setView(m_view);
 	//m_window.setVerticalSyncEnabled(true);
 
@@ -43,13 +43,36 @@ Game::Game()
 	m_ui.addComponent(basicComponentUI);
 	if (!m_music.openFromFile("Resources/Menu.ogg"))
 	{
-
 	}
 	m_music.setPitch(1);
 	m_music.setPosition(0, 1, 10);
-	m_music.setVolume(75.f);
+	m_music.setVolume(25.f);
 	m_music.setLoop(true);
 	m_music.play();
+
+	if (!m_laser.openFromFile("Resources/laser.wav"))
+	{
+	}
+	m_laser.setPitch(1);
+	m_laser.setPosition(0, 1, 10);
+	m_laser.setVolume(50.f);
+	m_laser.setLoop(false);
+
+	if (!m_ouch.openFromFile("Resources/ouch.wav"))
+	{
+	}
+	m_ouch.setPitch(1);
+	m_ouch.setPosition(0, 1, 10);
+	m_ouch.setVolume(50.f);
+	m_ouch.setLoop(false);
+
+	if (!m_dead.openFromFile("Resources/dead.wav"))
+	{
+	}
+	m_dead.setPitch(1);
+	m_dead.setPosition(0, 1, 10);
+	m_dead.setVolume(50.f);
+	m_dead.setLoop(false);
 
 	m_animator = new AnimationManager();
 }
@@ -183,19 +206,23 @@ void Game::handleEvents()
 			//Entity test
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				for (int i = 0; i < m_world.getEntities().size(); i++)
+				std::cout << "left click" << std::endl;
+				//for (int i = 1; i < m_world.getEntities().size(); i++)
+				//{
+				//	if (m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition())))
+				//		m_world.getEntities()[i]->applyDamage(10);//do damage on click of entity
+				//}
+				for (int i = 1; i < m_world.getEntities().size(); i++)
 				{
 					if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
-					m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
-					if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
+					else if (i > 0)
+						m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
+					std::cout << "click loop" << std::endl;
 				}
 			}
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				
-				std::cout << "mouseClick Coords: " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).x << ", " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).y << std::endl;
-				std::cout << "mouseClick Tile: " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).x << ", " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).y << std::endl;
 				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
 			}
 			break;
@@ -288,5 +315,15 @@ World& Game::getWorld()
 sf::RenderWindow& Game::getWindow()
 {
 	return m_window;
+}
+
+void Game::playSound(std::string name)
+{
+	if (name == "laser")
+		m_laser.play();
+	if (name == "ouch")
+		m_ouch.play();
+	if (name == "dead")
+		m_dead.play();
 }
 //test

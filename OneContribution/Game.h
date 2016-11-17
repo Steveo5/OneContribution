@@ -19,7 +19,7 @@ public:
 	World& getWorld();
 	sf::RenderWindow & getWindow();
 	AnimationManager* getAnimator();
-	 
+	void playSound(std::string name);
 	static Game* instance();
 
 	void setTest(std::string test);
@@ -44,6 +44,9 @@ private:
 	tmx::MapLoader* m_ml;
 
 	sf::Music m_music;
+	sf::Music m_laser;
+	sf::Music m_ouch;
+	sf::Music m_dead;
 
 	UI m_ui;
 

@@ -50,12 +50,12 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	if (m_entityType == EntityType::KNIGHT)
 	{
 		m_textName.setColor(sf::Color::Blue);
-		m_speedStep = 1;
+		m_speedStep = 4;
 	}
 	else
 	{
 		m_textName.setColor(sf::Color::Red);
-		m_speedStep = 1;
+		m_speedStep = 2;
 	}
 	m_textName.setFont(m_font);
 	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
@@ -138,6 +138,7 @@ void Entity::BFS()
 }
 
 sf::Clock pathTimer;
+sf::Clock attackTimer;
 void Entity::tick()
 {
 	if (isDead())
@@ -149,13 +150,21 @@ void Entity::tick()
 	//check for doing damage
 	if (m_entityType == EntityType::ENEMY)
 	{
-		if ((abs(getSpritePositionInt().x - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().x) < 50) && (abs(getSpritePositionInt().y - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().y) < 50))
+		if ((abs(getSpritePositionInt().x - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().x) < 30) 
+			&& (abs(getSpritePositionInt().y - Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().y) < 30))//range for hit registration on player
 		{
-			Game::instance()->getWorld().getEntities()[0]->applyDamage(10);
+			if (attackTimer.getElapsedTime().asSeconds() > 1)//only allow 1 attack every second per enemy
+			{
+				Game::instance()->getWorld().getEntities()[0]->applyDamage(10);
+				attackTimer.restart();//restart the timer for next attack
+			}
 		}
 	}
+	else
+	{
+		//player character damage updates
+	}
 
-	//m_sprite.setAnimation()
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
 	BFS();
@@ -169,9 +178,9 @@ void Entity::tick()
 			m_sprite.setPosition(*m_path->getNextTile());
 			m_path->setCurrentTile(m_path->getCurrentTileNumber() + 1);
 		}
-		//std::cout << "spriteSize: " << getGlobalBounds().width << ", " << getGlobalBounds().height << std::endl;
-		//BFS();
 	}
+
+	//update health bars
 	m_hpBar->setVisible(m_visible);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(sf::Vector2f(m_sprite.getPosition().x + 7, m_sprite.getPosition().y - 30));
@@ -266,10 +275,36 @@ void Entity::setHealth(int health)
 void Entity::applyDamage(int damage)
 {
 	//only do damage when alive
-	if (m_health > 0) m_health -= damage;
+	if (m_health > 0)
+	{
+		m_health -= damage;
+		Game::instance()->playSound("ouch");
+		if (m_health == 0)
+			Game::instance()->playSound("dead");
+	}
+
+	
 
 	//adjust if too much damage is dealt
 	if (m_health < 0) m_health = 0;
+	return;
+}
+
+void Entity::shootEnemy(int index, sf::RenderTarget &target)
+{
+	if (attackTimer.getElapsedTime().asSeconds() > 0.25)
+	{
+		sf::Vertex tracer[] =
+		{
+			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color::Red),
+			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[index]->getSpritePosition()), sf::Color::Yellow)
+		};
+		Game::instance()->playSound("laser");
+		target.draw(tracer, 2, sf::Lines);
+		attackTimer.restart();
+	}
+	else
+		return;
 }
 int Entity::getHealth()
 {

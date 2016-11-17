@@ -84,6 +84,7 @@ public:
 	void moveTo(sf::Vector2f position, int seconds);
 	bool isDead();
 	void applyDamage(int damage);
+	void shootEnemy(int index, sf::RenderTarget &target);
 	bool isControllable();
 	void setControllable(bool control);
 	bool isVisible();
