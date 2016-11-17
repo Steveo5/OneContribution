@@ -134,10 +134,6 @@ void runGame()
 		std::cout << "Height " << walkAnim->getFrame(i).height << std::endl;
 		std::cout << "Width " << walkAnim->getFrame(i).width << std::endl;
 	}
-	//Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, sf::Vector2f(50.f, 0.f));
-
-	//game->getWorld().spawnEntity(EntityType::ENEMY, sf::Vector2f(50.f, 50.f));
-
 	std::cout << game->getTest() << std::endl;
 
 	if (game->run() == false)

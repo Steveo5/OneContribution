@@ -80,10 +80,9 @@ public:
 	void setSelected(bool selected);
 	bool isSelected();
 	void Entity::setTarget(sf::Vector2i);
-	//Move an entity to a position in target seconds
-	void moveTo(sf::Vector2f position, int seconds);
 	bool isDead();
 	void applyDamage(int damage);
+	void drawTracer();
 	void shootEnemy(int index, sf::RenderTarget &target);
 	bool isControllable();
 	void setControllable(bool control);
@@ -124,6 +123,13 @@ private:
 	bool m_isSelected = false;
 
 	Path* m_path;
+
+	int m_ammo;
+	float m_fireRate;
+	bool m_tracer;
+	int m_entityTarget;
+	int m_alpha;
+
 
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;

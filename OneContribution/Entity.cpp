@@ -22,7 +22,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_characterSelectionBox.setOrigin(-21, 20);
 	m_maxHealth = 100;
 	m_entityType = entityType;
-	m_health = 70;
+	m_health = 100;
 	m_visible = true;
 	m_path = new Path();
 
@@ -34,11 +34,16 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	m_hpBar = new HealthBar();
 	m_hpBar->setWidth(50);
-	m_hpBar->setHeight(5);
+	m_hpBar->setHeight(3);
 	m_hpBar->setHealth(m_health);
 	m_hpBar->setPosition(location + sf::Vector2f(50, 50));
 	Game::instance()->getUi()->addComponent(m_hpBar);
 	m_lastPos = m_sprite.getPosition();
+
+	m_ammo = 10;
+	m_tracer = false;
+	m_entityTarget = 0;
+	m_alpha = 255;
 
 	if (!m_font.loadFromFile("Resources/arial.ttf"))
 	{
@@ -47,8 +52,10 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	if (m_entityType == EntityType::KNIGHT)
 	{
-		m_textName.setColor(sf::Color::Blue);
+		m_textName.setColor(sf::Color::Green);
 		m_speedStep = 4;
+		
+		m_fireRate = 0.25;
 	}
 	else
 	{
@@ -65,7 +72,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 }
 
-void Entity::BFS()
+void Entity::BFS()//not a BFS, just a chase AI :/
 {		
 	if ((getSpritePositionInt().x >= (m_nextMove.x - m_speedStep) && getSpritePositionInt().x <= (m_nextMove.x + m_speedStep))//fix entity never reaching exactly m_nextMove (thus not updating)
 		&& (getSpritePositionInt().y >= (m_nextMove.y - m_speedStep) && getSpritePositionInt().y <= (m_nextMove.y + m_speedStep)))
@@ -175,6 +182,12 @@ void Entity::tick()
 	else
 	{
 		//player character damage updates
+	}
+
+	//draw the bullet tracer on shot
+	if (m_tracer)
+	{
+		drawTracer();
 	}
 
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
@@ -294,26 +307,48 @@ void Entity::applyDamage(int damage)
 		if (m_health == 0)
 			Game::instance()->playSound("dead");
 	}
-
-	
-
 	//adjust if too much damage is dealt
 	if (m_health < 0) m_health = 0;
 	return;
 }
 
+void Entity::drawTracer()
+{
+	
+	sf::Vertex tracer[] =
+	{
+		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,0,0,m_alpha)),
+		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,0,0,m_alpha))
+	};
+	Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
+	m_alpha -= 50;
+	if (m_alpha < 0)
+	{
+		m_tracer = false;
+		m_alpha = 255;
+	}
+}
+
 void Entity::shootEnemy(int index, sf::RenderTarget &target)
 {
-	if (attackTimer.getElapsedTime().asSeconds() > 0.25)
+	m_entityTarget = index;
+	if (attackTimer.getElapsedTime().asSeconds() > m_fireRate)
 	{
-		sf::Vertex tracer[] =
+		m_tracer = true;
+		
+		if (m_ammo > 0)
 		{
-			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color::Red),
-			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[index]->getSpritePosition()), sf::Color::Yellow)
-		};
-		Game::instance()->playSound("laser");
-		target.draw(tracer, 2, sf::Lines);
-		Game::instance()->getWorld().getEntities()[index]->applyDamage(10);
+			Game::instance()->playSound("gun");
+			m_fireRate = 0.33;
+			m_ammo--;
+		}
+		else
+		{
+			Game::instance()->playSound("reload");
+			m_fireRate = 1.0;//take longer to shoot next bullet due to reload.
+		}
+		
+		Game::instance()->getWorld().getEntities()[index]->applyDamage(25);
 		attackTimer.restart();
 	}
 	else

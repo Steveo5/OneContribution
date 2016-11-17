@@ -47,10 +47,11 @@ private:
 	tmx::MapLoader* m_ml;
 
 	sf::Music m_music;
-	sf::Music m_laser;
+	sf::Music m_gun;
+	sf::Music m_reload;
 	sf::Music m_ouch;
 	sf::Music m_dead;
-
+	sf::Music m_nextTime;
 	UI m_ui;
 
 	sf::Clock m_tickTimer;

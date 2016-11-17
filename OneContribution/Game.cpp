@@ -57,6 +57,7 @@ Game::Game()
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
+
 	if (!m_music.openFromFile("Resources/Menu.ogg"))
 	{
 	}
@@ -66,13 +67,29 @@ Game::Game()
 	m_music.setLoop(true);
 	m_music.play();
 
-	if (!m_laser.openFromFile("Resources/laser.wav"))
+	if (!m_gun.openFromFile("Resources/gun.wav"))
 	{
 	}
-	m_laser.setPitch(1);
-	m_laser.setPosition(0, 1, 10);
-	m_laser.setVolume(100.f);
-	m_laser.setLoop(false);
+	m_gun.setPitch(1);
+	m_gun.setPosition(0, 1, 10);
+	m_gun.setVolume(100.f);
+	m_gun.setLoop(false);
+
+	if (!m_reload.openFromFile("Resources/reload.wav"))
+	{
+	}
+	m_reload.setPitch(1);
+	m_reload.setPosition(0, 1, 10);
+	m_reload.setVolume(100.f);
+	m_reload.setLoop(false);
+
+	if (!m_nextTime.openFromFile("Resources/nextTime.wav"))
+	{
+	}
+	m_nextTime.setPitch(1);
+	m_nextTime.setPosition(0, 1, 10);
+	m_nextTime.setVolume(100.f);
+	m_nextTime.setLoop(false);
 
 	if (!m_ouch.openFromFile("Resources/ouch.wav"))
 	{
@@ -113,6 +130,7 @@ bool Game::run()
 		while (m_gameOver)
 		{
 			m_window.draw(m_gameOverText);
+			playSound("nextTime");
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 			{
 				//restart game
@@ -236,18 +254,11 @@ void Game::handleEvents()
 			//Entity test
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				std::cout << "left click" << std::endl;
-				//for (int i = 1; i < m_world.getEntities().size(); i++)
-				//{
-				//	if (m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition())))
-				//		m_world.getEntities()[i]->applyDamage(10);//do damage on click of entity
-				//}
 				for (int i = 1; i < m_world.getEntities().size(); i++)
 				{
 					if (!(m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))))) continue;
 					else if (i > 0)
 						m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
-					std::cout << "click loop" << std::endl;
 				}
 			}
 			//provide target location to BFS
@@ -256,6 +267,7 @@ void Game::handleEvents()
 				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)))));
 			}
 			break;
+
 		case sf::Event::KeyPressed:
 			m_ui.handleInput(event.key.code);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -269,6 +281,7 @@ void Game::handleEvents()
 				m_view.setSize(m_view.getSize().x - 200, m_view.getSize().y - 200);
 			}
 			break;
+
 		case sf::Event::Resized:
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 			m_window.setView(sf::View(visibleArea));
@@ -306,7 +319,6 @@ void Game::update(sf::Time deltaTime)
 	m_world.update(deltaTime);
 	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
-	//m_window.setView(m_view);
 	m_ui.update(m_window);
 }
 
@@ -314,7 +326,6 @@ void Game::gameOver()
 {
 	m_gameOver = true;
 }
-
 
 void Game::toggleFullscreen()
 {
@@ -354,11 +365,10 @@ sf::RenderWindow& Game::getWindow()
 
 void Game::playSound(std::string name)
 {
-	if (name == "laser")
-		m_laser.play();
-	if (name == "ouch")
-		m_ouch.play();
-	if (name == "dead")
-		m_dead.play();
+	if (name == "gun") m_gun.play();
+	if (name == "reload") m_reload.play();
+	if (name == "ouch") m_ouch.play();
+	if (name == "dead") m_dead.play();
+	if (name == "nextTime")	m_nextTime.play();
 }
 //test
