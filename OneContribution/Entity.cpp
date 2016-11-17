@@ -317,11 +317,12 @@ void Entity::drawTracer()
 	
 	sf::Vertex tracer[] =
 	{
-		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,0,0,m_alpha)),
-		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,0,0,m_alpha))
+		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
+		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
 	};
+	
 	Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
-	m_alpha -= 50;
+	m_alpha -= 25;
 	if (m_alpha < 0)
 	{
 		m_tracer = false;
