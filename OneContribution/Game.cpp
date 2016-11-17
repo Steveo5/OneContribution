@@ -71,7 +71,7 @@ Game::Game()
 	}
 	m_laser.setPitch(1);
 	m_laser.setPosition(0, 1, 10);
-	m_laser.setVolume(50.f);
+	m_laser.setVolume(100.f);
 	m_laser.setLoop(false);
 
 	if (!m_ouch.openFromFile("Resources/ouch.wav"))
@@ -119,7 +119,7 @@ bool Game::run()
 				return false;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				return true;
+				return true; //end game
 		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -242,9 +242,9 @@ void Game::handleEvents()
 				//	if (m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition())))
 				//		m_world.getEntities()[i]->applyDamage(10);//do damage on click of entity
 				//}
-				for (int i = 0; i < m_world.getEntities().size(); i++)
+				for (int i = 1; i < m_world.getEntities().size(); i++)
 				{
-					if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
+					if (!(m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))))) continue;
 					else if (i > 0)
 						m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
 					std::cout << "click loop" << std::endl;
@@ -253,7 +253,7 @@ void Game::handleEvents()
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)))));
 			}
 			break;
 		case sf::Event::KeyPressed:
@@ -321,7 +321,7 @@ void Game::toggleFullscreen()
 	m_window.close();
 	if (m_fullscreen)
 	{
-		m_window.create(sf::VideoMode(854, 480), "OneContribution", sf::Style::Default);
+		m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default);
 		m_fullscreen = false;
 	}
 	else

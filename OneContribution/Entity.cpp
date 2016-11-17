@@ -313,6 +313,7 @@ void Entity::shootEnemy(int index, sf::RenderTarget &target)
 		};
 		Game::instance()->playSound("laser");
 		target.draw(tracer, 2, sf::Lines);
+		Game::instance()->getWorld().getEntities()[index]->applyDamage(10);
 		attackTimer.restart();
 	}
 	else
