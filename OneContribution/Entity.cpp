@@ -2,8 +2,6 @@
 #include "Animation.hpp"
 #include "Game.h"
 #include <algorithm>
-#include <unordered_set>
-#include <queue>
 #include <math.h>
 
 Animation m_animation;
@@ -63,6 +61,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	m_nextMove = getSpritePositionInt();
 	m_target = getSpritePositionInt();
+	m_spawnIndex = 0;
 
 }
 
@@ -143,8 +142,21 @@ void Entity::tick()
 {
 	if (isDead())
 	{
-		setVisible(false);
-		return;
+		if (m_entityType == EntityType::ENEMY)
+		{
+			setVisible(false);
+			m_sprite.setPosition(static_cast<sf::Vector2f>(getSpawnPoint()));
+			setVisible(true);
+			setHealth(100);
+			return;
+		}
+		if (m_entityType == EntityType::KNIGHT)
+		{
+			setVisible(false);
+
+			Game::instance()->gameOver();
+		}
+		
 	}
 
 	//check for doing damage
@@ -403,6 +415,12 @@ void Entity::setName(std::string name)
 std::string Entity::getName()
 {
 	return m_name;
+}
+
+sf::Vector2i Entity::getSpawnPoint()
+{
+	m_spawnIndex++;
+	return Game::instance()->getWorld().getTile(m_spawnPoints[m_spawnIndex]);
 }
 
 Entity::~Entity()

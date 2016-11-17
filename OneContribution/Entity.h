@@ -53,10 +53,9 @@ class Entity : public sf::Drawable
 public:
 	Entity();
 	Entity(EntityType entityType, sf::Vector2f location);
-	int VecToInt(sf::Vector2i v);
-	sf::Vector2i IntToVec(int i);
 	sf::Vector2i m_tileSize;
 	sf::Vector2i m_nextMove;
+	
 
 	~Entity();
 
@@ -74,6 +73,7 @@ public:
 	void setHealth(int health);
 	int getHealth();
 	std::string getName();
+	sf::Vector2i getSpawnPoint();
 	void setName(std::string name);
 	bool willCollide(sf::Vector2f position);
 	bool isHitting(sf::Vector2f position);
@@ -131,6 +131,12 @@ private:
 	int m_speedStep;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	int m_spawnIndex;
+	sf::Vector2i m_spawnPoints[20] = { sf::Vector2i(-448,288), sf::Vector2i(-736,464), sf::Vector2i(-1120,656), sf::Vector2i(-1664,928), sf::Vector2i(-2272,1232), //top-left edge
+		sf::Vector2i(2208,1264), sf::Vector2i(1696,976), sf::Vector2i(1312,816), sf::Vector2i(960,640), sf::Vector2i(544,368), //top-right edge
+		sf::Vector2i(128,2944), sf::Vector2i(512,2720), sf::Vector2i(864,2512), sf::Vector2i(1024,2208), sf::Vector2i(1888,2000), //bottom-right edge
+		sf::Vector2i(-320,2976), sf::Vector2i(-1088,2560), sf::Vector2i(-2720,1720), sf::Vector2i(-2240,1984), sf::Vector2i(-1888,2160) //bottom-left edge
+	};
 };
 
 

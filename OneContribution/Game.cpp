@@ -1,7 +1,10 @@
 #include "Game.h"
 #include "debugGrid.h"
 #include "BasicComponent.h"
+#include "GameOver.h"
 #include "tmx\MapLoader.h"
+#include "OneContribution.h"
+
 /*
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
@@ -28,8 +31,8 @@ Game::Game()
 	//m_view.setSize(1280 * 4, 720 * 4);
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
-	m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
-	//m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
+	//m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default, settings);
+	m_window.create(sf::VideoMode(sf::VideoMode::getDesktopMode()), "OneContribution", sf::Style::Fullscreen, settings);
 	m_window.setView(m_view);
 	//m_window.setVerticalSyncEnabled(true);
 
@@ -38,6 +41,19 @@ Game::Game()
 	
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
+
+	//text for gameover screen
+	m_gameOver = false;
+	
+	if (!m_arialFont.loadFromFile("Resources/arial.ttf"))
+	{
+	}
+
+	m_gameOverText.setFont(m_arialFont);
+	m_gameOverText.setColor(sf::Color::White);
+	m_gameOverText.setCharacterSize(100);
+	m_gameOverText.setString("GAME OVER");
+
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
@@ -80,24 +96,36 @@ Game::Game()
 
 Game::~Game()
 {
+	m_window.close();
 }
 
-void Game::run()
+bool Game::run()
 {
 	if (!m_ml->Load("Map.tmx"))
 	{
 		std::cout << "failed to load map" << std::endl;
-		return;
+		return true;
 	}
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
+		while (m_gameOver)
+		{
+			m_window.draw(m_gameOverText);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+			{
+				//restart game
+				return false;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				return true;
+		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 		//Clear the screen with black
 		beginDraw();
-		while (timeSinceLastUpdate > m_timePerFrame)
+		if (timeSinceLastUpdate > m_timePerFrame)
 		{
 			timeSinceLastUpdate -= m_timePerFrame;
 			//Handle all events
@@ -128,6 +156,7 @@ void Game::run()
 		//Display everything to the screen
 		endDraw();
 	}
+	return true;
 }
 
 void Game::setTest(std::string test)
@@ -185,14 +214,15 @@ void Game::handleEvents()
 		m_view.move(0.0, -3.0);
 	}
 	sf::Event event;
-	while (m_window.pollEvent(event))
+	if (m_window.pollEvent(event))
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
+			
 			m_window.close();
-			break;
-		case sf::Event::MouseWheelScrolled:
+			return;
+		/*case sf::Event::MouseWheelScrolled:
 			if (event.mouseWheelScroll.delta == 1)
 			{
 				m_view.setSize(m_view.getSize().x + 100, m_view.getSize().y + 100);
@@ -201,7 +231,7 @@ void Game::handleEvents()
 			{
 				m_view.setSize(m_view.getSize().x - 100, m_view.getSize().y - 100);
 			}
-			break;
+			break;*/
 		case::sf::Event::MouseButtonPressed:
 			//Entity test
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -212,7 +242,7 @@ void Game::handleEvents()
 				//	if (m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition())))
 				//		m_world.getEntities()[i]->applyDamage(10);//do damage on click of entity
 				//}
-				for (int i = 1; i < m_world.getEntities().size(); i++)
+				for (int i = 0; i < m_world.getEntities().size(); i++)
 				{
 					if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
 					else if (i > 0)
@@ -278,6 +308,11 @@ void Game::update(sf::Time deltaTime)
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	//m_window.setView(m_view);
 	m_ui.update(m_window);
+}
+
+void Game::gameOver()
+{
+	m_gameOver = true;
 }
 
 

@@ -84,7 +84,7 @@ void BasicComponent::update(sf::RenderWindow& window)
 		sf::Text& toDraw = ent->getTextName();
 		if (ent->getFacing() != Direction::NONE)
 		{
-			toDraw.setPosition(ent->getSpritePosition().x, ent->getSpritePosition().y - 100);
+			toDraw.setPosition(ent->getSpritePosition().x, ent->getSpritePosition().y - 50);
 		}
 	}
 
@@ -101,7 +101,7 @@ void BasicComponent::update(sf::RenderWindow& window)
 					ent->setSelected(true);
 					if(sound.getStatus() != sf::Sound::Playing)
 						sound.play();
-					while (sound.getStatus() == sf::Music::Playing);
+					//while (sound.getStatus() == sf::Music::Playing);
 				}
 			}
 			m_selectionBox.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));

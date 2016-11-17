@@ -3,8 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include "Game.h"
 
-
-int main()
+void runGame()
 {
 	Game* game = new Game();
 
@@ -17,19 +16,15 @@ int main()
 	Entity* ent = Game::instance()->getWorld().spawnEntity(EntityType::KNIGHT, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(sf::Vector2i(0, 1600))));
 	ent->setName("Chandler");
 	Path* path = new Path();
-	//path->addTile(sf::Vector2f(50, 50));
-	//path->addTile(sf::Vector2f(150, 50));
-	//path->addTile(sf::Vector2f(250, 50));
-	//path->addTile(sf::Vector2f(350, 200));
-	//path->setCurrentTile(0);
 	ent->setPath(path);
-	std::string enemyNames[20] = {"Ipes", "Ranesorth", "Margroth", "Zaramoran", "Ankruulde", "Ushu", "Ferran", "Gaapan", "Oskelze", "Drasnee", "Raxskel", "teca", "Shandrek", "Zergmo", "Tagamil", "Fenla", "Lormy", "Nockdruk", "Zergca"};
-	sf::Vector2i spawnPoints[20] = {sf::Vector2i(-448,288), sf::Vector2i(-736,464), sf::Vector2i(-1120,656), sf::Vector2i(-1664,928), sf::Vector2i(-2272,1232), //top-left edge
-									sf::Vector2i(2208,1264), sf::Vector2i(1696,976), sf::Vector2i(1312,816), sf::Vector2i(960,640), sf::Vector2i(544,368), //top-right edge
-									sf::Vector2i(128,2944), sf::Vector2i(512,2720), sf::Vector2i(864,2512), sf::Vector2i(1024,2208), sf::Vector2i(1888,2000), //bottom-right edge
-									sf::Vector2i(-320,2976), sf::Vector2i(-1088,2560), sf::Vector2i(-2720,1720), sf::Vector2i(-2240,1984), sf::Vector2i(-1888,2160) //bottom-left edge
-									};
-	
+
+	std::string enemyNames[20] = { "Ipes", "Ranesorth", "Margroth", "Zaramoran", "Ankruulde", "Ushu", "Ferran", "Gaapan", "Oskelze", "Drasnee", "Raxskel", "teca", "Shandrek", "Zergmo", "Tagamil", "Fenla", "Lormy", "Nockdruk", "Zergca" };
+	sf::Vector2i spawnPoints[20] = { sf::Vector2i(-448,288), sf::Vector2i(-736,464), sf::Vector2i(-1120,656), sf::Vector2i(-1664,928), sf::Vector2i(-2272,1232), //top-left edge
+		sf::Vector2i(2208,1264), sf::Vector2i(1696,976), sf::Vector2i(1312,816), sf::Vector2i(960,640), sf::Vector2i(544,368), //top-right edge
+		sf::Vector2i(128,2944), sf::Vector2i(512,2720), sf::Vector2i(864,2512), sf::Vector2i(1024,2208), sf::Vector2i(1888,2000), //bottom-right edge
+		sf::Vector2i(-320,2976), sf::Vector2i(-1088,2560), sf::Vector2i(-2720,1720), sf::Vector2i(-2240,1984), sf::Vector2i(-1888,2160) //bottom-left edge
+	};
+
 	int i = 0;
 	Entity* ent2 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
 	Path* path2 = new Path();
@@ -40,7 +35,7 @@ int main()
 	Path* path3 = new Path();
 	ent3->setName(enemyNames[i]);
 	i++;
-	
+
 	Entity* ent4 = Game::instance()->getWorld().spawnEntity(EntityType::ENEMY, static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(spawnPoints[i])));
 	Path* path4 = new Path();
 	ent4->setName(enemyNames[i]);
@@ -131,7 +126,7 @@ int main()
 
 	Animation* walkAnim = animator->generateAnimation("Resources/Sprite/testing.png", EntityType::KNIGHT, 1, 80, 40, 4);
 	animator->registerAnimation(EntityType::KNIGHT, "walkLeft", walkAnim);
-	
+
 	for (int i = 0; i < walkAnim->getSize(); i++)
 	{
 		std::cout << "Top " << walkAnim->getFrame(i).top << std::endl;
@@ -145,7 +140,17 @@ int main()
 
 	std::cout << game->getTest() << std::endl;
 
-	game->run();
+	if (game->run() == false)
+	{
+		game->~Game();
+		runGame();
+	}
+		
+}
+
+int main()
+{
+	runGame();
 
 	return 0;
 }

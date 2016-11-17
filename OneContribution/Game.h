@@ -12,7 +12,7 @@ class Game
 public:
 	Game();
 	~Game();
-	void run();
+	bool run();
 
 	UI* getUi();
 	tmx::MapLoader* getMapLoader();
@@ -24,6 +24,9 @@ public:
 
 	void setTest(std::string test);
 	std::string getTest();
+
+	void gameOver();
+	
 
 
 	//static World& getWorld();
@@ -56,11 +59,16 @@ private:
 	//Game speed multiplier
 	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 
+	bool m_gameOver;
+	sf::Text m_gameOverText;
+	sf::Font m_arialFont;
+
 	void handleEvents();
 	void beginDraw();
 	void endDraw();
 	void tick();
 	void update(sf::Time deltaTime);
+
 
 	void toggleFullscreen();
 };
