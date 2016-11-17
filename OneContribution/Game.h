@@ -12,18 +12,21 @@ class Game
 public:
 	Game();
 	~Game();
-	void run();
+	bool run();
 
 	UI* getUi();
 	tmx::MapLoader* getMapLoader();
 	World& getWorld();
 	sf::RenderWindow & getWindow();
 	AnimationManager* getAnimator();
-	 
+	void playSound(std::string name);
 	static Game* instance();
 
 	void setTest(std::string test);
 	std::string getTest();
+
+	void gameOver();
+	
 
 
 	//static World& getWorld();
@@ -44,7 +47,11 @@ private:
 	tmx::MapLoader* m_ml;
 
 	sf::Music m_music;
-
+	sf::Music m_gun;
+	sf::Music m_reload;
+	sf::Music m_ouch;
+	sf::Music m_dead;
+	sf::Music m_nextTime;
 	UI m_ui;
 
 	sf::Clock m_tickTimer;
@@ -53,11 +60,16 @@ private:
 	//Game speed multiplier
 	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 
+	bool m_gameOver;
+	sf::Text m_gameOverText;
+	sf::Font m_arialFont;
+
 	void handleEvents();
 	void beginDraw();
 	void endDraw();
 	void tick();
 	void update(sf::Time deltaTime);
+
 
 	void toggleFullscreen();
 };

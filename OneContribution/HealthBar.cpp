@@ -21,6 +21,11 @@ void HealthBar::setWidth(int width)
 	m_width = width;
 }
 
+void HealthBar::setHeight(int height)
+{
+	m_height = height;
+}
+
 void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (!m_visible) return;
@@ -31,8 +36,8 @@ void HealthBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void HealthBar::update(sf::RenderWindow& window)
 {
 	double healthGreen = m_health * m_width / 100;
-	m_healthGreen.setSize(sf::Vector2f(healthGreen, 20));
-	m_healthRed.setSize(sf::Vector2f(m_width, 20));
+	m_healthGreen.setSize(sf::Vector2f(healthGreen, m_height));
+	m_healthRed.setSize(sf::Vector2f(m_width, m_height));
 }
 
 void HealthBar::setHealth(int health)

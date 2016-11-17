@@ -1,7 +1,10 @@
 #include "Game.h"
 #include "debugGrid.h"
 #include "BasicComponent.h"
+#include "GameOver.h"
 #include "tmx\MapLoader.h"
+#include "OneContribution.h"
+
 /*
 tmx::MapLoader* Game::m_ml;
 UI Game::m_ui;
@@ -35,23 +38,74 @@ Game::Game()
 
 	//m_ui = new UI();
 	m_world.setWorld(sf::Vector2i(64, 32), sf::Vector2i(100, 100));//tile size, rows and columns
-	m_world.createGraph();
-	std::cout << "Game(): map size: " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).x << ", " << static_cast<sf::Vector2i>(m_ml->GetMapSize()).y << std::endl;
 	
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 
+	//text for gameover screen
+	m_gameOver = false;
+	
+	if (!m_arialFont.loadFromFile("Resources/arial.ttf"))
+	{
+	}
+
+	m_gameOverText.setFont(m_arialFont);
+	m_gameOverText.setColor(sf::Color::White);
+	m_gameOverText.setCharacterSize(100);
+	m_gameOverText.setString("GAME OVER");
+
+
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
+
 	if (!m_music.openFromFile("Resources/Menu.ogg"))
 	{
-
 	}
 	m_music.setPitch(1);
 	m_music.setPosition(0, 1, 10);
-	m_music.setVolume(75.f);
+	m_music.setVolume(25.f);
 	m_music.setLoop(true);
 	m_music.play();
+
+	if (!m_gun.openFromFile("Resources/gun.wav"))
+	{
+	}
+	m_gun.setPitch(1);
+	m_gun.setPosition(0, 1, 10);
+	m_gun.setVolume(100.f);
+	m_gun.setLoop(false);
+
+	if (!m_reload.openFromFile("Resources/reload.wav"))
+	{
+	}
+	m_reload.setPitch(1);
+	m_reload.setPosition(0, 1, 10);
+	m_reload.setVolume(100.f);
+	m_reload.setLoop(false);
+
+	if (!m_nextTime.openFromFile("Resources/nextTime.wav"))
+	{
+	}
+	m_nextTime.setPitch(1);
+	m_nextTime.setPosition(0, 1, 10);
+	m_nextTime.setVolume(100.f);
+	m_nextTime.setLoop(false);
+
+	if (!m_ouch.openFromFile("Resources/ouch.wav"))
+	{
+	}
+	m_ouch.setPitch(1);
+	m_ouch.setPosition(0, 1, 10);
+	m_ouch.setVolume(50.f);
+	m_ouch.setLoop(false);
+
+	if (!m_dead.openFromFile("Resources/dead.wav"))
+	{
+	}
+	m_dead.setPitch(1);
+	m_dead.setPosition(0, 1, 10);
+	m_dead.setVolume(50.f);
+	m_dead.setLoop(false);
 
 	m_animator = new AnimationManager();
 }
@@ -59,24 +113,37 @@ Game::Game()
 
 Game::~Game()
 {
+	m_window.close();
 }
 
-void Game::run()
+bool Game::run()
 {
 	if (!m_ml->Load("Map.tmx"))
 	{
 		std::cout << "failed to load map" << std::endl;
-		return;
+		return true;
 	}
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
+		while (m_gameOver)
+		{
+			m_window.draw(m_gameOverText);
+			playSound("nextTime");
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+			{
+				//restart game
+				return false;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				return true; //end game
+		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 		//Clear the screen with black
 		beginDraw();
-		while (timeSinceLastUpdate > m_timePerFrame)
+		if (timeSinceLastUpdate > m_timePerFrame)
 		{
 			timeSinceLastUpdate -= m_timePerFrame;
 			//Handle all events
@@ -107,6 +174,7 @@ void Game::run()
 		//Display everything to the screen
 		endDraw();
 	}
+	return true;
 }
 
 void Game::setTest(std::string test)
@@ -164,14 +232,15 @@ void Game::handleEvents()
 		m_view.move(0.0, -3.0);
 	}
 	sf::Event event;
-	while (m_window.pollEvent(event))
+	if (m_window.pollEvent(event))
 	{
 		switch (event.type)
 		{
 		case sf::Event::Closed:
+			
 			m_window.close();
-			break;
-		case sf::Event::MouseWheelScrolled:
+			return;
+		/*case sf::Event::MouseWheelScrolled:
 			if (event.mouseWheelScroll.delta == 1)
 			{
 				m_view.setSize(m_view.getSize().x + 100, m_view.getSize().y + 100);
@@ -180,27 +249,25 @@ void Game::handleEvents()
 			{
 				m_view.setSize(m_view.getSize().x - 100, m_view.getSize().y - 100);
 			}
-			break;
+			break;*/
 		case::sf::Event::MouseButtonPressed:
 			//Entity test
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				for (int i = 0; i < m_world.getEntities().size(); i++)
+				for (int i = 1; i < m_world.getEntities().size(); i++)
 				{
-					if (!m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition()))) return;
-					m_world.getEntities()[i]->setHealth(m_world.getEntities()[i]->getHealth() - 10);
-					if (m_world.getEntities()[i]->getHealth() < 0) m_world.getEntities()[i]->setHealth(0);
+					if (!(m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))))) continue;
+					else if (i > 0)
+						m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
 				}
 			}
 			//provide target location to BFS
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				
-				std::cout << "mouseClick Coords: " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).x << ", " << m_window.mapPixelToCoords(sf::Mouse::getPosition()).y << std::endl;
-				std::cout << "mouseClick Tile: " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).x << ", " << m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))).y << std::endl;
-				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+				m_world.getEntities()[0]->setTarget(m_world.getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window)))));
 			}
 			break;
+
 		case sf::Event::KeyPressed:
 			m_ui.handleInput(event.key.code);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -214,6 +281,7 @@ void Game::handleEvents()
 				m_view.setSize(m_view.getSize().x - 200, m_view.getSize().y - 200);
 			}
 			break;
+
 		case sf::Event::Resized:
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 			m_window.setView(sf::View(visibleArea));
@@ -251,17 +319,20 @@ void Game::update(sf::Time deltaTime)
 	m_world.update(deltaTime);
 	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
-	//m_window.setView(m_view);
 	m_ui.update(m_window);
 }
 
+void Game::gameOver()
+{
+	m_gameOver = true;
+}
 
 void Game::toggleFullscreen()
 {
 	m_window.close();
 	if (m_fullscreen)
 	{
-		m_window.create(sf::VideoMode(854, 480), "OneContribution", sf::Style::Default);
+		m_window.create(sf::VideoMode(1280, 720), "OneContribution", sf::Style::Default);
 		m_fullscreen = false;
 	}
 	else
@@ -290,5 +361,14 @@ World& Game::getWorld()
 sf::RenderWindow& Game::getWindow()
 {
 	return m_window;
+}
+
+void Game::playSound(std::string name)
+{
+	if (name == "gun") m_gun.play();
+	if (name == "reload") m_reload.play();
+	if (name == "ouch") m_ouch.play();
+	if (name == "dead") m_dead.play();
+	if (name == "nextTime")	m_nextTime.play();
 }
 //test
