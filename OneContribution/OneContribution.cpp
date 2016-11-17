@@ -124,7 +124,7 @@ void runGame()
 	//Initialize animations
 	AnimationManager* animator = Game::instance()->getAnimator();
 
-	Animation* walkAnim = animator->generateAnimation("Resources/Sprite/testing.png", EntityType::KNIGHT, 1, 80, 40, 4);
+	Animation* walkAnim = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 0, 34, 25, 4);
 	animator->registerAnimation(EntityType::KNIGHT, "walkLeft", walkAnim);
 
 	for (int i = 0; i < walkAnim->getSize(); i++)

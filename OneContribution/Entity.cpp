@@ -63,7 +63,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 		m_speedStep = 2;
 	}
 	m_textName.setFont(m_font);
-	m_sprite.setScale(sf::Vector2f(0.5, 0.5));
+	m_sprite.setScale(sf::Vector2f(1.0, 1.0));
 	m_textName.setScale(m_sprite.getScale());//match scale of sprite
 
 	m_nextMove = getSpritePositionInt();
