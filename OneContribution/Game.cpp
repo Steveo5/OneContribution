@@ -73,7 +73,7 @@ Game::Game()
 		std::cout << "gun.wav has not loaded correctly." << std::endl;
 	}
 	m_gun.setBuffer(m_gunBuffer);
-	m_gun.setVolume(100.f);
+	m_gun.setVolume(50.f);
 	m_gun.setLoop(false);
 
 	if (!m_reloadBuffer.loadFromFile("Resources/reload.wav"))
