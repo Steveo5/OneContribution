@@ -19,7 +19,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	m_characterSelectionBox.setOutlineColor(sf::Color::White);
 	m_characterSelectionBox.setOutlineThickness(1.f);
 	m_characterSelectionBox.setSize(sf::Vector2f(20, 40));
-	m_characterSelectionBox.setOrigin(-21, 20);
+	m_characterSelectionBox.setOrigin(-20, 10);
 	m_maxHealth = 100;
 	m_entityType = entityType;
 	m_health = 100;
@@ -28,7 +28,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	//m_sprite stuff here
 	m_sprite.setPosition(location);
-	m_sprite.setOrigin(-42, 40);
+	m_sprite.setOrigin(-20, 10);
 	//m_sprite stuff ends
 
 
@@ -64,7 +64,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 	}
 	m_textName.setFont(m_font);
 	m_sprite.setScale(sf::Vector2f(1.0, 1.0));
-	m_textName.setScale(m_sprite.getScale());//match scale of sprite
+	m_textName.setScale((m_sprite.getScale().x/2), (m_sprite.getScale().y / 2));//match scale of sprite halved (as sprite is no longer half scale)
 
 	m_nextMove = getSpritePositionInt();
 	m_target = getSpritePositionInt();
