@@ -56,7 +56,7 @@ public:
 	sf::Vector2i m_tileSize;
 	sf::Vector2i m_nextMove;
 	
-
+	AnimatedSprite getSprite();
 	~Entity();
 
 	void BFS();
