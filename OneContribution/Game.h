@@ -47,11 +47,17 @@ private:
 	tmx::MapLoader* m_ml;
 
 	sf::Music m_music;
-	sf::Music m_gun;
-	sf::Music m_reload;
-	sf::Music m_ouch;
-	sf::Music m_dead;
-	sf::Music m_nextTime;
+	sf::Sound m_gun;
+	sf::Sound m_reload;
+	sf::Sound m_ouch;
+	sf::Sound m_dead;
+	sf::Sound m_nextTime;
+	sf::SoundBuffer m_gunBuffer;
+	sf::SoundBuffer m_reloadBuffer;
+	sf::SoundBuffer m_gameOverBuffer;
+	sf::SoundBuffer m_ouchBuffer;
+	sf::SoundBuffer m_deadBuffer;
+
 	UI m_ui;
 
 	sf::Clock m_tickTimer;

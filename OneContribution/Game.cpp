@@ -67,44 +67,45 @@ Game::Game()
 	m_music.setLoop(true);
 	m_music.play();
 
-	if (!m_gun.openFromFile("Resources/gun.wav"))
+	
+	if (!m_gunBuffer.loadFromFile("Resources/gun.wav"))
 	{
+		std::cout << "gun.wav has not loaded correctly." << std::endl;
 	}
-	m_gun.setPitch(1);
-	m_gun.setPosition(0, 1, 10);
+	m_gun.setBuffer(m_gunBuffer);
 	m_gun.setVolume(100.f);
 	m_gun.setLoop(false);
 
-	if (!m_reload.openFromFile("Resources/reload.wav"))
+	if (!m_reloadBuffer.loadFromFile("Resources/reload.wav"))
 	{
+		std::cout << "reload.wav has not loaded correctly." << std::endl;
 	}
-	m_reload.setPitch(1);
-	m_reload.setPosition(0, 1, 10);
+	m_reload.setBuffer(m_reloadBuffer);
 	m_reload.setVolume(100.f);
 	m_reload.setLoop(false);
 
-	if (!m_nextTime.openFromFile("Resources/nextTime.wav"))
+	if (!m_gameOverBuffer.loadFromFile("Resources/nextTime.wav"))
 	{
+		std::cout << "nextTime.wav has not loaded correctly." << std::endl;
 	}
-	m_nextTime.setPitch(1);
-	m_nextTime.setPosition(0, 1, 10);
+	m_nextTime.setBuffer(m_gameOverBuffer);
 	m_nextTime.setVolume(100.f);
 	m_nextTime.setLoop(false);
 
-	if (!m_ouch.openFromFile("Resources/ouch.wav"))
+	if (!m_ouchBuffer.loadFromFile("Resources/ouch.wav"))
 	{
+		std::cout << "ouch.wav has not loaded correctly." << std::endl;
 	}
-	m_ouch.setPitch(1);
-	m_ouch.setPosition(0, 1, 10);
-	m_ouch.setVolume(50.f);
+	m_ouch.setBuffer(m_ouchBuffer);
+	m_ouch.setVolume(100.f);
 	m_ouch.setLoop(false);
 
-	if (!m_dead.openFromFile("Resources/dead.wav"))
+	if (!m_deadBuffer.loadFromFile("Resources/dead.wav"))
 	{
+		std::cout << "dead.wav has not loaded correctly." << std::endl;
 	}
-	m_dead.setPitch(1);
-	m_dead.setPosition(0, 1, 10);
-	m_dead.setVolume(50.f);
+	m_dead.setBuffer(m_deadBuffer);
+	m_dead.setVolume(100.f);
 	m_dead.setLoop(false);
 
 	m_animator = new AnimationManager();
@@ -129,8 +130,8 @@ bool Game::run()
 	{
 		if (m_gameOver)
 		{
-			//m_window.draw(m_gameOverText);
-			//playSound("nextTime");
+			m_window.draw(m_gameOverText);
+			playSound("nextTime");
 			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 			//{
 			//	//restart game
