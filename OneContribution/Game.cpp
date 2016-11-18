@@ -124,7 +124,7 @@ bool Game::run()
 		return true;
 	}
 	sf::Clock clock;
-	m_timeSinceLastUpdate = sf::Time::Zero;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
 		if (m_gameOver)
@@ -140,16 +140,16 @@ bool Game::run()
 			//	return true; //end game
 		}
 		sf::Time elapsedTime = clock.restart();
-		m_timeSinceLastUpdate += elapsedTime;
+		timeSinceLastUpdate += elapsedTime;
 		//Clear the screen with black
 		beginDraw();
-		if (m_timeSinceLastUpdate > m_timePerFrame)
+		if (timeSinceLastUpdate > m_timePerFrame)
 		{
-			m_timeSinceLastUpdate -= m_timePerFrame;
+			timeSinceLastUpdate -= m_timePerFrame;
 			//Handle all events
 			handleEvents();
 			//Update the game
-			update(m_timeSinceLastUpdate);
+			update(timeSinceLastUpdate);
 			//Do a game tick
 			
 			if (!m_gameOver)
@@ -376,8 +376,4 @@ void Game::playSound(std::string name)
 	if (name == "dead") m_dead.play();
 	if (name == "nextTime")	m_nextTime.play();
 }
-//
-//sf::Time getTimeSinceLastUpdate() {
-//	return m_timeSinceLastUpdate;
-//
-//}
+//test
