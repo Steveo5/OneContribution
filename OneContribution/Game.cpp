@@ -84,13 +84,13 @@ Game::Game()
 	m_reload.setVolume(100.f);
 	m_reload.setLoop(false);
 
-	if (!m_gameOverBuffer.loadFromFile("Resources/nextTime.wav"))
+	if (!m_gameOverBuffer.loadFromFile("Resources/you_died.wav"))
 	{
-		std::cout << "nextTime.wav has not loaded correctly." << std::endl;
+		std::cout << "you_died.wav has not loaded correctly." << std::endl;
 	}
-	m_nextTime.setBuffer(m_gameOverBuffer);
-	m_nextTime.setVolume(100.f);
-	m_nextTime.setLoop(false);
+	m_you_died.setBuffer(m_gameOverBuffer);
+	m_you_died.setVolume(100.f);
+	m_you_died.setLoop(false);
 
 	if (!m_ouchBuffer.loadFromFile("Resources/ouch.wav"))
 	{
@@ -131,14 +131,21 @@ bool Game::run()
 		if (m_gameOver)
 		{
 			m_window.draw(m_gameOverText);
-			playSound("nextTime");
-			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-			//{
-			//	//restart game
-			//	return false;
-			//}
-			//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			//	return true; //end game
+			playSound("you_died");
+			bool wait = true;
+			while (wait) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+				{
+					//restart game
+					return false;
+					wait = false;
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+					return true; //end game
+					wait = false;
+
+			}
+
 		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -286,6 +293,11 @@ void Game::handleEvents()
 			{
 				m_view.setSize(m_view.getSize().x - 200, m_view.getSize().y - 200);
 			}
+			//suicide key for lose condition testing
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
+				m_world.getEntities()[0]->setHealth(-1);
+			}
+				
 			break;
 
 		case sf::Event::Resized:
@@ -381,6 +393,6 @@ void Game::playSound(std::string name)
 	if (name == "reload") m_reload.play();
 	if (name == "ouch") m_ouch.play();
 	if (name == "dead") m_dead.play();
-	if (name == "nextTime")	m_nextTime.play();
+	if (name == "you_died")	m_you_died.play();
 }
 //test

@@ -51,7 +51,7 @@ private:
 	sf::Sound m_reload;
 	sf::Sound m_ouch;
 	sf::Sound m_dead;
-	sf::Sound m_nextTime;
+	sf::Sound m_you_died;
 	sf::SoundBuffer m_gunBuffer;
 	sf::SoundBuffer m_reloadBuffer;
 	sf::SoundBuffer m_gameOverBuffer;
