@@ -85,6 +85,9 @@ public:
 	void drawTracer();
 	bool getTracer();
 	void shootEnemy(int index, sf::RenderTarget &target);
+	void adjustAmmo(int i);
+	void setAmmo(int i);
+	int getAmmo();
 	bool isControllable();
 	void setControllable(bool control);
 	bool isVisible();

@@ -81,14 +81,9 @@ void Entity::BFS()//not a BFS, just a chase AI :/
 		m_sprite.setPosition(static_cast<sf::Vector2f>(m_nextMove));
 	}	
 	
-	//debug purposes
+	//update enemy target
 	if (m_entityType == EntityType::ENEMY) m_target = Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt();
-	else
-	{
-		std::cout << "m_target: " << m_target.x << ", " << m_target.y << std::endl;
-		std::cout << "m_nextMove: " << m_nextMove.x << ", " << m_nextMove.y << std::endl;
-		std::cout << "position: " << getSpritePositionInt().x << ", " << getSpritePositionInt().y << std::endl;
-	}
+	
 
 	//if closer to target than nextMove, nextMove = target.
 	if (abs(getSpritePositionInt().x - m_nextMove.x) > abs(getSpritePositionInt().x - m_target.x) && abs(getSpritePositionInt().y - m_nextMove.y) > abs(getSpritePositionInt().y - m_target.y))
@@ -160,7 +155,6 @@ void Entity::tick()
 		if (m_entityType == EntityType::KNIGHT)
 		{
 			setVisible(false);
-
 			Game::instance()->gameOver();
 		}
 		
@@ -298,10 +292,11 @@ void Entity::applyDamage(int damage)
 	if (m_health > 0)
 	{
 		m_health -= damage;
-		Game::instance()->playSound("gun");
+		Game::instance()->playSound("ouch");
 		if (m_health == 0)
 			Game::instance()->playSound("dead");
 	}
+	std::cout << "ammo: " << Game::instance()->getWorld().getEntities()[0]->getAmmo() << std::endl;
 	//adjust if too much damage is dealt
 	if (m_health < 0) m_health = 0;
 	return;
@@ -339,16 +334,17 @@ void Entity::shootEnemy(int index, sf::RenderTarget &target)
 	{
 		m_tracer = true;
 		
-		if (m_ammo > 0)
+		if (Game::instance()->getWorld().getEntities()[0]->getAmmo() > 0)
 		{
 			Game::instance()->playSound("gun");
 			m_fireRate = 0.33;
-			m_ammo--;
+			Game::instance()->getWorld().getEntities()[0]->adjustAmmo(1);
 		}
-		else
+		if (Game::instance()->getWorld().getEntities()[0]->getAmmo() <= 0)
 		{
 			Game::instance()->playSound("reload");
-			m_fireRate = 1.0;//take longer to shoot next bullet due to reload.
+			Game::instance()->getWorld().getEntities()[0]->setAmmo(10);
+			m_fireRate = 3.0;//take longer to shoot next bullet due to reload.
 		}
 		
 		Game::instance()->getWorld().getEntities()[index]->applyDamage(25);
@@ -357,6 +353,23 @@ void Entity::shootEnemy(int index, sf::RenderTarget &target)
 	else
 		return;
 }
+
+void Entity::adjustAmmo(int i)
+{
+	m_ammo--;
+
+}
+
+void Entity::setAmmo(int i)
+{
+	m_ammo = i;
+}
+
+int Entity::getAmmo()
+{
+	return m_ammo;
+}
+
 int Entity::getHealth()
 {
 	return m_health;
