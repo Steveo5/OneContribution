@@ -67,7 +67,8 @@ private:
 	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 
 	bool m_gameOver;
-	sf::Text m_gameOverText;
+	sf::Sprite m_gameOverImg;
+	sf::Texture m_gameOverImgTexture;
 	sf::Font m_arialFont;
 
 	void handleEvents();

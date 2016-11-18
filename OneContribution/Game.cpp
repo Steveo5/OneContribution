@@ -42,18 +42,16 @@ Game::Game()
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 
-	//text for gameover screen
+	//image for gameover screen
 	m_gameOver = false;
 	
-	if (!m_arialFont.loadFromFile("Resources/arial.ttf"))
+	if (!m_gameOverImgTexture.loadFromFile("Resources/Sprite/you_died.jpg"))
 	{
+		std::cout << "could not load you_died.jpg" << std::endl;
 	}
-
-	m_gameOverText.setFont(m_arialFont);
-	m_gameOverText.setColor(sf::Color::White);
-	m_gameOverText.setCharacterSize(100);
-	m_gameOverText.setString("GAME OVER");
-
+	m_gameOverImg.setPosition(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2));
+	m_gameOverImg.setTextureRect(sf::IntRect(0, 0, 550, 550));
+	m_gameOverImg.setTexture(m_gameOverImgTexture);
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
@@ -84,9 +82,9 @@ Game::Game()
 	m_reload.setVolume(100.f);
 	m_reload.setLoop(false);
 
-	if (!m_gameOverBuffer.loadFromFile("Resources/you_died.wav"))
+	if (!m_gameOverBuffer.loadFromFile("Resources/you_died.ogg"))
 	{
-		std::cout << "you_died.wav has not loaded correctly." << std::endl;
+		std::cout << "you_died.ogg has not loaded correctly." << std::endl;
 	}
 	m_you_died.setBuffer(m_gameOverBuffer);
 	m_you_died.setVolume(100.f);
@@ -130,7 +128,7 @@ bool Game::run()
 	{
 		if (m_gameOver)
 		{
-			m_window.draw(m_gameOverText);
+			m_window.draw(m_gameOverImg);
 			playSound("you_died");
 			bool wait = true;
 			while (wait) {
