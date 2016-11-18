@@ -345,7 +345,7 @@ void Game::update(sf::Time deltaTime)
 			//Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 			//AnimatedSprite sprite;
 			//sprite.play(*anim);
-		Game::instance()->getWorld().getEntities()[i]->getSprite().update(deltaTime);
+		Game::instance()->getWorld().getEntities()[i]->getSprite()->update(deltaTime);
 
 	}
 }

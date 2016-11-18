@@ -138,9 +138,9 @@ void Entity::BFS()//not a BFS, just a chase AI :/
 	}
 }
 
-AnimatedSprite Entity::getSprite()
+AnimatedSprite* Entity::getSprite()
 {
-	return m_sprite;
+	return &m_sprite;
 }
 
 sf::Clock pathTimer;
