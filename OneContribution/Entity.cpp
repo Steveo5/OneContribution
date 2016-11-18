@@ -181,6 +181,8 @@ void Entity::tick()
 
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
+
+
 	BFS();
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
@@ -419,11 +421,11 @@ bool Entity::isControllable()
 
 void Entity::setTarget(sf::Vector2i t)
 {
-	if (m_entityType == EntityType::KNIGHT && isSelected())
-	{
+	//if (m_entityType == EntityType::KNIGHT && isSelected())
+	//{
 		std::cout << "setTarget(): " << t.x << ", " << t.y << std::endl;
 		m_target = t;
-	}
+	//}
 	
 }
 
