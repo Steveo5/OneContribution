@@ -325,6 +325,12 @@ void Game::update(sf::Time deltaTime)
 	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	m_ui.update(m_window);
+
+	//for (int i = 1; i < m_world.getEntities().size(); i++)
+	//{
+	//	m_world.getEntities()[i]->getAnimation();
+
+	//}
 }
 
 void Game::gameOver()
