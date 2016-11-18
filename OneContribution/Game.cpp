@@ -127,17 +127,17 @@ bool Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (m_window.isOpen())
 	{
-		while (m_gameOver)
+		if (m_gameOver)
 		{
-			m_window.draw(m_gameOverText);
-			playSound("nextTime");
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-			{
-				//restart game
-				return false;
-			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				return true; //end game
+			//m_window.draw(m_gameOverText);
+			//playSound("nextTime");
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+			//{
+			//	//restart game
+			//	return false;
+			//}
+			//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			//	return true; //end game
 		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -151,12 +151,15 @@ bool Game::run()
 			//Update the game
 			update(timeSinceLastUpdate);
 			//Do a game tick
-			if (m_tickTimer.getElapsedTime().asMilliseconds() > m_tickRate)
+			
+			if (!m_gameOver)
 			{
-				tick();
-				m_tickTimer.restart();
+				if (m_tickTimer.getElapsedTime().asMilliseconds() > m_tickRate)
+				{
+					tick();
+					m_tickTimer.restart();
+				}
 			}
-
 		}
 
 		m_window.draw(*m_ml);
@@ -171,6 +174,8 @@ bool Game::run()
 		//Objects to draw to main window view
 		m_window.setView(m_view);
 		m_window.draw(m_ui);
+
+		m_world.getEntities()[0]->drawTracer();
 		//Display everything to the screen
 		endDraw();
 	}

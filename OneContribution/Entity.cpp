@@ -184,11 +184,6 @@ void Entity::tick()
 		//player character damage updates
 	}
 
-	//draw the bullet tracer on shot
-	if (m_tracer)
-	{
-		drawTracer();
-	}
 
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
@@ -303,7 +298,7 @@ void Entity::applyDamage(int damage)
 	if (m_health > 0)
 	{
 		m_health -= damage;
-		Game::instance()->playSound("ouch");
+		Game::instance()->playSound("gun");
 		if (m_health == 0)
 			Game::instance()->playSound("dead");
 	}
@@ -314,20 +309,27 @@ void Entity::applyDamage(int damage)
 
 void Entity::drawTracer()
 {
-	
-	sf::Vertex tracer[] =
+	if (m_tracer)
 	{
-		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
-		sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
-	};
-	
-	Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
-	m_alpha -= 25;
-	if (m_alpha < 0)
-	{
-		m_tracer = false;
-		m_alpha = 255;
+		sf::Vertex tracer[] =
+		{
+			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
+			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
+		};
+
+		Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
+		m_alpha -= 25;
+		if (m_alpha < 0)
+		{
+			m_tracer = false;
+			m_alpha = 255;
+		}
 	}
+}
+
+bool Entity::getTracer()
+{
+	return m_tracer;
 }
 
 void Entity::shootEnemy(int index, sf::RenderTarget &target)

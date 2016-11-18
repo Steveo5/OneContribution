@@ -83,6 +83,7 @@ public:
 	bool isDead();
 	void applyDamage(int damage);
 	void drawTracer();
+	bool getTracer();
 	void shootEnemy(int index, sf::RenderTarget &target);
 	bool isControllable();
 	void setControllable(bool control);
