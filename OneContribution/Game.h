@@ -26,7 +26,8 @@ public:
 	std::string getTest();
 
 	void gameOver();
-	
+
+	//sf::Time* getTimeSinceLastUpdate();
 
 
 	//static World& getWorld();
@@ -59,6 +60,8 @@ private:
 	const int m_tickRate = 20;
 	//Game speed multiplier
 	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
+
+	sf::Time m_timeSinceLastUpdate;
 
 	bool m_gameOver;
 	sf::Text m_gameOverText;

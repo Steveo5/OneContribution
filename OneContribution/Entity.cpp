@@ -187,6 +187,7 @@ void Entity::tick()
 
 	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
 	m_sprite.play(*anim);
+	//m_sprite.update(update());
 	BFS();
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
 	{
