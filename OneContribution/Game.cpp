@@ -308,7 +308,21 @@ void Game::handleEvents()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
 				m_world.getEntities()[0]->setHealth(-1);
 			}
-				
+			//mute key for music
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F6)) {
+
+				//unmuting doesn't work yet
+				//if (m_music.getVolume() != 25.f)
+				//{
+				//	m_music.setVolume(25.f);
+
+				//}
+				if (m_music.getVolume() != 0.f)
+				{
+					m_music.setVolume(0.f);
+
+				}
+			}
 			break;
 
 		case sf::Event::Resized:
