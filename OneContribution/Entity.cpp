@@ -194,38 +194,44 @@ void Entity::tick()
 	//m_sprite.play(*anim)
 
 
-	if (m_facing == DOWN) {
-		Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkDown");
-		m_sprite.play(*anim);
+	if (m_entityType == KNIGHT)
+	{
+		if (m_facing == DOWN) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkDown");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == UP) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkUp");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == RIGHT) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkRight");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == LEFT) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkLeft");
+			m_sprite.play(*anim);
+		}
 	}
-	if (m_facing == UP) {
-		Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkUp");
-		m_sprite.play(*anim);
+	if (m_entityType == ENEMY)
+	{
+		if (m_facing == DOWN) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkDown");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == UP) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == RIGHT) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			m_sprite.play(*anim);
+		}
+		if (m_facing == LEFT) {
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			m_sprite.play(*anim);
+		}
 	}
-	if (m_facing == RIGHT) {
-		Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkRight");
-		m_sprite.play(*anim);
-	}
-	if (m_facing == LEFT) {
-		Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "plyrwalkLeft");
-		m_sprite.play(*anim);
-	}
-	//if (m_facing == DOWN) {
-	//	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkDown");
-	//	m_sprite.play(*anim);
-	//}
-	//if (m_facing == UP) {
-	//	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
-	//	m_sprite.play(*anim);
-	//}
-	//if (m_facing == RIGHT) {
-	//	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
-	//	m_sprite.play(*anim);
-	//}
-	//if (m_facing == LEFT) {
-	//	Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
-	//	m_sprite.play(*anim);
-	//}
 
 	BFS();
 	if (pathTimer.getElapsedTime().asSeconds() > 1)
