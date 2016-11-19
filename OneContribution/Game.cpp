@@ -50,7 +50,7 @@ Game::Game()
 		std::cout << "gameOver.png has not loaded correctly." << std::endl;
 	}
 	
-	m_gameOverImg.setPosition(m_window.mapPixelToCoords(static_cast<sf::Vector2i>(m_window.getPosition())));
+	m_gameOverImg.setPosition(static_cast<sf::Vector2f>(m_view.getCenter()));
 	m_gameOverImg.setTextureRect(sf::IntRect(0,0,1024,768));
 	m_gameOverImg.setTexture(m_gameOverImgTexture);
 	m_gameOverImg.setScale(m_window.getView().getSize().x / 1024, m_window.getView().getSize().y / 768);
@@ -132,6 +132,7 @@ bool Game::run()
 	{
 		if (m_gameOver)
 		{
+			m_gameOverImg.setPosition(sf::Vector2f((m_view.getCenter().x - m_view.getSize().x / 2), (m_view.getCenter().y - m_view.getSize().y /2)));
 			m_window.draw(m_gameOverImg);
 			playSound("you_died");
 			m_music.pause();
