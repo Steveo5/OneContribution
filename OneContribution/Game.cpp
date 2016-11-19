@@ -417,7 +417,15 @@ void Game::playSound(std::string name)
 	if (name == "you_died")	m_you_died.play();
 }
 
+int Game::getKillCount()
+{
+	return m_killCount;
+}
 
+void Game::setKillCount(int i)
+{
+	m_killCount = i;
+}
 
 
 //test
