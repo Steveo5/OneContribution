@@ -377,4 +377,6 @@ void Game::playSound(std::string name)
 	if (name == "dead") m_dead.play();
 	if (name == "nextTime")	m_nextTime.play();
 }
+
+
 //test
