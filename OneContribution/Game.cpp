@@ -312,8 +312,16 @@ void Game::handleEvents()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
 				m_world.getEntities()[0]->setHealth(-1);
 			}
+
+			//hotkey for music toggle
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F6)) {
+				if (m_music.getStatus() == sf::Music::Paused) m_music.play();
+				else if (m_music.getStatus() == sf::Music::Playing) m_music.pause();
+			}
 				
 			break;
+
+			
 
 		case sf::Event::Resized:
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
