@@ -99,11 +99,13 @@ void Entity::BFS()//not a BFS, just a chase AI :/
 			{
 				//move down-right
 				m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				m_facing = Direction::RIGHT;
 			}
 			else
 			{
 				//move up-right
 				m_nextMove = (sf::Vector2i(getSpritePosition().x + (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+				m_facing = Direction::UP;
 			}
 		}
 		else
@@ -112,11 +114,13 @@ void Entity::BFS()//not a BFS, just a chase AI :/
 			{
 				//move down-left
 				m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y + (m_tileSize.y / 2)));
+				m_facing = Direction::DOWN;
 			}
 			else
 			{
 				//move up-left
 				m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
+				m_facing = Direction::LEFT;
 			}
 		}
 	}
@@ -226,7 +230,7 @@ void Entity::tick()
 	}
 
 	//Update the entities m_facing property
-	if (m_lastPos != m_sprite.getPosition())
+	/*if (m_lastPos != m_sprite.getPosition())
 	{
 		if (m_lastPos.x > m_sprite.getPosition().x)
 		{
@@ -248,7 +252,7 @@ void Entity::tick()
 		{
 			m_facing = Direction::NONE;
 		}
-	}
+	}*/
 }
 
 void Entity::setSelected(bool selected)

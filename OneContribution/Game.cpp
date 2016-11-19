@@ -45,13 +45,15 @@ Game::Game()
 	//image for gameover screen
 	m_gameOver = false;
 	
-	if (!m_gameOverImgTexture.loadFromFile("Resources/Sprite/you_died.jpg"))
+	if (!m_gameOverImgTexture.loadFromFile("Resources/gameOver.png"))
 	{
-		std::cout << "could not load you_died.jpg" << std::endl;
+		std::cout << "gameOver.png has not loaded correctly." << std::endl;
 	}
-	m_gameOverImg.setPosition(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2));
-	m_gameOverImg.setTextureRect(sf::IntRect(0, 0, 550, 550));
+	
+	m_gameOverImg.setPosition(m_window.mapPixelToCoords(static_cast<sf::Vector2i>(m_window.getPosition())));
+	m_gameOverImg.setTextureRect(sf::IntRect(0,0,1024,768));
 	m_gameOverImg.setTexture(m_gameOverImgTexture);
+	m_gameOverImg.setScale(m_window.getView().getSize().x / 1024, m_window.getView().getSize().y / 768);
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
@@ -106,6 +108,8 @@ Game::Game()
 	m_dead.setVolume(100.f);
 	m_dead.setLoop(false);
 
+	
+
 	m_animator = new AnimationManager();
 }
 
@@ -130,8 +134,11 @@ bool Game::run()
 		{
 			m_window.draw(m_gameOverImg);
 			playSound("you_died");
+			m_music.pause();
 			bool wait = true;
 			while (wait) {
+				m_window.draw(m_gameOverImg);
+				m_window.display();
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
 					//restart game
@@ -139,9 +146,10 @@ bool Game::run()
 					wait = false;
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
 					return true; //end game
 					wait = false;
-
+				}
 			}
 
 		}
@@ -180,6 +188,10 @@ bool Game::run()
 		//Objects to draw to main window view
 		m_window.setView(m_view);
 		m_window.draw(m_ui);
+		
+		//debug
+		//m_window.draw(m_gameOverImg);
+
 
 		m_world.getEntities()[0]->drawTracer();
 		//Display everything to the screen
