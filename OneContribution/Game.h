@@ -27,7 +27,8 @@ public:
 
 	void gameOver();
 	
-
+	int getKillCount();
+	void setKillCount(int i);
 
 	//static World& getWorld();
 private:
@@ -76,7 +77,10 @@ private:
 	void endDraw();
 	void tick();
 	void update(sf::Time deltaTime);
-	void toggleFullscreen();
+	int m_killCount = 0;
 
+
+
+	void toggleFullscreen();
 };
 
