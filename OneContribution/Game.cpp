@@ -81,7 +81,7 @@ Game::Game()
 		std::cout << "reload.wav has not loaded correctly." << std::endl;
 	}
 	m_reload.setBuffer(m_reloadBuffer);
-	m_reload.setVolume(100.f);
+	m_reload.setVolume(50.f);
 	m_reload.setLoop(false);
 
 	if (!m_gameOverBuffer.loadFromFile("Resources/you_died.ogg"))
