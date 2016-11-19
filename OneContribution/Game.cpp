@@ -73,7 +73,7 @@ Game::Game()
 		std::cout << "gun.wav has not loaded correctly." << std::endl;
 	}
 	m_gun.setBuffer(m_gunBuffer);
-	m_gun.setVolume(50.f);
+	m_gun.setVolume(25.f);
 	m_gun.setLoop(false);
 
 	if (!m_reloadBuffer.loadFromFile("Resources/reload.wav"))
@@ -97,7 +97,7 @@ Game::Game()
 		std::cout << "ouch.wav has not loaded correctly." << std::endl;
 	}
 	m_ouch.setBuffer(m_ouchBuffer);
-	m_ouch.setVolume(100.f);
+	m_ouch.setVolume(50.f);
 	m_ouch.setLoop(false);
 
 	if (!m_deadBuffer.loadFromFile("Resources/dead.wav"))
@@ -105,7 +105,7 @@ Game::Game()
 		std::cout << "dead.wav has not loaded correctly." << std::endl;
 	}
 	m_dead.setBuffer(m_deadBuffer);
-	m_dead.setVolume(100.f);
+	m_dead.setVolume(50.f);
 	m_dead.setLoop(false);
 
 	
