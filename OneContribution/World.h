@@ -39,9 +39,9 @@ public:
 
 	bool willCollide(sf::Vector2f position);
 
-	std::unordered_map <int, std::list<int>> graph;
-	void createGraph();
-	std::unordered_map <int, std::list<int>>* getGraph();
+	int pnpoly(int npol, float x, float y);
+	float * pVertY;
+	float * pVertX;
 	
 
 	void tick();
@@ -56,5 +56,8 @@ private:
 
 	sf::Vector2i m_tileSize;
 	sf::Vector2i m_worldBounds;
+
+	float vertX[4] = { 0, -3200, 0, 3200 };
+	float vertY[4] = { 15, 1615, 3215, 1615 };
 };
 

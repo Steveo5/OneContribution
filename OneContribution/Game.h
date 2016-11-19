@@ -76,8 +76,7 @@ private:
 	void endDraw();
 	void tick();
 	void update(sf::Time deltaTime);
-
-
 	void toggleFullscreen();
+
 };
 

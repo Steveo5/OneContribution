@@ -12,6 +12,9 @@ void World::setWorld(sf::Vector2i tileSize, sf::Vector2i worldBounds)
 	//m_tileMap = new TileMap(m_texture, 1, 1, 32.f, 2008.f);
 	m_tileSize = tileSize;
 	m_worldBounds = sf::Vector2i(worldBounds.x * tileSize.x, worldBounds.y * tileSize.y);
+
+	pVertX = vertX;
+	pVertY = vertY;
 }
 
 
@@ -146,5 +149,20 @@ bool World::willCollide(sf::Vector2f position)
 		}
 	}
 	return collision;
+}
+
+int World::pnpoly(int npol, float x, float y)
+{
+	float *xp = vertX;
+	float *yp = vertY;
+	int i, j, c = 0;
+	for (i = 0, j = npol - 1; i < npol; j = i++) {
+		if ((((yp[i] <= y) && (y<yp[j])) ||
+			((yp[j] <= y) && (y<yp[i]))) &&
+			(x < (xp[j] - xp[i]) * (y - yp[i]) / (yp[j] - yp[i]) + xp[i]))
+
+			c = !c;
+	}
+	return c;
 }
 

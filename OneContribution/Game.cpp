@@ -44,7 +44,11 @@ Game::Game()
 
 	//image for gameover screen
 	m_gameOver = false;
+
 	
+
+
+	//load resources
 	if (!m_gameOverImgTexture.loadFromFile("Resources/gameOver.png"))
 	{
 		std::cout << "gameOver.png has not loaded correctly." << std::endl;
@@ -412,6 +416,8 @@ void Game::playSound(std::string name)
 	if (name == "dead") m_dead.play();
 	if (name == "you_died")	m_you_died.play();
 }
+
+
 
 
 //test

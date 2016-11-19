@@ -41,11 +41,11 @@ void debugGrid::draw(sf::RenderTarget& target, sf::RenderStates states)const
 	sf::Vertex line[] =
 	{
 		
-		sf::Vertex(sf::Vector2f(-3200,0), sf::Color::Green),
-		sf::Vertex(sf::Vector2f(3200,0), sf::Color::Green),
-		sf::Vertex(sf::Vector2f(3200, 3200), sf::Color::Green),
-		sf::Vertex(sf::Vector2f(-3200, 3200), sf::Color::Green),
-		sf::Vertex(sf::Vector2f(-3200, 0), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(0,15), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(-3200,1615), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(0, 3215), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(3200, 1615), sf::Color::Green),
+		sf::Vertex(sf::Vector2f(0, 15), sf::Color::Green),
 
 	};
 	target.draw(line, 5, sf::LinesStrip);

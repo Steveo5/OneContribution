@@ -74,6 +74,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 void Entity::BFS()//not a BFS, just a chase AI :/
 {		
+	m_lastPos = static_cast<sf::Vector2f>(getSpritePositionInt());
 	if ((getSpritePositionInt().x >= (m_nextMove.x - m_speedStep) && getSpritePositionInt().x <= (m_nextMove.x + m_speedStep))//fix entity never reaching exactly m_nextMove (thus not updating)
 		&& (getSpritePositionInt().y >= (m_nextMove.y - m_speedStep) && getSpritePositionInt().y <= (m_nextMove.y + m_speedStep)))
 	{
@@ -122,6 +123,14 @@ void Entity::BFS()//not a BFS, just a chase AI :/
 				m_nextMove = (sf::Vector2i(getSpritePosition().x - (m_tileSize.x / 2), getSpritePosition().y - (m_tileSize.y / 2)));
 				m_facing = Direction::LEFT;
 			}
+		}
+
+		//check if in boundaries
+		if (m_entityType == EntityType::KNIGHT && Game::instance()->getWorld().pnpoly(4, m_nextMove.x, m_nextMove.y) % 2 == 0)
+		{
+			
+			m_target = static_cast<sf::Vector2i>(m_lastPos);//Game::instance()->getWorld().getTile(getSpritePositionInt());
+
 		}
 	}
 	
