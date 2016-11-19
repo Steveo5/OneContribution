@@ -11,7 +11,7 @@ Entity::Entity()
 
 }
 Entity::Entity(EntityType entityType, sf::Vector2f location)
-	: m_sprite(sf::seconds(0.2), true, false)
+	: m_sprite(sf::seconds(0.05), true, false)
 {
 	m_tileSize = Game::instance()->getWorld().getTileSize();
 	m_isSelected = false;
