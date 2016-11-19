@@ -124,16 +124,34 @@ void runGame()
 	//Initialize animations
 	AnimationManager* animator = Game::instance()->getAnimator();
 
-	Animation* walkAnim = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 0, 34, 25, 4);
-	animator->registerAnimation(EntityType::KNIGHT, "walkLeft", walkAnim);
+	//Animation* walkAnim = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 0, 34, 25, 4);
+	//animator->registerAnimation(EntityType::KNIGHT, "walkLeft", walkAnim);
 
-	for (int i = 0; i < walkAnim->getSize(); i++)
-	{
-		std::cout << "Top " << walkAnim->getFrame(i).top << std::endl;
-		std::cout << "Left " << walkAnim->getFrame(i).left << std::endl;
-		std::cout << "Height " << walkAnim->getFrame(i).height << std::endl;
-		std::cout << "Width " << walkAnim->getFrame(i).width << std::endl;
-	}
+	Animation* plyrwalkDown = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 0, 34, 25, 4);
+	animator->registerAnimation(EntityType::KNIGHT, "plyrwalkDown", plyrwalkDown);
+	Animation* plyrwalkUp = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 1, 34, 25, 4);
+	animator->registerAnimation(EntityType::KNIGHT, "plyrwalkUp", plyrwalkUp);
+	Animation* plyrwalkRight = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 2, 34, 25, 4);
+	animator->registerAnimation(EntityType::KNIGHT, "plyrwalkRight", plyrwalkRight);
+	Animation* plyrwalkLeft = animator->generateAnimation("Resources/Sprite/KNIGHT_long.png", EntityType::KNIGHT, 3, 34, 25, 4);
+	animator->registerAnimation(EntityType::KNIGHT, "plyrwalkLeft", plyrwalkLeft);
+	Animation* enemwalkDown = animator->generateAnimation("Resources/Sprite/ENEMY_long.png", EntityType::ENEMY, 0, 34, 25, 4);
+	animator->registerAnimation(EntityType::ENEMY, "enemwalkDown", enemwalkDown);
+	Animation* enemwalkUp = animator->generateAnimation("Resources/Sprite/ENEMY_long.png", EntityType::ENEMY, 1, 34, 25, 4);
+	animator->registerAnimation(EntityType::ENEMY, "enemwalkUp", enemwalkUp);
+	Animation* enemwalkRight = animator->generateAnimation("Resources/Sprite/ENEMY_long.png", EntityType::ENEMY, 2, 34, 25, 4);
+	animator->registerAnimation(EntityType::ENEMY, "enemwalkRight", enemwalkRight);
+	Animation* enemwalkLeft = animator->generateAnimation("Resources/Sprite/ENEMY_long.png", EntityType::ENEMY, 3, 34, 25, 4);
+	animator->registerAnimation(EntityType::ENEMY, "enemwalkLeft", enemwalkLeft);
+
+	//for (int i = 0; i < walkAnim->getSize(); i++)
+	//{
+	//	std::cout << "Top " << walkAnim->getFrame(i).top << std::endl;
+	//	std::cout << "Left " << walkAnim->getFrame(i).left << std::endl;
+	//	std::cout << "Height " << walkAnim->getFrame(i).height << std::endl;
+	//	std::cout << "Width " << walkAnim->getFrame(i).width << std::endl;
+	//}
+
 	std::cout << game->getTest() << std::endl;
 
 	if (game->run() == false)
