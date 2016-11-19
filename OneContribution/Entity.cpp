@@ -230,7 +230,7 @@ void Entity::tick()
 			m_sprite.play(*anim);
 		}
 		if (m_facing == UP) {
-			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkUp");
 			m_sprite.play(*anim);
 		}
 		if (m_facing == RIGHT) {
@@ -238,7 +238,7 @@ void Entity::tick()
 			m_sprite.play(*anim);
 		}
 		if (m_facing == LEFT) {
-			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkLeft");
 			m_sprite.play(*anim);
 		}
 	}

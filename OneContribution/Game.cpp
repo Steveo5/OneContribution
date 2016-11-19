@@ -318,6 +318,13 @@ void Game::handleEvents()
 				if (m_music.getStatus() == sf::Music::Paused) m_music.play();
 				else if (m_music.getStatus() == sf::Music::Playing) m_music.pause();
 			}
+
+			////test / debug key - currently printing out entity 3 (zaramoran)'s m_facing value
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::F7)) {
+
+			//	std::cout << (Game::instance()->getWorld().getEntities()[4]->getFacing()) << std::endl;
+
+			//}
 				
 			break;
 
