@@ -18,6 +18,9 @@ private:
 	sf::Sprite m_bottomSprite;
 	sf::Font m_arialFont;
 	sf::Text m_textEntities;
+	sf::Text m_scoreCount;
+	sf::Text m_ammoCount;
+
 
 	sf::SoundBuffer buffer;
 	sf::Sound sound;

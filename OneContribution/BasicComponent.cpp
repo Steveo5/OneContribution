@@ -1,4 +1,5 @@
 #include "BasicComponent.h"
+#include <string>
 
 
 BasicComponent::BasicComponent()
@@ -34,6 +35,14 @@ BasicComponent::BasicComponent()
 	m_textEntities.setFont(m_arialFont);
 	m_textEntities.setColor(sf::Color::Color(242,101,34,255));
 	m_textEntities.setCharacterSize(20);
+
+	m_scoreCount.setFont(m_arialFont);
+	m_scoreCount.setColor(sf::Color::Blue);
+	m_scoreCount.setCharacterSize(20);
+
+	m_ammoCount.setFont(m_arialFont);
+	m_ammoCount.setColor(sf::Color::Red);
+	m_ammoCount.setCharacterSize(20);
 }
 
 BasicComponent::~BasicComponent()
@@ -54,6 +63,10 @@ void BasicComponent::draw(sf::RenderTarget& target, sf::RenderStates states) con
 
 	target.draw(m_bottomSprite);
 	target.draw(m_textEntities);
+	target.draw(m_scoreCount);
+	target.draw(m_ammoCount);
+
+
 }
 
 void BasicComponent::update(sf::RenderWindow& window)
@@ -62,6 +75,17 @@ void BasicComponent::update(sf::RenderWindow& window)
 	m_bottomSprite.setPosition(bottomSpritePos);
 	
 	m_textEntities.setPosition(bottomSpritePos.x + 100, bottomSpritePos.y + 50);
+
+	m_scoreCount.setPosition(bottomSpritePos.x + 550, bottomSpritePos.y + 50);
+
+	m_ammoCount.setPosition(bottomSpritePos.x + 550, bottomSpritePos.y + 100);
+
+	std::string ammostring = std::to_string(Game::instance()->getWorld().getEntities()[0]->getAmmo());
+	m_ammoCount.setString((ammostring)+" of 10 \n shots remain" );
+
+
+	m_scoreCount.setString("placeholderscore");
+
 
 	if (Game::instance()->getWorld().getEntities().size() > 0)
 	{
