@@ -42,18 +42,16 @@ Game::Game()
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 
-	//text for gameover screen
+	//image for gameover screen
 	m_gameOver = false;
 	
-	if (!m_arialFont.loadFromFile("Resources/arial.ttf"))
+	if (!m_gameOverImgTexture.loadFromFile("Resources/Sprite/you_died.jpg"))
 	{
+		std::cout << "could not load you_died.jpg" << std::endl;
 	}
-
-	m_gameOverText.setFont(m_arialFont);
-	m_gameOverText.setColor(sf::Color::White);
-	m_gameOverText.setCharacterSize(100);
-	m_gameOverText.setString("GAME OVER");
-
+	m_gameOverImg.setPosition(sf::Vector2f(m_window.getSize().x / 2, m_window.getSize().y / 2));
+	m_gameOverImg.setTextureRect(sf::IntRect(0, 0, 550, 550));
+	m_gameOverImg.setTexture(m_gameOverImgTexture);
 
 	BasicComponent* basicComponentUI = new BasicComponent();
 	m_ui.addComponent(basicComponentUI);
@@ -84,13 +82,13 @@ Game::Game()
 	m_reload.setVolume(100.f);
 	m_reload.setLoop(false);
 
-	if (!m_gameOverBuffer.loadFromFile("Resources/nextTime.wav"))
+	if (!m_gameOverBuffer.loadFromFile("Resources/you_died.ogg"))
 	{
-		std::cout << "nextTime.wav has not loaded correctly." << std::endl;
+		std::cout << "you_died.ogg has not loaded correctly." << std::endl;
 	}
-	m_nextTime.setBuffer(m_gameOverBuffer);
-	m_nextTime.setVolume(100.f);
-	m_nextTime.setLoop(false);
+	m_you_died.setBuffer(m_gameOverBuffer);
+	m_you_died.setVolume(100.f);
+	m_you_died.setLoop(false);
 
 	if (!m_ouchBuffer.loadFromFile("Resources/ouch.wav"))
 	{
@@ -130,15 +128,22 @@ bool Game::run()
 	{
 		if (m_gameOver)
 		{
-			m_window.draw(m_gameOverText);
-			playSound("nextTime");
-			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-			//{
-			//	//restart game
-			//	return false;
-			//}
-			//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			//	return true; //end game
+			m_window.draw(m_gameOverImg);
+			playSound("you_died");
+			bool wait = true;
+			while (wait) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+				{
+					//restart game
+					return false;
+					wait = false;
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+					return true; //end game
+					wait = false;
+
+			}
+
 		}
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -286,6 +291,11 @@ void Game::handleEvents()
 			{
 				m_view.setSize(m_view.getSize().x - 200, m_view.getSize().y - 200);
 			}
+			//suicide key for lose condition testing
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::F5)) {
+				m_world.getEntities()[0]->setHealth(-1);
+			}
+				
 			break;
 
 		case sf::Event::Resized:
@@ -326,6 +336,18 @@ void Game::update(sf::Time deltaTime)
 	
 	m_miniMapSprite.setPosition(m_window.mapPixelToCoords(sf::Vector2i(0, 0)));
 	m_ui.update(m_window);
+
+	for (int i = 1; i < m_world.getEntities().size(); i++)
+	{
+		//m_world.getEntities()[i]->;
+		//Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft")
+
+			//Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::KNIGHT, "walkLeft");
+			//AnimatedSprite sprite;
+			//sprite.play(*anim);
+		Game::instance()->getWorld().getEntities()[i]->getSprite()->update(deltaTime);
+
+	}
 }
 
 void Game::gameOver()
@@ -375,7 +397,7 @@ void Game::playSound(std::string name)
 	if (name == "reload") m_reload.play();
 	if (name == "ouch") m_ouch.play();
 	if (name == "dead") m_dead.play();
-	if (name == "nextTime")	m_nextTime.play();
+	if (name == "you_died")	m_you_died.play();
 }
 
 

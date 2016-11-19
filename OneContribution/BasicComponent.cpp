@@ -32,7 +32,7 @@ BasicComponent::BasicComponent()
 	}
 
 	m_textEntities.setFont(m_arialFont);
-	m_textEntities.setColor(sf::Color::White);
+	m_textEntities.setColor(sf::Color::Color(242,101,34,255));
 	m_textEntities.setCharacterSize(20);
 }
 

@@ -51,7 +51,7 @@ private:
 	sf::Sound m_reload;
 	sf::Sound m_ouch;
 	sf::Sound m_dead;
-	sf::Sound m_nextTime;
+	sf::Sound m_you_died;
 	sf::SoundBuffer m_gunBuffer;
 	sf::SoundBuffer m_reloadBuffer;
 	sf::SoundBuffer m_gameOverBuffer;
@@ -67,7 +67,8 @@ private:
 	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 
 	bool m_gameOver;
-	sf::Text m_gameOverText;
+	sf::Sprite m_gameOverImg;
+	sf::Texture m_gameOverImgTexture;
 	sf::Font m_arialFont;
 
 	void handleEvents();
