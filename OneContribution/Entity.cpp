@@ -162,6 +162,7 @@ void Entity::tick()
 			m_sprite.setPosition(static_cast<sf::Vector2f>(getSpawnPoint()));
 			setVisible(true);
 			setHealth(100);
+			Game::instance()->setKillCount(Game::instance()->getKillCount() + 1);
 			return;
 		}
 		if (m_entityType == EntityType::KNIGHT)

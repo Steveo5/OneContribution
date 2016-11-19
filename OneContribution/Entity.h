@@ -134,7 +134,6 @@ private:
 	int m_entityTarget;
 	int m_alpha;
 
-
 	//Used for getting the entities direction
 	sf::Vector2f m_lastPos;
 	sf::Vector2i m_target;

@@ -84,7 +84,8 @@ void BasicComponent::update(sf::RenderWindow& window)
 	m_ammoCount.setString((ammostring)+" of 10 \n shots remain" );
 
 
-	m_scoreCount.setString("placeholderscore");
+	std::string scorestring = std::to_string(Game::instance()->getKillCount());
+	m_scoreCount.setString("Score:" + (scorestring));
 
 
 	if (Game::instance()->getWorld().getEntities().size() > 0)
