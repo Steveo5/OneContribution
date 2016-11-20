@@ -6,6 +6,7 @@
 #include <iostream>
 #include "SFML\Audio.hpp"
 #include "AnimationManager.h"
+#include "MenuComponent.h"
 
 class Game
 {
