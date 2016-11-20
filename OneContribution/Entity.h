@@ -84,6 +84,8 @@ public:
 	void applyDamage(int damage);
 	void drawTracer();
 	bool getTracer();
+	float getAttackTime();
+	void resetAttackTime();
 	void shootEnemy(int index, sf::RenderTarget &target);
 	void adjustAmmo(int i);
 	void setAmmo(int i);

@@ -393,7 +393,7 @@ void Entity::drawTracer()
 				tracer[i].color = sf::Color(0, 249, 174, m_alpha);
 
 			Game::instance()->getWindow().draw(tracer, 4, sf::Quads);
-
+			
 		//sf::Vertex tracer[] =
 		//{
 		//	sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
@@ -415,28 +415,39 @@ bool Entity::getTracer()
 	return m_tracer;
 }
 
+float Entity::getAttackTime()
+{
+	return attackTimer.getElapsedTime().asSeconds();
+}
+
+void Entity::resetAttackTime()
+{
+	attackTimer.restart();
+}
+
 void Entity::shootEnemy(int index, sf::RenderTarget &target)
 {
 	m_entityTarget = index;
-	if (attackTimer.getElapsedTime().asSeconds() > m_fireRate)
+	if (Game::instance()->getWorld().getEntities()[0]->getAttackTime() > 
+		Game::instance()->getWorld().getEntities()[0]->m_fireRate)
 	{
 		m_tracer = true;
 		
 		if (Game::instance()->getWorld().getEntities()[0]->getAmmo() > 0)
 		{
 			Game::instance()->playSound("gun");
-			m_fireRate = 0.33;
+			Game::instance()->getWorld().getEntities()[0]->m_fireRate = 0.33;
 			Game::instance()->getWorld().getEntities()[0]->adjustAmmo(1);
 		}
 		if (Game::instance()->getWorld().getEntities()[0]->getAmmo() <= 0)
 		{
 			Game::instance()->playSound("reload");
 			Game::instance()->getWorld().getEntities()[0]->setAmmo(10);
-			m_fireRate = 3.0;//take longer to shoot next bullet due to reload.
+			Game::instance()->getWorld().getEntities()[0]->m_fireRate = 3.0;//take longer to shoot next bullet due to reload.
 		}
 		
 		Game::instance()->getWorld().getEntities()[index]->applyDamage(25);
-		attackTimer.restart();
+		Game::instance()->getWorld().getEntities()[0]->resetAttackTime();
 	}
 	else
 		return;
