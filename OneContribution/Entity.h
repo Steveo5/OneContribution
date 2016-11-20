@@ -95,6 +95,8 @@ public:
 
 	sf::FloatRect getGlobalBounds();
 	Direction getFacing();
+	void setFacing(Direction dir);
+
 
 	sf::Text& getTextName();
 

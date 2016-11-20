@@ -190,6 +190,7 @@ void Entity::tick()
 		{
 			if (attackTimer.getElapsedTime().asSeconds() > 1)//only allow 1 attack every second per enemy
 			{
+				//remove / comment next line for godmode
 				Game::instance()->getWorld().getEntities()[0]->applyDamage(10);
 				attackTimer.restart();//restart the timer for next attack
 			}
@@ -230,7 +231,7 @@ void Entity::tick()
 			m_sprite.play(*anim);
 		}
 		if (m_facing == UP) {
-			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkUp");
 			m_sprite.play(*anim);
 		}
 		if (m_facing == RIGHT) {
@@ -238,7 +239,7 @@ void Entity::tick()
 			m_sprite.play(*anim);
 		}
 		if (m_facing == LEFT) {
-			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkRight");
+			Animation *anim = Game::instance()->getAnimator()->getAnimation(EntityType::ENEMY, "enemwalkLeft");
 			m_sprite.play(*anim);
 		}
 	}
@@ -368,13 +369,38 @@ void Entity::drawTracer()
 {
 	if (m_tracer)
 	{
-		sf::Vertex tracer[] =
-		{
-			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
-			sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
-		};
 
-		Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
+		//code here references (https://github.com/SFML/SFML/wiki/Source%3A-Line-segment-with-thickness)
+		sf::Vertex tracer[4];
+		float thickness = 3.0;
+
+		sf::Vector2f point1 = (Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
+		sf::Vector2f point2 = (Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition());
+
+
+			sf::Vector2f direction = point2 - point1;
+			sf::Vector2f unitDirection = direction / std::sqrt(direction.x*direction.x + direction.y*direction.y);
+			sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
+
+			sf::Vector2f offset = (thickness / 2.f)*unitPerpendicular;
+
+			tracer[0].position = point1 + offset;
+			tracer[1].position = point2 + offset;
+			tracer[2].position = point2 - offset;
+			tracer[3].position = point1 - offset;
+
+			for (int i = 0; i<4; ++i)
+				tracer[i].color = sf::Color(0, 249, 174, m_alpha);
+
+			Game::instance()->getWindow().draw(tracer, 4, sf::Quads);
+
+		//sf::Vertex tracer[] =
+		//{
+		//	sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
+		//	sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
+		//};
+
+		//Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
 		m_alpha -= 25;
 		if (m_alpha < 0)
 		{
@@ -508,6 +534,10 @@ void Entity::setVisible(bool visible)
 Direction Entity::getFacing()
 {
 	return m_facing;
+}
+
+void Entity::setFacing(Direction dir) {
+	m_facing = dir;
 }
 
 sf::Vector2f Entity::getSpritePosition()

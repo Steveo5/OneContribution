@@ -286,7 +286,36 @@ void Game::handleEvents()
 				{
 					if (!(m_world.getEntities()[i]->isHitting(m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window))))) continue;
 					else if (i > 0)
-						m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
+
+					sf::Vector2f mousePos = static_cast<sf::Vector2f>(Game::instance()->getWorld().getTile(static_cast<sf::Vector2i>(m_window.mapPixelToCoords(sf::Mouse::getPosition()))));
+					sf::Vector2f playerPos = static_cast<sf::Vector2f>(Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt());
+					sf::Vector2f enemyPos = static_cast<sf::Vector2f>(Game::instance()->getWorld().getEntities()[i]->getSpritePositionInt());
+
+					//set facing based on who is being shot
+					if (playerPos.x < enemyPos.x)
+					{
+						if (playerPos.y < enemyPos.y)
+						{
+							m_world.getEntities()[0]->setFacing(RIGHT);
+						}
+						else
+						{
+							m_world.getEntities()[0]->setFacing(UP);
+						}
+					}
+					else
+					{
+						if (playerPos.y < enemyPos.y)
+						{
+							m_world.getEntities()[0]->setFacing(DOWN);
+						}
+						else
+						{
+							m_world.getEntities()[0]->setFacing(LEFT);
+						}
+					}
+
+					m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
 				}
 			}
 			//provide target location to BFS
@@ -321,15 +350,12 @@ void Game::handleEvents()
 				
 			break;
 
-			
-
 		case sf::Event::Resized:
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 			m_window.setView(sf::View(visibleArea));
 			break;
 		}
 	}
-
 
 }
 
