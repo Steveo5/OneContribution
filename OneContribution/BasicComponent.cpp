@@ -9,6 +9,9 @@ BasicComponent::BasicComponent()
 	m_selectionBox.setFillColor(sf::Color::Transparent);
 	m_selectionBox.setOutlineThickness(1.f);
 	
+	m_target.setRadius(3.f);
+	m_target.setPosition(sf::Vector2f(-10000000.f, -10000000.f));
+	m_target.setFillColor(sf::Color::White);
 
 	if (!buffer.loadFromFile("Resources/ogre2.wav"))
 	{
@@ -61,6 +64,8 @@ void BasicComponent::draw(sf::RenderTarget& target, sf::RenderStates states) con
 	if(wasLeftClicked)
 		target.draw(m_selectionBox);
 
+	target.draw(m_target);
+
 	target.draw(m_bottomSprite);
 	target.draw(m_textEntities);
 	target.draw(m_scoreCount);
@@ -69,8 +74,18 @@ void BasicComponent::draw(sf::RenderTarget& target, sf::RenderStates states) con
 
 }
 
+void BasicComponent::handleInput(sf::Mouse::Button button)
+{
+
+}
+
 void BasicComponent::update(sf::RenderWindow& window)
 {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition());
+		m_target.setPosition(mousePos.x - (m_target.getRadius() / 2), mousePos.y - (m_target.getRadius() / 2));
+	}
 	sf::Vector2f bottomSpritePos = window.mapPixelToCoords(sf::Vector2i(window.getSize().x / 2 - 400, window.getSize().y - 200));
 	m_bottomSprite.setPosition(bottomSpritePos);
 	
@@ -157,3 +172,4 @@ void BasicComponent::update(sf::RenderWindow& window)
 		m_isFirstClick = true;
 	}
 }
+

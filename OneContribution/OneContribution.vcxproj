@@ -166,6 +166,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="HealthBar.h" />
+    <ClInclude Include="MenuComponent.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="lib\sfml-tmxloader-master\src\pugixml\pugixml.cpp" />
     <ClCompile Include="lib\sfml-tmxloader-master\src\QuadTreeNode.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="MenuComponent.cpp" />
     <ClCompile Include="OneContribution.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="UI.cpp" />

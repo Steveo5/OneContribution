@@ -42,11 +42,11 @@ Game::Game()
 	debugGrid* grid = new debugGrid(6400, 6400);
 	m_ui.addComponent(grid);
 
+	MenuComponent* menu = new MenuComponent();
+	m_ui.addComponent(menu);
+
 	//image for gameover screen
 	m_gameOver = false;
-
-	
-
 
 	//load resources
 	if (!m_gameOverImgTexture.loadFromFile("Resources/gameOver.png"))

@@ -12,6 +12,7 @@ public:
 private:
 	sf::Font font;
 	sf::RectangleShape m_selectionBox;
+	sf::CircleShape m_target;
 	bool m_isFirstClick = true;
 
 	sf::Texture m_bottomSpriteTexture;
@@ -28,5 +29,7 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void update(sf::RenderWindow& window);
+
+	void handleInput(sf::Mouse::Button button);
 };
 

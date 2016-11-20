@@ -46,9 +46,9 @@ void UI::handleInput(sf::Keyboard::Key key)
 
 	for (int i = 0; i < m_components.size(); i++)
 	{
-		//m_components[i]->handleInput(key);
+		m_components[i]->handleInput(key);
 	}
-	m_components[0]->handleInput(key);
+	//m_components[0]->handleInput(key);
 }
 void UI::handleInput(sf::Mouse::Button button)
 {
