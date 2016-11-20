@@ -510,6 +510,10 @@ Direction Entity::getFacing()
 	return m_facing;
 }
 
+void Entity::setFacing(Direction dir) {
+	m_facing = dir;
+}
+
 sf::Vector2f Entity::getSpritePosition()
 {
 	return m_sprite.getPosition();

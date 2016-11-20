@@ -103,9 +103,11 @@ void UI::update(sf::RenderWindow &window)
 	m_txtDebug.setPosition(newDebugPos);
 	std::string fps = "Fps: " + std::to_string(m_fps);
 	std::string mousePosStr = "Mouse Position: x " + std::to_string(mousePos.x) + " y " + std::to_string(mousePos.y);
-	std::string entityCount = "Total entities: " +  std::to_string(Game::instance()->getWorld().getEntities().size());
+	std::string entityCount = "Total entities: " + std::to_string(Game::instance()->getWorld().getEntities().size());
+	std::string PlayerPos = "Current Player Position: (" + std::to_string(Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().x)
+		+ "," + std::to_string(Game::instance()->getWorld().getEntities()[0]->getSpritePositionInt().y) + ")";
 	
-	m_txtDebug.setString(fps + "\n" + mousePosStr + "\n" + entityCount);
+	m_txtDebug.setString(fps + "\n" + mousePosStr + "\n" + entityCount + "\n" + PlayerPos);
 	
 
 	for (int i = 0; i < m_components.size(); i++)
