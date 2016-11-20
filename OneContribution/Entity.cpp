@@ -42,7 +42,7 @@ Entity::Entity(EntityType entityType, sf::Vector2f location)
 
 	m_ammo = 10;
 	m_tracer = false;
-	m_entityTarget = 0;
+	m_entityTarget = 14;
 	m_alpha = 255;
 
 	if (!m_font.loadFromFile("Resources/arial.ttf"))
@@ -367,15 +367,17 @@ void Entity::applyDamage(int damage)
 
 void Entity::drawTracer()
 {
-	if (m_tracer)
+	if (Game::instance()->getWorld().getEntities()[0]->getTracer())
 	{
 
 		//code here references (https://github.com/SFML/SFML/wiki/Source%3A-Line-segment-with-thickness)
 		sf::Vertex tracer[4];
 		float thickness = 3.0;
 
-		sf::Vector2f point1 = (Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
-		sf::Vector2f point2 = (Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition());
+		sf::Vector2f point1 = (sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition().x + 30, 
+			Game::instance()->getWorld().getEntities()[0]->getSpritePosition().y));
+		sf::Vector2f point2 = (sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition().x + 30, 
+			Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition().y));
 
 
 			sf::Vector2f direction = point2 - point1;
@@ -393,14 +395,20 @@ void Entity::drawTracer()
 				tracer[i].color = sf::Color(0, 249, 174, m_alpha);
 
 			Game::instance()->getWindow().draw(tracer, 4, sf::Quads);
-			
-		//sf::Vertex tracer[] =
-		//{
-		//	sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition()), sf::Color(255,255,255,m_alpha)),
-		//	sf::Vertex(sf::Vector2f(Game::instance()->getWorld().getEntities()[m_entityTarget]->getSpritePosition()), sf::Color(255,255,255,m_alpha))
-		//};
+	/*sf::Vector2f a = sf::Vector2f(Game::instance()->getWorld().getEntities()[0]->getSpritePosition());
+	sf::Vector2f b = sf::Vector2f(Game::instance()->getWorld().getEntities()[Game::instance()->getWorld().getEntities()[0]->getTarget()]->getSpritePosition());
 
-		//Game::instance()->getWindow().draw(tracer, 3, sf::Lines);
+		sf::Vertex tracer[] = 
+		{
+			sf::Vertex(a, sf::Color(255,255,255,m_alpha)),
+			sf::Vertex(b, sf::Color(255,255,255,m_alpha)),
+			sf::Vertex(sf::Vector2f(b.x, b.y + 2), sf::Color(255,255,255,m_alpha)),
+			sf::Vertex(sf::Vector2f(a.x, a.y + 2), sf::Color(255,255,255,m_alpha)),
+
+
+		};*/
+
+		Game::instance()->getWindow().draw(tracer, 5, sf::Lines);
 		m_alpha -= 25;
 		if (m_alpha < 0)
 		{
@@ -415,6 +423,11 @@ bool Entity::getTracer()
 	return m_tracer;
 }
 
+void Entity::setTracer(bool b)
+{
+	m_tracer = b;
+}
+
 float Entity::getAttackTime()
 {
 	return attackTimer.getElapsedTime().asSeconds();
@@ -425,13 +438,23 @@ void Entity::resetAttackTime()
 	attackTimer.restart();
 }
 
+int Entity::getTarget()
+{
+	return m_entityTarget;
+}
+
+void Entity::setTarget(int i)
+{
+	m_entityTarget = i;
+}
+
 void Entity::shootEnemy(int index, sf::RenderTarget &target)
 {
-	m_entityTarget = index;
+	Game::instance()->getWorld().getEntities()[0]->setTarget(index);
 	if (Game::instance()->getWorld().getEntities()[0]->getAttackTime() > 
 		Game::instance()->getWorld().getEntities()[0]->m_fireRate)
 	{
-		m_tracer = true;
+		Game::instance()->getWorld().getEntities()[0]->setTracer(true);
 		
 		if (Game::instance()->getWorld().getEntities()[0]->getAmmo() > 0)
 		{

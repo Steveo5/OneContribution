@@ -316,6 +316,7 @@ void Game::handleEvents()
 					}
 
 					m_world.getEntities()[i]->shootEnemy(i, m_window);//do damage on click of entity
+					m_world.getEntities()[0]->drawTracer();
 				}
 			}
 			//provide target location to BFS
